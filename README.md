@@ -14,6 +14,7 @@ You must have NodeJS installed to run the application in the development environ
 3 To start the application, run "npm run dev" from the command line.
 4 Note that you still need to extract the ARASAAC Symbol Set in the path "C\ARASAACSymbols" to be able to use the provided vocabularies. Otherwise you can create your own. The ARASAAC Symbol Set compressed folder can be found in the Installation folder.
 5 To build the executable file for your chosen platform, run the following command: `npm run dist`
+```
 
 ## Usage
 
