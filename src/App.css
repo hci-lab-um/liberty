@@ -1,0 +1,63 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gridColumn{
+  margin: 0;
+}
+
+.gridItem{
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.ui.grid [class*="left floated"].column {
+  margin-right: 0;
+}
+
+.ui.celled.grid>.row>.column{
+  margin-top: 0; 
+  margin-bottom: 0;
+}
+
+.ui.grid>* {
+  padding-left: 0;
+}
+
+
+.ui.grid.createBoardGrid{
+  margin-left: 10px;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}

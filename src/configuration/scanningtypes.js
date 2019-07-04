@@ -1,0 +1,6 @@
+// constant variables for the available scanning types
+export const STEP_SCANNING = "STEP_SCANNING";
+export const ROW_BASED_SCANNING = "ROW_BASED_SCANNING";
+export const COLUMN_BASED_SCANNING = "COLUMN_BASED_SCANNING";
+export const DIVISION_BASED_SCANNING = "DIVISION_BASED_SCANNING";
+export const REGION_BASED_SCANNING = "REGION_BASED_SCANNING";
