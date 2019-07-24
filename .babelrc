@@ -1,0 +1,10 @@
+// setup Babel compiler for ES6 and transpiler for JSX
+{
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
+    ],
+    "plugins": [
+        "@babel/plugin-proposal-class-properties"
+      ]
+}

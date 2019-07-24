@@ -64,7 +64,7 @@ const menuTemplate = [
         }
     ]
    }/**Options below commented out as these were meant to be used in development only**/
- /* ,{
+  ,{
         label: 'Open Dev Tools',
         click: function(){
             mainWindow.openDevTools();
@@ -74,7 +74,7 @@ const menuTemplate = [
         click: function(){
             mainWindow.reload();
         }
-    }*/
+    }
 ];
 
 function createWindow(){
