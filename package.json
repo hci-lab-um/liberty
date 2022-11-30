@@ -2,7 +2,7 @@
   "name": "communication.board",
   "version": "1.0.0",
   "private": true,
-  "main": "electron.js",
+  "main": "main.js",
   "dependencies": {
     "concurrently": "^4.1.0",
     "leapjs": "^0.6.4",
@@ -66,7 +66,7 @@
     },
     "extends": null,
     "files": [
-      "electron.js",
+      "main.js",
       "public/index.html",
       "public/bundle.js",
       "public/icon.png",
