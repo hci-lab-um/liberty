@@ -16,6 +16,10 @@ You must have NodeJS installed to run the application in the development environ
 5 To build the executable file for your chosen platform, run the following command: `npm run dist`
 ```
 
+##Dependencies
+
+1. Ultraleap Tracking Software (Gemini) 5.0.0 (last version that includes LeapJS + WebSocket server) - https://developer.leapmotion.com/releases
+
 ## Usage
 
 ```
