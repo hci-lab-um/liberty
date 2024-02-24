@@ -28,11 +28,13 @@ const menuTemplate = [
             // open file dialog to select vocabulary to edit
                 dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Custom File Type', extensions: ['json'] }] })
                 .then((result) => {
-                    const filepaths = result.filePaths;        
-                    if(typeof(filepaths) !== 'undefined'){
-                        var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], "utf8"));
-                        // send message to main window with vocabulary to edit
-                        mainWindow.webContents.send('editExistingBoard', vocabulary);
+                    if (!result.canceled){
+                        const filepaths = result.filePaths;        
+                        if(typeof(filepaths) !== 'undefined'){
+                            var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], "utf8"));
+                            // send message to main window with vocabulary to edit
+                            mainWindow.webContents.send('editExistingBoard', vocabulary);
+                        }
                     }
                 });
             }
@@ -46,14 +48,15 @@ const menuTemplate = [
                 //Open dialog to import a vocabulary into the board
                 dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Custom File Type', extensions: ['json'] }] })
                 .then((result) => {
-                    const filepaths = result.filePaths;
-            
-                    if (typeof filepaths !== 'undefined' && filepaths.length > 0) {
-                        try {
-                            var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], 'utf8'));
-                            mainWindow.webContents.send('vocabularyLoad', vocabulary);
-                        } catch (error) {
-                            console.error('Error reading or parsing file:', error);
+                    if (!result.canceled){
+                        const filepaths = result.filePaths;
+                        if (typeof filepaths !== 'undefined' && filepaths.length > 0) {
+                            try {
+                                var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], 'utf8'));
+                                mainWindow.webContents.send('vocabularyLoad', vocabulary);
+                            } catch (error) {
+                                console.error('Error reading or parsing file:', error);
+                            }
                         }
                     }
                 });
@@ -156,11 +159,12 @@ ipcMain.on('addImageToNewItem', (event) => {
     // open file dialog to add an image to a vocabulary item
     dialog.showOpenDialog({properties:['openFile'], filters:[{  name: 'Images', extensions: ['jpg', 'png'] }]})
     .then((result) => {
-        const filepaths = result.filePaths;
-
-        if(typeof(filepaths) !== 'undefined'){
-            var imagePath = filepaths[0];
-            mainWindow.webContents.send('imageSent', imagePath); //send path to image      
+        if (!result.canceled){
+            const filepaths = result.filePaths;
+            if(typeof(filepaths) !== 'undefined'){
+                var imagePath = filepaths[0];
+                mainWindow.webContents.send('imageSent', imagePath); //send path to image      
+            }
         }
     });
 });
@@ -169,11 +173,12 @@ ipcMain.on('addImageToNewItem', (event) => {
 ipcMain.on('changeVocabulary', (event) => {
     dialog.showOpenDialog({properties:['openFile'], filters:[{ name: 'Custom File Type', extensions: ['json'] }]})
     .then((result) => {
-        const filepaths = result.filePaths;
-
-        if(typeof(filepaths) !== 'undefined'){
-            var vocabularyPath = filepaths[0];
-            mainWindow.webContents.send('vocabularySent', vocabularyPath);
+        if (!result.canceled){
+            const filepaths = result.filePaths;
+            if(typeof(filepaths) !== 'undefined'){
+                var vocabularyPath = filepaths[0];
+                mainWindow.webContents.send('vocabularySent', vocabularyPath);
+            }
         }
     });
      mainWindow.webContents.send('importBoard');
