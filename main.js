@@ -79,8 +79,17 @@ const menuTemplate = [
 
 function createWindow(){
     // create the main window
-    mainWindow = new BrowserWindow({show: false, icon: __dirname + '/public/icon.png', 
-                            title: 'Communications Board', backgroundColor: '#dee8f9'});
+    mainWindow = new BrowserWindow({
+        show: false,
+        icon: __dirname + '/public/icon.png',
+        title: 'Communications Board',
+        backgroundColor: '#dee8f9',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
+          },
+      });
     mainWindow.maximize();
     var menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu);
