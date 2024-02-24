@@ -4,7 +4,6 @@ const configfile = 'config.json';
 const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
-
 let mainWindow;
 //default configuration if configuration file does not exist
 let defaultConfiguration = {"automaticScanningInterval":2500,"backScanningGesture":"LEFT_ARROW","selectorGesture":"SPACEBAR",
@@ -27,13 +26,15 @@ const menuTemplate = [
             label: 'Edit existing vocabulary',
             click: function(){
             // open file dialog to select vocabulary to edit
-             dialog.showOpenDialog({properties:['openFile'], filters:[{ name: 'Custom File Type', extensions: ['json'] }]}, (filepaths) =>{
-                if(typeof(filepaths) !== 'undefined'){
-                    var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], "utf8"));
-                    // send message to main window with vocabulary to edit
-                    mainWindow.webContents.send('editExistingBoard', vocabulary);
-                }
-             });
+                dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Custom File Type', extensions: ['json'] }] })
+                .then((result) => {
+                    const filepaths = result.filePaths;        
+                    if(typeof(filepaths) !== 'undefined'){
+                        var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], "utf8"));
+                        // send message to main window with vocabulary to edit
+                        mainWindow.webContents.send('editExistingBoard', vocabulary);
+                    }
+                });
             }
         },
         {
@@ -43,11 +44,17 @@ const menuTemplate = [
             label: 'Import existing vocabulary',
             click: function(){
                 //Open dialog to import a vocabulary into the board
-                dialog.showOpenDialog({properties:['openFile'], filters:[{ name: 'Custom File Type', extensions: ['json'] }]}, (filepaths) =>{
-                    if(typeof(filepaths) !== 'undefined'){
-                        var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], "utf8"));
-                        // send message to main window with vocabulary to inject into board
-                        mainWindow.webContents.send('vocabularyLoad', vocabulary);
+                dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Custom File Type', extensions: ['json'] }] })
+                .then((result) => {
+                    const filepaths = result.filePaths;
+            
+                    if (typeof filepaths !== 'undefined' && filepaths.length > 0) {
+                        try {
+                            var vocabulary = JSON.parse(fs.readFileSync(filepaths[0], 'utf8'));
+                            mainWindow.webContents.send('vocabularyLoad', vocabulary);
+                        } catch (error) {
+                            console.error('Error reading or parsing file:', error);
+                        }
                     }
                 });
             }
@@ -147,12 +154,15 @@ ipcMain.on('getConfiguration', (event) => {
 
 ipcMain.on('addImageToNewItem', (event) => {
     // open file dialog to add an image to a vocabulary item
-    dialog.showOpenDialog({properties:['openFile'], filters:[{  name: 'Images', extensions: ['jpg', 'png'] }]}, (filepaths) =>{
+    dialog.showOpenDialog({properties:['openFile'], filters:[{  name: 'Images', extensions: ['jpg', 'png'] }]})
+    .then((result) => {
+        const filepaths = result.filePaths;
+
         if(typeof(filepaths) !== 'undefined'){
             var imagePath = filepaths[0];
             mainWindow.webContents.send('imageSent', imagePath); //send path to image      
         }
-     });
+    });
 });
 
 // change the default vocabulary
