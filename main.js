@@ -167,7 +167,10 @@ ipcMain.on('addImageToNewItem', (event) => {
 
 // change the default vocabulary
 ipcMain.on('changeVocabulary', (event) => {
-    dialog.showOpenDialog({properties:['openFile'], filters:[{ name: 'Custom File Type', extensions: ['json'] }]}, (filepaths) =>{
+    dialog.showOpenDialog({properties:['openFile'], filters:[{ name: 'Custom File Type', extensions: ['json'] }]})
+    .then((result) => {
+        const filepaths = result.filePaths;
+
         if(typeof(filepaths) !== 'undefined'){
             var vocabularyPath = filepaths[0];
             mainWindow.webContents.send('vocabularySent', vocabularyPath);
