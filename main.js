@@ -187,12 +187,21 @@ ipcMain.on('changeVocabulary', (event) => {
 // Save vocabulary of new communication board
 ipcMain.on('newBoard', (event, newBoard) => {
     try{
-        var path = dialog.showSaveDialog({filters:[{ name: 'Custom File Type', extensions: ['json'] }]});
-        if(typeof(path) !== 'undefined'){
-            var content = JSON.stringify(newBoard);
-            fs.writeFileSync(path, content,'utf8');
-            mainWindow.webContents.send('boardSaved');
-        }
+        dialog.showSaveDialog({filters:[{ name: 'Custom File Type', extensions: ['json'] }]})
+        .then((result) => {
+            if (!result.canceled) {
+                const filePath = result.filePath;
+                if (typeof filePath !== 'undefined') {
+                    const content = JSON.stringify(newBoard);
+                    try {
+                        fs.writeFileSync(filePath, content, 'utf8');
+                        mainWindow.webContents.send('boardSaved');
+                    } catch (e) {
+                        console.error('Error writing file:', e);
+                    }
+                }
+            }
+        });
     }catch(e){
         console.log(e);
     }
