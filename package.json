@@ -7,7 +7,7 @@
     "concurrently": "^8.2.2",
     "leapjs": "^0.6.4",
     "myo": "^3.0.0",
-    "react": "^16.8.3",
+    "react": "^18.2.0",
     "react-dnd": "^7.4.5",
     "react-dnd-html5-backend": "^7.4.4",
     "react-dom": "^16.8.3",
