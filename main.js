@@ -1,19 +1,11 @@
-const {
-    app,
-    BrowserWindow,
-    ipcMain,
-    Menu,
-    dialog
-} = require('electron')
-
+const {app, BrowserWindow, ipcMain, Menu, dialog} = require('electron')
 const fs = require('fs')
 const configfile = 'config.json';
 const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
+
 let mainWindow;
-
-
 //default configuration if configuration file does not exist
 let defaultConfiguration = {
     "automaticScanningInterval": 2500,
@@ -29,12 +21,12 @@ let defaultConfiguration = {
     "transition": "fade",
     "vocabularyFile": "demoboard.json"
 };
-
-
 // Template for Menu inside the solution
-const menuTemplate = [{
+const menuTemplate = [
+    {
     label: 'Settings',
-    submenu: [{
+    submenu: [
+        {
             label: 'Create new vocabulary',
             click: function() {
                 // send message to the main window to handle creation of new board
@@ -47,10 +39,7 @@ const menuTemplate = [{
                 // open file dialog to select vocabulary to edit
                 dialog.showOpenDialog({
                         properties: ['openFile'],
-                        filters: [{
-                            name: 'Custom File Type',
-                            extensions: ['json']
-                        }]
+                        filters: [{name: 'Custom File Type', extensions: ['json']}]
                     })
                     .then((result) => {
                         if (!result.canceled) {
@@ -73,10 +62,7 @@ const menuTemplate = [{
                 //Open dialog to import a vocabulary into the board
                 dialog.showOpenDialog({
                         properties: ['openFile'],
-                        filters: [{
-                            name: 'Custom File Type',
-                            extensions: ['json']
-                        }]
+                        filters: [{name: 'Custom File Type', extensions: ['json']}]
                     })
                     .then((result) => {
                         if (!result.canceled) {
@@ -104,17 +90,18 @@ const menuTemplate = [{
             }
         }
     ]
-} /**Options below commented out as these were meant to be used in development only**/ , {
-    label: 'Open Dev Tools',
-    click: function() {
-        mainWindow.openDevTools();
-    }
-}, {
-    label: 'Refresh Page',
-    click: function() {
-        mainWindow.reload();
-    }
-}];
+    } /**Options below commented out as these were meant to be used in development only**/ , {
+        label: 'Open Dev Tools',
+        click: function() {
+            mainWindow.openDevTools();
+        }
+    }, 
+    {
+        label: 'Refresh Page',
+        click: function() {
+            mainWindow.reload();
+        }
+    }];
 
 
 function createWindow() {
@@ -189,10 +176,7 @@ ipcMain.on('addImageToNewItem', (event) => {
     // open file dialog to add an image to a vocabulary item
     dialog.showOpenDialog({
             properties: ['openFile'],
-            filters: [{
-                name: 'Images',
-                extensions: ['jpg', 'png']
-            }]
+            filters: [{name: 'Images',extensions: ['jpg', 'png']}]
         })
         .then((result) => {
             if (!result.canceled) {
@@ -209,10 +193,7 @@ ipcMain.on('addImageToNewItem', (event) => {
 ipcMain.on('changeVocabulary', (event) => {
     dialog.showOpenDialog({
             properties: ['openFile'],
-            filters: [{
-                name: 'Custom File Type',
-                extensions: ['json']
-            }]
+            filters: [{name: 'Custom File Type', extensions: ['json']}]
         })
         .then((result) => {
             if (!result.canceled) {
@@ -230,10 +211,7 @@ ipcMain.on('changeVocabulary', (event) => {
 ipcMain.on('newBoard', (event, newBoard) => {
     try {
         dialog.showSaveDialog({
-                filters: [{
-                    name: 'Custom File Type',
-                    extensions: ['json']
-                }]
+                filters: [{name: 'Custom File Type', extensions: ['json']}]
             })
             .then((result) => {
                 if (!result.canceled) {
