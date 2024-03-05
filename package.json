@@ -5,8 +5,10 @@
   "main": "main.js",
   "dependencies": {
     "concurrently": "^8.2.2",
-    "leapjs": "^0.6.4",
-    "myo": "^3.0.0",
+    "json5": "^2.2.3",
+    "leapjs": "^1.1.1",
+    "myo": "^3.0.1",
+    "postcss": "^8.4.35",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
