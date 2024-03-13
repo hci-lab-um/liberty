@@ -20,7 +20,7 @@
     "ws": "^8.16.0"
   },
   "scripts": {
-    "start": "webpack -d --watch",
+    "start": "webpack --watch",
     "electron": "electron .",
     "dev": "concurrently \"npm start\" \"npm run electron\"",
     "dist": "build"
