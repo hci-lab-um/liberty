@@ -3,8 +3,8 @@ import {Header, Divider} from 'semantic-ui-react'
 import GridBoard from './GridBoard'
 import CreateEditVocabularyModal from './CreateEditVocabularyModal'
 import ConfigBoardModal from './ConfigBoardModal'
-import HTML5Backend from 'react-dnd-html5-backend'
-import {DragDropContext} from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import {DndProvider} from 'react-dnd'
 const {ipcRenderer} = window.require('electron')
 
 class Main extends Component {
@@ -75,16 +75,17 @@ class Main extends Component {
   render() {
     const renderCreateEditBoardModal = this.renderCreateEditVocabularyModal();
     return (
-      <div>
-        <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
-        <Divider  hidden/>
-        <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
-        {renderCreateEditBoardModal}
-        <ConfigBoardModal />
-      </div>
+      <DndProvider backend={HTML5Backend}>      
+        <div>
+          <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
+          <Divider  hidden/>
+          <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
+          {renderCreateEditBoardModal}
+          <ConfigBoardModal />
+        </div>
+        </DndProvider>
     )
   }
 }
 
-// Documentation suggests to put the drag and drop context wrapper in the outer component
-export default DragDropContext(HTML5Backend)(Main);
+export default Main;

@@ -4,6 +4,7 @@ module.exports = {
   output: {
       path: require('path').resolve(__dirname, 'public'),
       filename: 'bundle.js',
+      publicPath: '/public/',
   },
   module: {
       rules: [
