@@ -204,10 +204,12 @@ class ConfigBoardModal extends Component {
         });
     }
 
-    saveConfiguration(){
-        this.setState({configBoardModalOpen: false}, ()=>{
+    saveConfiguration = (event) => {
+        event.preventDefault(); // Prevent default form submission
+    
+        this.setState({ configBoardModalOpen: false }, () => {
             let isLeap = this.isLeapConfiguration();
-            // pass configuration object to changeConfig function so that it can be saved in the file system
+            // Construct configuration object
             let configObject = {
                 scanningGesture: this.state.chosenScanningGesture,
                 selectorGesture: this.state.chosenSelectorGesture,
@@ -221,12 +223,14 @@ class ConfigBoardModal extends Component {
                 vocabularyFile: this.state.addVocabulary,
                 regionScanningRows: this.state.regionScanningRows,
                 regionScanningColumns: this.state.regionScanningColumns
-            }
+            };
+    
             changeConfig(configObject, true);
+    
+            unlockSelector();
         });
-        unlockSelector();
     }
-
+    
     isLeapConfiguration(){
         // check if one of the gestures selected is a leap gesture
         let scanningGesture= this.state.chosenScanningGesture;
@@ -346,12 +350,12 @@ class ConfigBoardModal extends Component {
                    {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
                    {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
                    <Divider hidden/>
-                   <Form.Button value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
+                   <Form.Button type="button" value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
                    <Form.Input fluid readOnly>
                     {this.state.addVocabulary}
                    </Form.Input>
                    <Divider hidden/>
-                   <Form.Button value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
+                   <Form.Button type="submit" value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
                </Form>
            </Modal.Content>
         </Modal>
