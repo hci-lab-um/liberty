@@ -1,5 +1,7 @@
 // Configuration for webpack to bundle the React application
 module.exports = {
+  mode: 'development', 
+  devtool: "nosources-source-map",
   entry: './src/App.js',
   output: {
       path: require('path').resolve(__dirname, 'public'),
