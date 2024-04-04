@@ -5,6 +5,9 @@ const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
 
+//Disables caching
+app.commandLine.appendSwitch ("disable-http-cache");
+
 let mainWindow;
 //default configuration if configuration file does not exist
 let defaultConfiguration = {
