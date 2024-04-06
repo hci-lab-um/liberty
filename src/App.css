@@ -62,3 +62,8 @@
   margin-bottom: 0;
 }
 
+.alertText{
+  font-weight: bold;
+  color: red;
+}
+

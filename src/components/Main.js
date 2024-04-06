@@ -65,6 +65,7 @@ class Main extends Component {
 
   handleResize() {
     this.setState({ gridBoardHeight: window.innerHeight - 150 });
+    ipcRenderer.send('refreshPage');
   }
 
   componentDidMount(){

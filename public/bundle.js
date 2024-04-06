@@ -922,7 +922,7 @@ let isLeap = false;
 let isMyo = true;
 let leapInterval = 1000;
 let highlightColor = 'green';
-let itemsPerRow = 10;
+let itemsPerRow = 7;
 let isLocked = false;
 let automaticScanningInterval = 2500;
 let transition = 'jiggle';
@@ -2743,6 +2743,7 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   }
   addNewItem(itemName, itemFunction, itemImage) {
     // adding new item to the vocabulary
+
     let newItem = {
       title: itemName,
       function: itemFunction === "" ? null : itemFunction,
@@ -2920,6 +2921,10 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   }
   render() {
     const renderModal = this.renderItemModal();
+    const {
+      currentItems
+    } = this.state;
+    const showAddButton = currentItems.length < 27;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
       open: this.state.CreateEditVocabularyModalOpen,
       onClose: this.closeCreateEditVocabularyModal,
@@ -2931,7 +2936,8 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
       currentItems: this.state.currentItems,
       onSelectedItem: this.selectItem,
       selectedItemIndex: this.state.selectedItemIndex,
-      itemSelected: this.state.itemSelected
+      itemSelected: this.state.itemSelected,
+      showAddButton: showAddButton
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"].Actions, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
       disabled: !this.state.itemSelected,
       onClick: () => this.modifyItem()
@@ -4406,6 +4412,7 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.setState({
       gridBoardHeight: window.innerHeight - 150
     });
+    ipcRenderer.send('refreshPage');
   }
   componentDidMount() {
     // add event listeners on component mount
@@ -4512,6 +4519,7 @@ class VocabularyGrid extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     };
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
       columns: 7,
+      container: false,
       className: "createBoardGrid"
     }, this.state.currentItems.map((elem, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_VocabularyItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
       key: index,
@@ -4520,11 +4528,13 @@ class VocabularyGrid extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       onRepositionItem: this.handleItemsRepositioning,
       selectItem: this.handleSelectItem,
       selected: itemSelected && index == selectedItemIndex
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, {
+    })), this.props.showAddButton ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, {
       onClick: () => this.props.onAddNewItem()
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"].Button, {
       style: addStyle
-    }, "+")));
+    }, "+")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      className: "alertText"
+    }, "You have reached the maximum number of items. Please either remove one or create children to add more.")));
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VocabularyGrid);
@@ -5312,7 +5322,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   margin-bottom: 0;
 }
 
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB","sourceRoot":""}]);
+.alertText{
+  font-weight: bold;
+  color: red;
+}
+
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

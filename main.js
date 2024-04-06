@@ -147,6 +147,9 @@ app.on('window-all-closed', function() {
     }
 })
 
+ipcMain.on('refreshPage', (event) => {
+    mainWindow.reload();
+})
 
 ipcMain.on('configChange', (event, configs) => {
     try {
