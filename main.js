@@ -119,6 +119,8 @@ function createWindow() {
             contextIsolation: false,
             enableRemoteModule: true,
         },
+        minWidth: 1024,
+        minHeight: 768,
     });
     mainWindow.maximize();
     var menu = Menu.buildFromTemplate(menuTemplate);

@@ -67,7 +67,7 @@ class GridItem extends Component {
     return (
       <Transition animation={this.state.transitionType} duration={500} visible={this.state.transitionActive}>
         <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className="gridColumn">
-            <div className='gridItem'>
+            <div className='gridItem' style={{ height: `${this.props.height}px`}}>
                 <Image src={this.props.item.image} size='small' centered />
                 <p>
                 {this.state.showTitle && <span>{this.props.item.title} </span>}
