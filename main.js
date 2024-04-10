@@ -4,6 +4,11 @@ const configfile = 'config.json';
 const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
+const express = require('express');
+const https = require('https');
+const forge = require('node-forge');
+
+
 
 let mainWindow;
 //default configuration if configuration file does not exist
@@ -103,6 +108,9 @@ const menuTemplate = [
         }
     }];
 
+
+const expressApp = express();
+expressApp.use(express.static(path.join(__dirname, 'build')));
 
 function createWindow() {
     // create the main window
