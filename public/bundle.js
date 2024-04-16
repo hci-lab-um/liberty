@@ -883,6 +883,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getChosenScanningGesture: () => (/* binding */ getChosenScanningGesture),
 /* harmony export */   getChosenSelectorGesture: () => (/* binding */ getChosenSelectorGesture),
 /* harmony export */   getDefaultVocabularyPath: () => (/* binding */ getDefaultVocabularyPath),
+/* harmony export */   getDwellAnimation: () => (/* binding */ getDwellAnimation),
 /* harmony export */   getHighlightColor: () => (/* binding */ getHighlightColor),
 /* harmony export */   getHoverDuration: () => (/* binding */ getHoverDuration),
 /* harmony export */   getItemsPerRow: () => (/* binding */ getItemsPerRow),
@@ -895,6 +896,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   selectorIsLocked: () => (/* binding */ selectorIsLocked),
 /* harmony export */   setAutomaticIsLocked: () => (/* binding */ setAutomaticIsLocked),
 /* harmony export */   setAutomaticScanningInterval: () => (/* binding */ setAutomaticScanningInterval),
+/* harmony export */   setDwellAnimation: () => (/* binding */ setDwellAnimation),
 /* harmony export */   setHighlightColor: () => (/* binding */ setHighlightColor),
 /* harmony export */   setItemsPerRow: () => (/* binding */ setItemsPerRow),
 /* harmony export */   setLeapInterval: () => (/* binding */ setLeapInterval),
@@ -932,6 +934,7 @@ let regionScanningColumns = 3;
 let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
+let dwellAnimation = 'fill-up';
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -947,6 +950,7 @@ function changeConfig(configObject) {
   defaultVocabularyPath = configObject.vocabularyFile;
   setAutomaticScanningInterval(configObject.automaticScanningInterval);
   hoverDuration = configObject.hoverDuration;
+  dwellAnimation = configObject.dwellAnimation;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
@@ -1017,6 +1021,12 @@ function setHighlightColor(newColor) {
 }
 function getHoverDuration() {
   return hoverDuration;
+}
+function getDwellAnimation() {
+  return dwellAnimation;
+}
+function setDwellAnimation(newColor) {
+  dwellAnimation = newColor;
 }
 function getTransition() {
   return transition;
@@ -2324,6 +2334,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }]);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
+    _defineProperty(this, "dwellAnimations", ['fill-up']);
     _defineProperty(this, "transitionOptions", this.transitions.map(name => ({
       key: name,
       text: name,
@@ -2334,9 +2345,22 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       value: name,
       color: name
     })));
+    _defineProperty(this, "dwellAnimationOptions", this.dwellAnimations.map(name => ({
+      text: name,
+      value: name,
+      color: name
+    })));
     _defineProperty(this, "handleHoverDurationChange", (e, data) => {
       this.setState({
         hoverDuration: data.value
+      });
+      //setting css variable to be used for hover animatons
+      const root = document.documentElement;
+      root.style.setProperty('--dwell-time', "".concat(data.value, "ms"));
+    });
+    _defineProperty(this, "handleDwellAnimationChange", (e, data) => {
+      this.setState({
+        dwellAnimation: data.value
       });
     });
     _defineProperty(this, "handleColorChange", (e, data) => {
@@ -2414,6 +2438,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           scanningType: this.state.chosenScanningType,
           highlightColor: this.state.color,
           hoverDuration: this.state.hoverDuration,
+          dwellAnimation: this.state.dwellAnimation,
           transition: this.state.transition,
           automaticScanningInterval: this.state.automaticScanningInterval,
           leapInterval: this.state.leapInterval,
@@ -2520,8 +2545,10 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       regionScanningRows: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningRows)(),
       regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningColumns)(),
       regionsHidden: true,
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)()
+      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
     };
+
     // definie binding of methods
     this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
     this.openConfigBoardModal = this.openConfigBoardModal.bind(this);
@@ -2536,6 +2563,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
     this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
+    this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
     this.automaticShow = this.automaticShow.bind(this);
     this.leapShow = this.leapShow.bind(this);
     this.validateScanningGesture = this.validateScanningGesture.bind(this);
@@ -2553,6 +2581,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       chosenBackScanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getChosenBackScanningGesture)(),
       color: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
       automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getAutomaticScanningInterval)(),
       leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getLeapInterval)(),
       transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
@@ -2566,6 +2595,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.lockSelector)(); // lock gesture detection
+    // const root = document.documentElement;
+    // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
   }
   closeConfigBoardModal() {
     this.setState({
@@ -2664,6 +2695,14 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       fluid: true,
       selection: true,
       onChange: this.handleHoverDurationChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      hidden: true
+    }), "Dwell Animation:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: this.state.dwellAnimation,
+      options: this.dwellAnimationOptions,
+      fluid: true,
+      selection: true,
+      onChange: this.handleDwellAnimationChange
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Color:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -4288,6 +4327,10 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     _defineProperty(this, "handleMouseEnter", () => {
       if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
         //console.log("Current hover duration: ", this.state.hoverDuration);
+        const root = document.documentElement;
+        root.style.setProperty('--color', "".concat(this.state.bgColor));
+        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)());
+        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)());
         console.log('Mouse entered the grid item.');
         document.dispatchEvent(new CustomEvent('hoverScanning', {
           detail: this.props.id
@@ -4305,10 +4348,12 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     this.state = {
       bgColor: "",
+      animationColor: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
       transitionActive: true,
       transitionType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
       showTitle: true,
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)()
+      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
     };
     this.colorItem = this.colorItem.bind(this);
     this.toggleTransition = this.toggleTransition.bind(this);
@@ -4329,6 +4374,8 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.colorItem();
   }
   componentDidMount() {
+    const root = document.documentElement;
+    root.style.setProperty('--dwell-time', "".concat(this.state.hoverDuration, "ms"));
     // listen to event
     document.addEventListener('transitionChanged', this.handleTransitionChange);
   }
@@ -4346,7 +4393,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   colorItem() {
     let props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
     // color item if it is being scanned
-    if (props.selected) {
+    if (props.selected && (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() !== _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
       let color = (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)();
       this.setState({
         bgColor: color
@@ -4366,7 +4413,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       color: this.state.bgColor
     } : {}, {
       floated: "left",
-      className: "gridColumn",
+      className: "gridColumn ".concat(this.state.dwellAnimation),
       onMouseEnter: this.handleMouseEnter,
       onMouseLeave: this.handleMouseLeave
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -5380,7 +5427,33 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   margin-top: 0;
   margin-bottom: 0;
 }
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB","sourceRoot":""}]);
+
+.fill-up {
+  position: relative;
+  overflow: hidden;
+}
+
+.fill-up::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-color: olive;
+  transition: top var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
+}
+
+.fill-up:hover::after {
+  top: 0;
+}
+
+.fill-up:not(:hover)::after {
+  transition: none;
+  top: 100%;
+}
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,uBAAuB;EACvB,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

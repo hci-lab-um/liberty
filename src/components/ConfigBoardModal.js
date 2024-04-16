@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Input, Form, Divider, Dropdown, Checkbox } from 'semantic-ui-react';
-import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration } from '../actions/configactions';
+import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation } from '../actions/configactions';
 import * as gestures from '../configuration/gestures.js';
 import * as scanningTypes from '../configuration/scanningtypes.js'
 const {ipcRenderer} = window.require('electron')
@@ -85,9 +85,11 @@ class ConfigBoardModal extends Component {
 
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
-      
+    dwellAnimations = ['fill-up']
+    
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));
+    dwellAnimationOptions = this.dwellAnimations.map(name => ({text: name, value: name, color: name}));
 
     constructor(props){
         super(props);
@@ -109,8 +111,10 @@ class ConfigBoardModal extends Component {
             regionScanningRows: getRegionScanningRows(),
             regionScanningColumns: getRegionScanningColumns(),
             regionsHidden: true,
-            hoverDuration: getHoverDuration()
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
         }
+
         // definie binding of methods
         this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
         this.openConfigBoardModal = this.openConfigBoardModal.bind(this);
@@ -125,13 +129,14 @@ class ConfigBoardModal extends Component {
         this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
         this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
+        this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
         this.automaticShow = this.automaticShow.bind(this);
         this.leapShow = this.leapShow.bind(this);
         this.validateScanningGesture = this.validateScanningGesture.bind(this);
         this.validateBackScanningGesture = this.validateBackScanningGesture.bind(this);
         this.validateSelectorGesture = this.validateSelectorGesture.bind(this);
         this.handleVocabularyLoad = this.handleVocabularyLoad.bind(this);
-        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);
+        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);        
     }
 
     handleModalOpen(){
@@ -143,6 +148,7 @@ class ConfigBoardModal extends Component {
             chosenBackScanningGesture: getChosenBackScanningGesture(),
             color: getHighlightColor(),
             hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
             automaticScanningInterval: getAutomaticScanningInterval(),
             leapInterval: getLeapInterval(),
             transition: getTransition(),
@@ -155,10 +161,19 @@ class ConfigBoardModal extends Component {
                 this.setState({regionsHidden: false}); 
         });
         lockSelector(); // lock gesture detection
+        // const root = document.documentElement;
+        // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
     }
 
     handleHoverDurationChange=(e, data)=>{
         this.setState({hoverDuration: data.value});
+        //setting css variable to be used for hover animatons
+        const root = document.documentElement;
+        root.style.setProperty('--dwell-time', `${data.value}ms`);
+    }
+
+    handleDwellAnimationChange=(e, data)=>{
+        this.setState({dwellAnimation: data.value});
     }
 
     handleColorChange=(e, data)=>{
@@ -233,6 +248,7 @@ class ConfigBoardModal extends Component {
                 scanningType: this.state.chosenScanningType,
                 highlightColor: this.state.color,
                 hoverDuration: this.state.hoverDuration,
+                dwellAnimation: this.state.dwellAnimation,
                 transition: this.state.transition,
                 automaticScanningInterval: this.state.automaticScanningInterval,
                 leapInterval: this.state.leapInterval,
@@ -374,7 +390,11 @@ class ConfigBoardModal extends Component {
                                 <Divider hidden/>
                                 Enter Dwelling Time:
                                 <Dropdown value={this.state.hoverDuration} options={this.hoverTimeOptions} fluid selection onChange={this.handleHoverDurationChange}/>
+                                <Divider hidden/>
+                                Dwell Animation:
+                                <Dropdown value={this.state.dwellAnimation} options={this.dwellAnimationOptions} fluid selection onChange={this.handleDwellAnimationChange}/>
                             </>
+                            
                         )}
                         <Divider hidden/>
                         Color:
