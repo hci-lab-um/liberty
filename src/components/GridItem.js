@@ -83,6 +83,9 @@ class GridItem extends Component {
         console.log(getHoverDuration())
         console.log('Mouse entered the grid item.');
         document.dispatchEvent(new CustomEvent('hoverScanning', {detail: this.props.id}));
+        if (this.hoverTimeout) {
+          clearTimeout(this.hoverTimeout);
+        }
         this.hoverTimeout = setTimeout(() => {
             document.dispatchEvent(new CustomEvent('hoverSelection'));
         }, this.state.hoverDuration);
@@ -92,7 +95,10 @@ class GridItem extends Component {
     handleMouseLeave = () => {
         if (getScanningType() === scanningTypes.MOUSE_SCANNING) {
           console.log('Mouse left the grid item.');
-          clearTimeout(this.hoverTimeout);
+          if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+            this.hoverTimeout = null;
+          }
         }
     }
 

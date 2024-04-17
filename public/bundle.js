@@ -4335,6 +4335,9 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         document.dispatchEvent(new CustomEvent('hoverScanning', {
           detail: this.props.id
         }));
+        if (this.hoverTimeout) {
+          clearTimeout(this.hoverTimeout);
+        }
         this.hoverTimeout = setTimeout(() => {
           document.dispatchEvent(new CustomEvent('hoverSelection'));
         }, this.state.hoverDuration);
@@ -4343,7 +4346,10 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     _defineProperty(this, "handleMouseLeave", () => {
       if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
         console.log('Mouse left the grid item.');
-        clearTimeout(this.hoverTimeout);
+        if (this.hoverTimeout) {
+          clearTimeout(this.hoverTimeout);
+          this.hoverTimeout = null;
+        }
       }
     });
     this.state = {
