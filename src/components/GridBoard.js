@@ -201,15 +201,13 @@ class GridBoard extends Component {
     }
 
     // scanning next item
-    handleItemScanning = (itemIndex) => {
+    handleItemScanning(){
         // general case - scanning type is step scanning
         if(this.state.scanningType === scanningTypes.STEP_SCANNING){
             if(this.state.selectedItemIndex === this.state.currentItems.length-1)
                 this.setState({selectedItemIndex: 0}) // scan first item if no more items proceed
             else
                 this.setState({selectedItemIndex: this.state.selectedItemIndex+1}) // scan next item
-        }else if (this.state.scanningType === scanningTypes.MOUSE_SCANNING){
-            this.setState({ selectedItemIndex: itemIndex });
         }else if(this.state.isGoBackFromRowColumnScanning){
             // case when it is currently in the state of going back from current scanning region
             // scan to the initial scannable index of scanning region
@@ -955,7 +953,7 @@ class GridBoard extends Component {
                 let itemIsSelected = this.checkItemIsSelected(rowIndex, columnIndex, itemIndex); // if item is being scanned
                 let itemIsActivated = this.checkIfItemIsActivated(itemIndex); // if user selects item
                 let isParent = item.children.length > 0;
-                return <GridItem height={this.props.height/4} item={item} key={columnIndex} id={itemIndex} 
+                return <GridItem item={item} key={columnIndex} id={itemIndex} 
                          selected={itemIsSelected} itemActivated={itemIsActivated} isParent={isParent} />
             })}
         </GridRow>
@@ -971,11 +969,6 @@ class GridBoard extends Component {
         document.addEventListener('backScanning', this.handleBackScanning);
         document.addEventListener('selection', this.handleSelection);
         document.addEventListener('scanningTypeChanged', this.handleScanningTypeChange);
-        document.addEventListener('hoverSelection', this.handleItemSelection);
-        document.addEventListener('hoverScanning', (event) => {
-            this.handleItemScanning(event.detail);
-        });
-          
         
         // ask main process to send configuration
         ipcRenderer.send('getConfiguration');
@@ -999,7 +992,7 @@ class GridBoard extends Component {
     let show = 1000;
     return (
         <Transition animation='fade down' duration={{hide,show}} visible={visible}>
-            <Grid columns={this.state.itemsPerRow} container={false} celled='internally'>
+            <Grid columns={this.state.itemsPerRow} container={this.state.currentItems.length < 30} celled='internally' >
             {elementsToRender}
             </Grid>
         </Transition>
