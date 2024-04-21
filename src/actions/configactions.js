@@ -43,6 +43,7 @@ export function changeConfig(configObject, save = false){
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
          and the setters that dispatch events to the main board need to be called */
+        updateCSSBgColour();
         setScanningType();
         setTransition();
         // send the new configuration to the main process
@@ -103,6 +104,11 @@ export function configurationIsLeap(){
 // check whether Myo is needed for one of the gesture mappings
 export function configurationIsMyo(){
     return isMyo;
+}
+
+export function updateCSSBgColour(){
+    const root = document.documentElement;
+    root.style.setProperty('--color', `${getHighlightColor()}`);
 }
 
 export function getLeapInterval(){
