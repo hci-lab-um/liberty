@@ -13,7 +13,7 @@ let isLeap = false;
 let isMyo = true;
 let leapInterval = 1000;
 let highlightColor = 'green';
-let itemsPerRow = 10;
+let itemsPerRow = 7;
 let isLocked = false;
 let automaticScanningInterval = 2500;
 let transition = 'jiggle';
@@ -142,16 +142,7 @@ export function getItemsPerRow(){
 // function to set how many items are to be displayed per row
 export function setItemsPerRow(itemsCount, callback){
     // the number of items per row depends on the total number of items in the current vocabulary
-    if(itemsCount <= 18)
-        itemsPerRow = 6;
-    else if(itemsCount <= 21){
-        itemsPerRow = 7;
-    } else if(itemsCount <= 28){
-        itemsPerRow = 8;
-    }else{
-        // when there are more than 28 items per row apply formula below to get number of items per row
-        itemsPerRow = Math.ceil(itemsCount/4); 
-    }
+    itemsPerRow = 7;
     callback();
 }
 
