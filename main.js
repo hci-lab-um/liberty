@@ -121,6 +121,8 @@ function createWindow() {
             contextIsolation: false,
             enableRemoteModule: true,
         },
+        minWidth: 1024,
+        minHeight: 768,
     });
     mainWindow.maximize();
     var menu = Menu.buildFromTemplate(menuTemplate);
@@ -147,6 +149,9 @@ app.on('window-all-closed', function() {
     }
 })
 
+ipcMain.on('refreshPage', (event) => {
+    mainWindow.reload();
+})
 
 ipcMain.on('configChange', (event, configs) => {
     try {

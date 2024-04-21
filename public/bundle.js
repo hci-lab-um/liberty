@@ -883,9 +883,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getChosenScanningGesture: () => (/* binding */ getChosenScanningGesture),
 /* harmony export */   getChosenSelectorGesture: () => (/* binding */ getChosenSelectorGesture),
 /* harmony export */   getDefaultVocabularyPath: () => (/* binding */ getDefaultVocabularyPath),
-/* harmony export */   getDwellAnimation: () => (/* binding */ getDwellAnimation),
 /* harmony export */   getHighlightColor: () => (/* binding */ getHighlightColor),
-/* harmony export */   getHoverDuration: () => (/* binding */ getHoverDuration),
 /* harmony export */   getItemsPerRow: () => (/* binding */ getItemsPerRow),
 /* harmony export */   getLeapInterval: () => (/* binding */ getLeapInterval),
 /* harmony export */   getRegionScanningColumns: () => (/* binding */ getRegionScanningColumns),
@@ -896,7 +894,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   selectorIsLocked: () => (/* binding */ selectorIsLocked),
 /* harmony export */   setAutomaticIsLocked: () => (/* binding */ setAutomaticIsLocked),
 /* harmony export */   setAutomaticScanningInterval: () => (/* binding */ setAutomaticScanningInterval),
-/* harmony export */   setDwellAnimation: () => (/* binding */ setDwellAnimation),
 /* harmony export */   setHighlightColor: () => (/* binding */ setHighlightColor),
 /* harmony export */   setItemsPerRow: () => (/* binding */ setItemsPerRow),
 /* harmony export */   setLeapInterval: () => (/* binding */ setLeapInterval),
@@ -925,7 +922,7 @@ let isLeap = false;
 let isMyo = true;
 let leapInterval = 1000;
 let highlightColor = 'green';
-let itemsPerRow = 10;
+let itemsPerRow = 7;
 let isLocked = false;
 let automaticScanningInterval = 2500;
 let transition = 'jiggle';
@@ -933,8 +930,6 @@ let automaticIsLocked = false;
 let regionScanningColumns = 3;
 let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
-let hoverDuration = 3000;
-let dwellAnimation = 'fill-up';
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -949,8 +944,6 @@ function changeConfig(configObject) {
   regionScanningColumns = parseInt(configObject.regionScanningColumns);
   defaultVocabularyPath = configObject.vocabularyFile;
   setAutomaticScanningInterval(configObject.automaticScanningInterval);
-  hoverDuration = configObject.hoverDuration;
-  dwellAnimation = configObject.dwellAnimation;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
@@ -1019,15 +1012,6 @@ function getHighlightColor() {
 function setHighlightColor(newColor) {
   highlightColor = newColor;
 }
-function getHoverDuration() {
-  return hoverDuration;
-}
-function getDwellAnimation() {
-  return dwellAnimation;
-}
-function setDwellAnimation(newColor) {
-  dwellAnimation = newColor;
-}
 function getTransition() {
   return transition;
 }
@@ -1048,14 +1032,7 @@ function getItemsPerRow() {
 // function to set how many items are to be displayed per row
 function setItemsPerRow(itemsCount, callback) {
   // the number of items per row depends on the total number of items in the current vocabulary
-  if (itemsCount <= 18) itemsPerRow = 6;else if (itemsCount <= 21) {
-    itemsPerRow = 7;
-  } else if (itemsCount <= 28) {
-    itemsPerRow = 8;
-  } else {
-    // when there are more than 28 items per row apply formula below to get number of items per row
-    itemsPerRow = Math.ceil(itemsCount / 4);
-  }
+  itemsPerRow = 7;
   callback();
 }
 function getRegionScanningColumns() {
@@ -2131,9 +2108,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }, {
       text: 'Division based Scanning',
       value: _configuration_scanningtypes_js__WEBPACK_IMPORTED_MODULE_3__.DIVISION_BASED_SCANNING
-    }, {
-      text: 'Mouse Scanning',
-      value: _configuration_scanningtypes_js__WEBPACK_IMPORTED_MODULE_3__.MOUSE_SCANNING
     }]);
     // definition of gesture type to include gesture name in title case and corresponding icon
     _defineProperty(this, "gestureType", [{
@@ -2316,25 +2290,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       icon: 'band aid'
     }]);
     _defineProperty(this, "leapTypes", [_configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_GRAB, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_PINCH, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CIRCLE, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_LEFT]);
-    _defineProperty(this, "hoverTimeOptions", [{
-      text: '1 second',
-      value: 1000
-    }, {
-      text: '2 seconds',
-      value: 2000
-    }, {
-      text: '3 seconds',
-      value: 3000
-    }, {
-      text: '4 seconds',
-      value: 4000
-    }, {
-      text: '5 seconds',
-      value: 5000
-    }]);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
-    _defineProperty(this, "dwellAnimations", ['fill-up']);
     _defineProperty(this, "transitionOptions", this.transitions.map(name => ({
       key: name,
       text: name,
@@ -2345,24 +2302,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       value: name,
       color: name
     })));
-    _defineProperty(this, "dwellAnimationOptions", this.dwellAnimations.map(name => ({
-      text: name,
-      value: name,
-      color: name
-    })));
-    _defineProperty(this, "handleHoverDurationChange", (e, data) => {
-      this.setState({
-        hoverDuration: data.value
-      });
-      //setting css variable to be used for hover animatons
-      const root = document.documentElement;
-      root.style.setProperty('--dwell-time', "".concat(data.value, "ms"));
-    });
-    _defineProperty(this, "handleDwellAnimationChange", (e, data) => {
-      this.setState({
-        dwellAnimation: data.value
-      });
-    });
     _defineProperty(this, "handleColorChange", (e, data) => {
       this.setState({
         color: data.value
@@ -2437,8 +2376,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           backScanningGesture: this.state.chosenBackScanningGesture,
           scanningType: this.state.chosenScanningType,
           highlightColor: this.state.color,
-          hoverDuration: this.state.hoverDuration,
-          dwellAnimation: this.state.dwellAnimation,
           transition: this.state.transition,
           automaticScanningInterval: this.state.automaticScanningInterval,
           leapInterval: this.state.leapInterval,
@@ -2544,11 +2481,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       addVocabulary: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDefaultVocabularyPath)(),
       regionScanningRows: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningRows)(),
       regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningColumns)(),
-      regionsHidden: true,
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      regionsHidden: true
     };
-
     // definie binding of methods
     this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
     this.openConfigBoardModal = this.openConfigBoardModal.bind(this);
@@ -2562,8 +2496,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
-    this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
-    this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
     this.automaticShow = this.automaticShow.bind(this);
     this.leapShow = this.leapShow.bind(this);
     this.validateScanningGesture = this.validateScanningGesture.bind(this);
@@ -2580,8 +2512,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       chosenScanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getChosenScanningGesture)(),
       chosenBackScanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getChosenBackScanningGesture)(),
       color: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
       automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getAutomaticScanningInterval)(),
       leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getLeapInterval)(),
       transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
@@ -2595,8 +2525,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.lockSelector)(); // lock gesture detection
-    // const root = document.documentElement;
-    // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
   }
   closeConfigBoardModal() {
     this.setState({
@@ -2636,9 +2564,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     ipcRenderer.removeListener('configBoard', this.openConfigBoardModal);
     ipcRenderer.removeListener('vocabularySent', this.handleVocabularyLoad);
   }
-  isMouseScanning() {
-    return this.state.chosenScanningType === _configuration_scanningtypes_js__WEBPACK_IMPORTED_MODULE_3__.MOUSE_SCANNING;
-  }
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
       open: this.state.configBoardModalOpen,
@@ -2650,17 +2575,17 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       fluid: true,
       selection: true,
       onChange: this.handleScanningTypeChange
-    }), !this.state.regionsHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Region Rows:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), !this.state.regionsHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Region Rows:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
       type: "number",
       id: "regionRows",
       value: this.state.regionScanningRows,
       onChange: this.handleRegionScanningRowsChange
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Region Columns:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    })), !this.state.regionsHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Region Columns:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
       type: "number",
       id: "regionColumns",
       value: this.state.regionScanningColumns,
       onChange: this.handleRegionScanningColumnsChange
-    }))), this.isMouseScanning() ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Enter Scanning Gesture:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       id: "text1",
@@ -2687,23 +2612,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       fluid: true,
       selection: true,
       onChange: this.handleSelectorGestureChange
-    })), this.isMouseScanning() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      hidden: true
-    }), "Enter Dwelling Time:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      value: this.state.hoverDuration,
-      options: this.hoverTimeOptions,
-      fluid: true,
-      selection: true,
-      onChange: this.handleHoverDurationChange
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      hidden: true
-    }), "Dwell Animation:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      value: this.state.dwellAnimation,
-      options: this.dwellAnimationOptions,
-      fluid: true,
-      selection: true,
-      onChange: this.handleDwellAnimationChange
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Color:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       value: this.state.color,
@@ -3011,6 +2920,10 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   }
   render() {
     const renderModal = this.renderItemModal();
+    const {
+      currentItems
+    } = this.state;
+    const showAddButton = currentItems.length < 27;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
       open: this.state.CreateEditVocabularyModalOpen,
       onClose: this.closeCreateEditVocabularyModal,
@@ -3022,7 +2935,8 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
       currentItems: this.state.currentItems,
       onSelectedItem: this.selectItem,
       selectedItemIndex: this.state.selectedItemIndex,
-      itemSelected: this.state.itemSelected
+      itemSelected: this.state.itemSelected,
+      showAddButton: showAddButton
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"].Actions, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
       disabled: !this.state.itemSelected,
       onClick: () => this.modifyItem()
@@ -3220,103 +3134,6 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         }
       }
     });
-    // scanning next item
-    _defineProperty(this, "handleItemScanning", itemIndex => {
-      // general case - scanning type is step scanning
-      if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.STEP_SCANNING) {
-        if (this.state.selectedItemIndex === this.state.currentItems.length - 1) this.setState({
-          selectedItemIndex: 0
-        }); // scan first item if no more items proceed
-        else this.setState({
-          selectedItemIndex: this.state.selectedItemIndex + 1
-        }); // scan next item
-      } else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
-        this.setState({
-          selectedItemIndex: itemIndex
-        });
-      } else if (this.state.isGoBackFromRowColumnScanning) {
-        // case when it is currently in the state of going back from current scanning region
-        // scan to the initial scannable index of scanning region
-        this.setState({
-          selectedItemIndex: this.state.initialScannableItemIndex,
-          isGoBackFromRowColumnScanning: false,
-          currentItemInRegionIndex: 0
-        });
-      } else {
-        // case of scanning of items but scanning type is not step scanning
-        // case of column based scanning and it is not single row
-        if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.COLUMN_BASED_SCANNING && !this.state.singleRowScanning) {
-          if (this.state.selectedItemIndex + this.state.itemsPerRow >= this.state.currentItems.length) {
-            if (this.state.currentItems.length <= this.state.itemsPerRow)
-              // case when less items than items per row
-              this.setState({
-                selectedItemIndex: this.state.initialScannableItemIndex
-              }); // go to first scannable item
-            else this.setState({
-              isGoBackFromRowColumnScanning: true
-            }); // select all column for go back from column row scanning
-          } else {
-            this.setState({
-              selectedItemIndex: this.state.selectedItemIndex + this.state.itemsPerRow
-            }); // go to next item in column
-          }
-        }
-        // case of row based scanning or any other scanning type but there is only one row
-        else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.ROW_BASED_SCANNING || this.state.singleRowScanning) {
-          if (this.state.selectedItemIndex === this.state.lastScannableItemIndex) {
-            // if no more next items
-            if (this.state.currentItems.length <= this.state.itemsPerRow)
-              // case when go back from row scanning cannot be done because there is only 1 row
-              this.setState({
-                selectedItemIndex: this.state.initialScannableItemIndex
-              }); // go to first scannable index
-            else this.setState({
-              isGoBackFromRowColumnScanning: true
-            }); // select all row for go back from column row scanning
-          } else {
-            this.setState({
-              selectedItemIndex: this.state.selectedItemIndex + 1
-            }); // go next item
-          }
-        }
-        // case of region based scanning
-        else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.REGION_BASED_SCANNING) {
-          let newItemInRegionIndex = this.state.currentItemInRegionIndex + 1;
-          if (newItemInRegionIndex >= this.state.scanningRegion.length) {
-            // set states to allow for go back from region scanning
-            this.setState({
-              isGoBackFromRowColumnScanning: true,
-              selectedItemIndex: this.state.scanningRegion[0],
-              currentItemInRegionIndex: this.state.scanningRegion[0]
-            });
-          } else {
-            // move to next item in region
-            this.setState({
-              selectedItemIndex: this.state.scanningRegion[newItemInRegionIndex],
-              currentItemInRegionIndex: newItemInRegionIndex
-            });
-          }
-        }
-        // case of division based scanning
-        else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.DIVISION_BASED_SCANNING) {
-          let newItemInRegionIndex = this.state.currentItemInRegionIndex + 1;
-          if (newItemInRegionIndex >= this.state.scanningRegion.length) {
-            // set states to allow for go back from division scanning
-            this.setState({
-              isGoBackFromRowColumnScanning: true,
-              selectedItemIndex: this.state.scanningRegion[0],
-              currentItemInRegionIndex: this.state.scanningRegion[0]
-            });
-          } else {
-            // move to next item in region
-            this.setState({
-              selectedItemIndex: this.state.scanningRegion[newItemInRegionIndex],
-              currentItemInRegionIndex: newItemInRegionIndex
-            });
-          }
-        }
-      }
-    });
     // event when the user changes the scanning type from the configurations menu
     _defineProperty(this, "handleScanningTypeChange", event => {
       this.chooseScanningType();
@@ -3382,6 +3199,100 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // if function is not null, then the function defined in the dictionary will be executed
     this.functionDict["goBack"] = this.goBack;
   }
+  // scanning next item
+  handleItemScanning() {
+    // general case - scanning type is step scanning
+    if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.STEP_SCANNING) {
+      if (this.state.selectedItemIndex === this.state.currentItems.length - 1) this.setState({
+        selectedItemIndex: 0
+      }); // scan first item if no more items proceed
+      else this.setState({
+        selectedItemIndex: this.state.selectedItemIndex + 1
+      }); // scan next item
+    } else if (this.state.isGoBackFromRowColumnScanning) {
+      // case when it is currently in the state of going back from current scanning region
+      // scan to the initial scannable index of scanning region
+      this.setState({
+        selectedItemIndex: this.state.initialScannableItemIndex,
+        isGoBackFromRowColumnScanning: false,
+        currentItemInRegionIndex: 0
+      });
+    } else {
+      // case of scanning of items but scanning type is not step scanning
+      // case of column based scanning and it is not single row
+      if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.COLUMN_BASED_SCANNING && !this.state.singleRowScanning) {
+        if (this.state.selectedItemIndex + this.state.itemsPerRow >= this.state.currentItems.length) {
+          if (this.state.currentItems.length <= this.state.itemsPerRow)
+            // case when less items than items per row
+            this.setState({
+              selectedItemIndex: this.state.initialScannableItemIndex
+            }); // go to first scannable item
+          else this.setState({
+            isGoBackFromRowColumnScanning: true
+          }); // select all column for go back from column row scanning
+        } else {
+          this.setState({
+            selectedItemIndex: this.state.selectedItemIndex + this.state.itemsPerRow
+          }); // go to next item in column
+        }
+      }
+      // case of row based scanning or any other scanning type but there is only one row
+      else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.ROW_BASED_SCANNING || this.state.singleRowScanning) {
+        if (this.state.selectedItemIndex === this.state.lastScannableItemIndex) {
+          // if no more next items
+          if (this.state.currentItems.length <= this.state.itemsPerRow)
+            // case when go back from row scanning cannot be done because there is only 1 row
+            this.setState({
+              selectedItemIndex: this.state.initialScannableItemIndex
+            }); // go to first scannable index
+          else this.setState({
+            isGoBackFromRowColumnScanning: true
+          }); // select all row for go back from column row scanning
+        } else {
+          this.setState({
+            selectedItemIndex: this.state.selectedItemIndex + 1
+          }); // go next item
+        }
+      }
+      // case of region based scanning
+      else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.REGION_BASED_SCANNING) {
+        let newItemInRegionIndex = this.state.currentItemInRegionIndex + 1;
+        if (newItemInRegionIndex >= this.state.scanningRegion.length) {
+          // set states to allow for go back from region scanning
+          this.setState({
+            isGoBackFromRowColumnScanning: true,
+            selectedItemIndex: this.state.scanningRegion[0],
+            currentItemInRegionIndex: this.state.scanningRegion[0]
+          });
+        } else {
+          // move to next item in region
+          this.setState({
+            selectedItemIndex: this.state.scanningRegion[newItemInRegionIndex],
+            currentItemInRegionIndex: newItemInRegionIndex
+          });
+        }
+      }
+      // case of division based scanning
+      else if (this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.DIVISION_BASED_SCANNING) {
+        let newItemInRegionIndex = this.state.currentItemInRegionIndex + 1;
+        if (newItemInRegionIndex >= this.state.scanningRegion.length) {
+          // set states to allow for go back from division scanning
+          this.setState({
+            isGoBackFromRowColumnScanning: true,
+            selectedItemIndex: this.state.scanningRegion[0],
+            currentItemInRegionIndex: this.state.scanningRegion[0]
+          });
+        } else {
+          // move to next item in region
+          this.setState({
+            selectedItemIndex: this.state.scanningRegion[newItemInRegionIndex],
+            currentItemInRegionIndex: newItemInRegionIndex
+          });
+        }
+      }
+    }
+  }
+
   // scanning previous item
   handleItemBackScanning() {
     // general case - scanning type is step scanning
@@ -4228,6 +4139,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       let itemIsActivated = this.checkIfItemIsActivated(itemIndex); // if user selects item
       let isParent = item.children.length > 0;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GridItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        height: this.props.height / 4,
         item: item,
         key: columnIndex,
         id: itemIndex,
@@ -4246,10 +4158,6 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     document.addEventListener('backScanning', this.handleBackScanning);
     document.addEventListener('selection', this.handleSelection);
     document.addEventListener('scanningTypeChanged', this.handleScanningTypeChange);
-    document.addEventListener('hoverSelection', this.handleItemSelection);
-    document.addEventListener('hoverScanning', event => {
-      this.handleItemScanning(event.detail);
-    });
 
     // ask main process to send configuration
     ipcRenderer.send('getConfiguration');
@@ -4279,7 +4187,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       visible: visible
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
       columns: this.state.itemsPerRow,
-      container: this.state.currentItems.length < 30,
+      container: false,
       celled: "internally"
     }, elementsToRender));
   }
@@ -4301,17 +4209,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/modules/Transition/Transition.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/collections/Grid/Grid.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Image/Image.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Icon/Icon.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/modules/Transition/Transition.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/collections/Grid/Grid.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Image/Image.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Icon/Icon.js");
 /* harmony import */ var _actions_configactions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/configactions */ "./src/actions/configactions.js");
-/* harmony import */ var _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../configuration/scanningtypes */ "./src/configuration/scanningtypes.js");
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-
 
 
 
@@ -4324,50 +4230,14 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         transitionType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)()
       });
     });
-    _defineProperty(this, "handleMouseEnter", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        //console.log("Current hover duration: ", this.state.hoverDuration);
-        const root = document.documentElement;
-        root.style.setProperty('--color', "".concat(this.state.bgColor));
-        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)());
-        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)());
-        console.log('Mouse entered the grid item.');
-        document.dispatchEvent(new CustomEvent('hoverScanning', {
-          detail: this.props.id
-        }));
-        if (this.hoverTimeout) {
-          clearTimeout(this.hoverTimeout);
-        }
-        this.hoverTimeout = setTimeout(() => {
-          document.dispatchEvent(new CustomEvent('hoverSelection'));
-        }, this.state.hoverDuration);
-      }
-    });
-    _defineProperty(this, "handleMouseLeave", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        console.log('Mouse left the grid item.');
-        if (this.hoverTimeout) {
-          clearTimeout(this.hoverTimeout);
-          this.hoverTimeout = null;
-        }
-      }
-    });
     this.state = {
       bgColor: "",
-      animationColor: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
       transitionActive: true,
       transitionType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
-      showTitle: true,
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      showTitle: true
     };
     this.colorItem = this.colorItem.bind(this);
     this.toggleTransition = this.toggleTransition.bind(this);
-  }
-  getCurrentHoverDuration() {
-    this.setState({
-      hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)()
-    });
   }
   toggleTransition() {
     // activate transition on item
@@ -4380,8 +4250,6 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.colorItem();
   }
   componentDidMount() {
-    const root = document.documentElement;
-    root.style.setProperty('--dwell-time', "".concat(this.state.hoverDuration, "ms"));
     // listen to event
     document.addEventListener('transitionChanged', this.handleTransitionChange);
   }
@@ -4392,14 +4260,13 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   componentWillReceiveProps(nextProps) {
     // call functions when component receives props
     this.colorItem(nextProps);
-    this.getCurrentHoverDuration();
     // toggle transition when item is selected
     if (nextProps.itemActivated) this.toggleTransition();
   }
   colorItem() {
     let props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props;
     // color item if it is being scanned
-    if (props.selected && (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() !== _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
+    if (props.selected) {
       let color = (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)();
       this.setState({
         bgColor: color
@@ -4411,24 +4278,25 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }
   }
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
       animation: this.state.transitionType,
       duration: 500,
       visible: this.state.transitionActive
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["default"].Column, _extends({}, this.state.bgColor !== '' ? {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"].Column, _extends({}, this.state.bgColor !== '' ? {
       color: this.state.bgColor
     } : {}, {
       floated: "left",
-      className: "gridColumn ".concat(this.state.dwellAnimation),
-      onMouseEnter: this.handleMouseEnter,
-      onMouseLeave: this.handleMouseLeave
+      className: "gridColumn"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "gridItem"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      className: "gridItem",
+      style: {
+        height: "".concat(this.props.height, "px")
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
       src: this.props.item.image,
       size: "small",
       centered: true
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, this.state.showTitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.item.title, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.isParent && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, this.state.showTitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.item.title, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.isParent && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
       name: "folder"
     }))))));
   }
@@ -4451,7 +4319,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Header/Header.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Divider/Divider.js");
 /* harmony import */ var _GridBoard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GridBoard */ "./src/components/GridBoard.js");
 /* harmony import */ var _CreateEditVocabularyModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreateEditVocabularyModal */ "./src/components/CreateEditVocabularyModal.js");
 /* harmony import */ var _ConfigBoardModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfigBoardModal */ "./src/components/ConfigBoardModal.js");
@@ -4506,7 +4373,8 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       vocabularyToEdit: [],
       createBoardModalOpen: false,
       currentTitle: "Home",
-      previousTitles: []
+      previousTitles: [],
+      gridBoardHeight: window.innerHeight - 150
     };
     this.renderCreateEditVocabularyModal = this.renderCreateEditVocabularyModal.bind(this);
     this.eventCreateVocabulary = this.eventCreateVocabulary.bind(this);
@@ -4514,6 +4382,7 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.handleGoBackFromFolder = this.handleGoBackFromFolder.bind(this);
     this.handleFreshBoard = this.handleFreshBoard.bind(this);
     this.closeCreateEditVocabularyModal = this.closeCreateEditVocabularyModal.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
   closeCreateEditVocabularyModal() {
     // handle closing of 
@@ -4538,25 +4407,42 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       createBoardModalOpen: true
     });
   }
+  handleResize() {
+    this.setState({
+      gridBoardHeight: window.innerHeight - 150
+    });
+    ipcRenderer.send('refreshPage');
+  }
   componentDidMount() {
     // add event listeners on component mount
     ipcRenderer.on('createBoard', this.eventCreateVocabulary);
     ipcRenderer.on('editExistingBoard', this.handleEditExistingVocabulary);
+    window.addEventListener('resize', this.handleResize);
   }
   componentWillUnmount() {
     // remove event listeners on component unmount to avoid memory leakage
     ipcRenderer.removeListener('createBoard', this.renderCreateEditVocabularyModal);
+    window.removeEventListener('resize', this.handleResize);
   }
   render() {
     const renderCreateEditBoardModal = this.renderCreateEditVocabularyModal();
+    const headerHeight = 36;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_dnd__WEBPACK_IMPORTED_MODULE_4__.DndProvider, {
       backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_5__.HTML5Backend
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      style: {
+        height: "".concat(window.innerHeight, "px")
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      style: {
+        height: "".concat(headerHeight, "px")
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       as: "h1",
       textAlign: "center"
-    }, this.state.currentTitle), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
-      hidden: true
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GridBoard__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }, this.state.currentTitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GridBoard__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      key: this.state.gridBoardHeight,
+      height: this.state.gridBoardHeight,
       onGoToSubFolder: this.handleGoToSubFolder,
       onGoBackFromFolder: this.handleGoBackFromFolder,
       onFreshBoard: this.handleFreshBoard
@@ -4632,6 +4518,7 @@ class VocabularyGrid extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     };
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
       columns: 7,
+      container: false,
       className: "createBoardGrid"
     }, this.state.currentItems.map((elem, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_VocabularyItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
       key: index,
@@ -4640,11 +4527,13 @@ class VocabularyGrid extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       onRepositionItem: this.handleItemsRepositioning,
       selectItem: this.handleSelectItem,
       selected: itemSelected && index == selectedItemIndex
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, {
+    })), this.props.showAddButton ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, {
       onClick: () => this.props.onAddNewItem()
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"].Button, {
       style: addStyle
-    }, "+")));
+    }, "+")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["default"].Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      className: "alertText"
+    }, "You have reached the maximum number of items. Please either remove one or create children to add more.")));
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VocabularyGrid);
@@ -4865,7 +4754,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   COLUMN_BASED_SCANNING: () => (/* binding */ COLUMN_BASED_SCANNING),
 /* harmony export */   DIVISION_BASED_SCANNING: () => (/* binding */ DIVISION_BASED_SCANNING),
-/* harmony export */   MOUSE_SCANNING: () => (/* binding */ MOUSE_SCANNING),
 /* harmony export */   REGION_BASED_SCANNING: () => (/* binding */ REGION_BASED_SCANNING),
 /* harmony export */   ROW_BASED_SCANNING: () => (/* binding */ ROW_BASED_SCANNING),
 /* harmony export */   STEP_SCANNING: () => (/* binding */ STEP_SCANNING)
@@ -4876,7 +4764,6 @@ const ROW_BASED_SCANNING = "ROW_BASED_SCANNING";
 const COLUMN_BASED_SCANNING = "COLUMN_BASED_SCANNING";
 const DIVISION_BASED_SCANNING = "DIVISION_BASED_SCANNING";
 const REGION_BASED_SCANNING = "REGION_BASED_SCANNING";
-const MOUSE_SCANNING = "MOUSE_SCANNING";
 
 /***/ }),
 
@@ -5434,32 +5321,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   margin-bottom: 0;
 }
 
-.fill-up {
-  position: relative;
-  overflow: hidden;
+.alertText{
+  font-weight: bold;
+  color: red;
 }
 
-.fill-up::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background-color: olive;
-  transition: top var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
-}
-
-.fill-up:hover::after {
-  top: 0;
-}
-
-.fill-up:not(:hover)::after {
-  transition: none;
-  top: 100%;
-}
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,uBAAuB;EACvB,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX","sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

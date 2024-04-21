@@ -62,6 +62,12 @@
   margin-bottom: 0;
 }
 
+.alertText{
+  font-weight: bold;
+  color: red;
+}
+
+
 .fill-up {
   position: relative;
   overflow: hidden;
