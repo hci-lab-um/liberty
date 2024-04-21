@@ -1,5 +1,7 @@
 // EyeTrackingComponent.js
+import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
+
 
 const EyeTrackingComponent = () => {
   useEffect(() => {
@@ -7,7 +9,12 @@ const EyeTrackingComponent = () => {
     if (window.webgazer) {
       window.webgazer.setGazeListener((data, timestamp) => {
         if (data) {
-          console.log('Gaze data:', data); // Or handle the gaze data as needed
+          console.log("HELLLLOOOOO"); // Or handle the gaze data as needed
+          const simpleData = {
+            x: data.x,
+            y: data.y,
+          };
+          ipcRenderer.send('gaze-data', simpleData); // Send simplified data
         }
       }).begin();
     }
@@ -20,7 +27,7 @@ const EyeTrackingComponent = () => {
     };
   }, []);
 
-  return <div>Eye Tracking Enabled</div>;
+  return <div></div>;
 };
 
 export default EyeTrackingComponent;

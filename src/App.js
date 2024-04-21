@@ -18,7 +18,7 @@ class App extends Component {
     return (
       <div>
         <Main />
-        <EyeTrackingComponent /> 
+        <EyeTrackingComponent />
       </div>
     );
   }

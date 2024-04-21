@@ -5,8 +5,7 @@ const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
 const express = require('express');
-const https = require('https');
-const forge = require('node-forge');
+const robotjs = require('robotjs');
 
 
 
@@ -239,6 +238,10 @@ ipcMain.on('newBoard', (event, newBoard) => {
         console.log(e);
     }
 })
+
+ipcMain.on('gaze-data', (event, data) => {
+    robotjs.moveMouse(data.x, data.y);
+  });
 
 //call createWindow function when Electron app is ready
 app.on('ready', createWindow);
