@@ -21,6 +21,8 @@ let automaticIsLocked = false;
 let regionScanningColumns = 3;
 let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
+let hoverDuration = 3000;
+let dwellAnimation = 'fill-up';
 
 export function changeConfig(configObject, save = false){
     chosenScanningGesture = configObject.scanningGesture;
@@ -35,6 +37,8 @@ export function changeConfig(configObject, save = false){
     regionScanningColumns = parseInt(configObject.regionScanningColumns);
     defaultVocabularyPath = configObject.vocabularyFile;
     setAutomaticScanningInterval(configObject.automaticScanningInterval);
+    hoverDuration = configObject.hoverDuration;
+    dwellAnimation = configObject.dwellAnimation;
 
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
@@ -115,6 +119,18 @@ export function getHighlightColor(){
 
 export function setHighlightColor(newColor){
    highlightColor = newColor;
+}
+
+export function getHoverDuration(){
+    return hoverDuration;
+}
+
+export function getDwellAnimation(){
+    return dwellAnimation;
+}
+
+export function setDwellAnimation(newColor){
+    dwellAnimation = newColor;
 }
 
 export function getTransition(){

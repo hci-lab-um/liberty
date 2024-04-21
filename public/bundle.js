@@ -2743,7 +2743,6 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   }
   addNewItem(itemName, itemFunction, itemImage) {
     // adding new item to the vocabulary
-
     let newItem = {
       title: itemName,
       function: itemFunction === "" ? null : itemFunction,

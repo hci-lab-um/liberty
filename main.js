@@ -15,6 +15,8 @@ let defaultConfiguration = {
     "backScanningGesture": "LEFT_ARROW",
     "selectorGesture": "SPACEBAR",
     "highlightColor": "green",
+    "hoverDuration": 3000,
+    "dwellAnimation": "fill-up",
     "isLeap": false,
     "leapInterval": 1000,
     "regionScanningColumns": 2,

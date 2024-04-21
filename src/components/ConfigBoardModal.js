@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Input, Form, Divider, Dropdown, Checkbox } from 'semantic-ui-react';
-import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath } from '../actions/configactions';
+import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation } from '../actions/configactions';
 import * as gestures from '../configuration/gestures.js';
 import * as scanningTypes from '../configuration/scanningtypes.js'
 const {ipcRenderer} = window.require('electron')
@@ -13,7 +13,8 @@ class ConfigBoardModal extends Component {
         {text: 'Row based Scanning', value: scanningTypes.ROW_BASED_SCANNING},
         {text: 'Column based Scanning', value: scanningTypes.COLUMN_BASED_SCANNING},
         {text: 'Region based Scanning', value: scanningTypes.REGION_BASED_SCANNING},
-        {text: 'Division based Scanning', value: scanningTypes.DIVISION_BASED_SCANNING}
+        {text: 'Division based Scanning', value: scanningTypes.DIVISION_BASED_SCANNING},
+        {text: 'Mouse Scanning', value: scanningTypes.MOUSE_SCANNING}
     ]
 
     // definition of gesture type to include gesture name in title case and corresponding icon
@@ -74,11 +75,21 @@ class ConfigBoardModal extends Component {
         gestures.SWIPE_LEFT, gestures.SWIPE_RIGHT, gestures.CIRCLE, gestures.SWIPE_RIGHT, gestures.SWIPE_LEFT, gestures.ROLL_RIGHT, gestures.ROLL_LEFT
     ]
 
+    hoverTimeOptions = [
+        { text: '1 second', value: 1000 },
+        { text: '2 seconds', value: 2000 },
+        { text: '3 seconds', value: 3000 },
+        { text: '4 seconds', value: 4000 },
+        { text: '5 seconds', value: 5000 }
+    ];
+
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
-      
+    dwellAnimations = ['fill-up']
+    
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));
+    dwellAnimationOptions = this.dwellAnimations.map(name => ({text: name, value: name, color: name}));
 
     constructor(props){
         super(props);
@@ -99,8 +110,11 @@ class ConfigBoardModal extends Component {
             addVocabulary: getDefaultVocabularyPath(),
             regionScanningRows: getRegionScanningRows(),
             regionScanningColumns: getRegionScanningColumns(),
-            regionsHidden: true
+            regionsHidden: true,
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
         }
+
         // definie binding of methods
         this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
         this.openConfigBoardModal = this.openConfigBoardModal.bind(this);
@@ -114,13 +128,15 @@ class ConfigBoardModal extends Component {
         this.handleModalOpen = this.handleModalOpen.bind(this);
         this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
+        this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
+        this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
         this.automaticShow = this.automaticShow.bind(this);
         this.leapShow = this.leapShow.bind(this);
         this.validateScanningGesture = this.validateScanningGesture.bind(this);
         this.validateBackScanningGesture = this.validateBackScanningGesture.bind(this);
         this.validateSelectorGesture = this.validateSelectorGesture.bind(this);
         this.handleVocabularyLoad = this.handleVocabularyLoad.bind(this);
-        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);
+        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);        
     }
 
     handleModalOpen(){
@@ -131,6 +147,8 @@ class ConfigBoardModal extends Component {
             chosenScanningGesture: getChosenScanningGesture(),
             chosenBackScanningGesture: getChosenBackScanningGesture(),
             color: getHighlightColor(),
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
             automaticScanningInterval: getAutomaticScanningInterval(),
             leapInterval: getLeapInterval(),
             transition: getTransition(),
@@ -143,6 +161,19 @@ class ConfigBoardModal extends Component {
                 this.setState({regionsHidden: false}); 
         });
         lockSelector(); // lock gesture detection
+        // const root = document.documentElement;
+        // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
+    }
+
+    handleHoverDurationChange=(e, data)=>{
+        this.setState({hoverDuration: data.value});
+        //setting css variable to be used for hover animatons
+        const root = document.documentElement;
+        root.style.setProperty('--dwell-time', `${data.value}ms`);
+    }
+
+    handleDwellAnimationChange=(e, data)=>{
+        this.setState({dwellAnimation: data.value});
     }
 
     handleColorChange=(e, data)=>{
@@ -216,6 +247,8 @@ class ConfigBoardModal extends Component {
                 backScanningGesture: this.state.chosenBackScanningGesture,
                 scanningType: this.state.chosenScanningType,
                 highlightColor: this.state.color,
+                hoverDuration: this.state.hoverDuration,
+                dwellAnimation: this.state.dwellAnimation,
                 transition: this.state.transition,
                 automaticScanningInterval: this.state.automaticScanningInterval,
                 leapInterval: this.state.leapInterval,
@@ -321,47 +354,70 @@ class ConfigBoardModal extends Component {
         ipcRenderer.removeListener('vocabularySent', this.handleVocabularyLoad);
     }
 
+    isMouseScanning() {
+        return this.state.chosenScanningType === scanningTypes.MOUSE_SCANNING; 
+    }    
+
     render() {
         return (
-        <Modal open={this.state.configBoardModalOpen} onClose={this.closeConfigBoardModal}>
-           <Modal.Header>Configure Board</Modal.Header>
-           <Modal.Content>
-               <Form>
-                   Scanning Type:
-                   <Dropdown id="scanningtype" value={this.state.chosenScanningType} options={this.scanningType} fluid selection onChange={this.handleScanningTypeChange}/>
-                   {!this.state.regionsHidden && <div><p>Region Rows:</p><Input type="number" id="regionRows" value={this.state.regionScanningRows} onChange={this.handleRegionScanningRowsChange}/></div>}
-                   {!this.state.regionsHidden && <div><p>Region Columns:</p><Input type="number" id="regionColumns" value={this.state.regionScanningColumns} onChange={this.handleRegionScanningColumnsChange}/></div>}
-                   <Divider hidden/>
-                   Enter Scanning Gesture:
-                   <Dropdown id="text1" value={this.state.chosenScanningGesture} options={this.gestureType} fluid selection onChange={this.handleScanningGestureChange}/>
-                   <Divider hidden/>
-                   Enter Back Scanning Gesture:
-                   <Dropdown id="text2" value={this.state.chosenBackScanningGesture} options={this.gestureType} fluid selection onChange={this.handleBackScanningGestureChange}/>
-                   <Divider hidden/>
-                   Enter Selector Gesture:
-                   <Dropdown id="text3" value={this.state.chosenSelectorGesture} options={this.gestureType} fluid selection onChange={this.handleSelectorGestureChange}/>
-                   <Divider hidden/>
-                   Color:
-                   <Dropdown value={this.state.color} options={this.colorOptions} fluid selection onChange={this.handleColorChange}/>
-                   <Divider hidden/>
-                   Item Transition:
-                   <Dropdown value={this.state.transition} options={this.transitionOptions} fluid selection onChange={this.handleTransitionChange}/>
-                   <Divider hidden/>
-                   {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
-                   {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
-                   <Divider hidden/>
-                   <Form.Button type="button" value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
-                   <Form.Input fluid readOnly>
-                    {this.state.addVocabulary}
-                   </Form.Input>
-                   <Divider hidden/>
-                   <Form.Button type="submit" value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
-               </Form>
-           </Modal.Content>
-        </Modal>
-        )
-        
+            <Modal open={this.state.configBoardModalOpen} onClose={this.closeConfigBoardModal}>
+                <Modal.Header>Configure Board</Modal.Header>
+                <Modal.Content>
+                    <Form>
+                        Scanning Type:
+                        <Dropdown id="scanningtype" value={this.state.chosenScanningType} options={this.scanningType} fluid selection onChange={this.handleScanningTypeChange}/>
+                        {!this.state.regionsHidden && (
+                            <>
+                                <div><p>Region Rows:</p><Input type="number" id="regionRows" value={this.state.regionScanningRows} onChange={this.handleRegionScanningRowsChange}/></div>
+                                <div><p>Region Columns:</p><Input type="number" id="regionColumns" value={this.state.regionScanningColumns} onChange={this.handleRegionScanningColumnsChange}/></div>
+                            </>
+                        )}
+                        {this.isMouseScanning() ? null : (
+                            <>
+                                <Divider hidden/>
+                                Enter Scanning Gesture:
+                                <Dropdown id="text1" value={this.state.chosenScanningGesture} options={this.gestureType} fluid selection onChange={this.handleScanningGestureChange}/>
+                                <Divider hidden/>
+                                Enter Back Scanning Gesture:
+                                <Dropdown id="text2" value={this.state.chosenBackScanningGesture} options={this.gestureType} fluid selection onChange={this.handleBackScanningGestureChange}/>
+                                <Divider hidden/>
+                                Enter Selector Gesture:
+                                <Dropdown id="text3" value={this.state.chosenSelectorGesture} options={this.gestureType} fluid selection onChange={this.handleSelectorGestureChange}/>
+                            </>
+                        )}
+                        {this.isMouseScanning() && (
+                            <>
+                                <Divider hidden/>
+                                Enter Dwelling Time:
+                                <Dropdown value={this.state.hoverDuration} options={this.hoverTimeOptions} fluid selection onChange={this.handleHoverDurationChange}/>
+                                <Divider hidden/>
+                                Dwell Animation:
+                                <Dropdown value={this.state.dwellAnimation} options={this.dwellAnimationOptions} fluid selection onChange={this.handleDwellAnimationChange}/>
+                            </>
+                            
+                        )}
+                        <Divider hidden/>
+                        Color:
+                        <Dropdown value={this.state.color} options={this.colorOptions} fluid selection onChange={this.handleColorChange}/>
+                        <Divider hidden/>
+                        Item Transition:
+                        <Dropdown value={this.state.transition} options={this.transitionOptions} fluid selection onChange={this.handleTransitionChange}/>
+                        <Divider hidden/>
+                        {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
+                        {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
+                        <Divider hidden/>
+                        <Form.Button type="button" value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
+                        <Form.Input fluid readOnly>
+                            {this.state.addVocabulary}
+                        </Form.Input>
+                        <Divider hidden/>
+                        <Form.Button type="submit" value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
+                    </Form>
+                </Modal.Content>
+            </Modal>
+        );
     }
+    
 
 }
 
