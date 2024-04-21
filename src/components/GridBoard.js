@@ -955,7 +955,7 @@ class GridBoard extends Component {
                 let itemIsSelected = this.checkItemIsSelected(rowIndex, columnIndex, itemIndex); // if item is being scanned
                 let itemIsActivated = this.checkIfItemIsActivated(itemIndex); // if user selects item
                 let isParent = item.children.length > 0;
-                return <GridItem item={item} key={columnIndex} id={itemIndex} 
+                return <GridItem height={this.props.height/4} item={item} key={columnIndex} id={itemIndex} 
                          selected={itemIsSelected} itemActivated={itemIsActivated} isParent={isParent} />
             })}
         </GridRow>
@@ -999,7 +999,7 @@ class GridBoard extends Component {
     let show = 1000;
     return (
         <Transition animation='fade down' duration={{hide,show}} visible={visible}>
-            <Grid columns={this.state.itemsPerRow} container={this.state.currentItems.length < 30} celled='internally' >
+            <Grid columns={this.state.itemsPerRow} container={false} celled='internally'>
             {elementsToRender}
             </Grid>
         </Transition>
