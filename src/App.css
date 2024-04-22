@@ -93,27 +93,31 @@
   top: 100%;
 }
 
+.horizontal-out {
+  position: relative; 
+}
+
 .horizontal-out::before {
   content: "";
-  position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0; 
+  position: absolute;
+  height: 100%;
+  margin-top: 0;
+  left: 50%; 
+  transform: translate(-50%, 0); 
   border-top: 10px solid olive; 
   border-bottom: 10px solid olive; 
-  width: 0;
-  height: 100%;
+  width: 0; 
   box-sizing: border-box;
   overflow: hidden;
-  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
+  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7); 
 }
 
 .horizontal-out.hovered::before {
-  width: 100%; 
+  width: calc(100% - 10px); /* Expand width to fill the remaining space */
 }
 
 .horizontal-out:not(.hovered)::before {
   transition-duration: 0s;
-  width: 0;
+  width: 0; /* Set width back to 0 */
 }

@@ -5512,30 +5512,35 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   top: 100%;
 }
 
+.horizontal-out {
+  position: relative; 
+}
+
 .horizontal-out::before {
   content: "";
-  position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0; 
+  position: absolute;
+  height: 100%;
+  margin-top: 0;
+  left: 50%; 
+  transform: translate(-50%, 0); 
   border-top: 10px solid olive; 
   border-bottom: 10px solid olive; 
-  width: 0;
-  height: 100%;
+  width: 0; 
   box-sizing: border-box;
   overflow: hidden;
-  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
+  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7); 
 }
 
 .horizontal-out.hovered::before {
-  width: 100%; 
+  width: calc(100% - 10px); /* Expand width to fill the remaining space */
 }
 
 .horizontal-out:not(.hovered)::before {
   transition-duration: 0s;
-  width: 0;
-}`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,MAAM;EACN,OAAO;EACP,QAAQ;EACR,SAAS;EACT,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,YAAY;EACZ,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;EACvB,QAAQ;AACV","sourceRoot":""}]);
+  width: 0; /* Set width back to 0 */
+}
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
