@@ -85,7 +85,7 @@ class ConfigBoardModal extends Component {
 
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
-    dwellAnimations = ['fill-up']
+    dwellAnimations = ['fill-up', 'horizontal-out']
     
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));

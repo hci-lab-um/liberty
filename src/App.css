@@ -67,10 +67,9 @@
   color: red;
 }
 
-
 .fill-up {
   position: relative;
-  overflow: hidden;
+  overflow: hidden; 
 }
 
 .fill-up::after {
@@ -85,11 +84,40 @@
   transition: top var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
 }
 
-.fill-up:hover::after {
-  top: 0;
+.fill-up.hovered::after {
+  top: 0; 
 }
 
-.fill-up:not(:hover)::after {
-  transition: none;
+.fill-up:not(.hovered)::after {
+  transition: none; 
   top: 100%;
+}
+
+.horizontal-out {
+  position: relative; 
+}
+
+.horizontal-out::before {
+  content: "";
+  top: 0;
+  position: absolute;
+  height: 100%;
+  margin-top: 0;
+  left: 50%; 
+  transform: translate(-50%, 0); 
+  border-top: 10px solid olive; 
+  border-bottom: 10px solid olive; 
+  width: 0; 
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7); 
+}
+
+.horizontal-out.hovered::before {
+  width: calc(100% - 10px); /* Expand width to fill the remaining space */
+}
+
+.horizontal-out:not(.hovered)::before {
+  transition-duration: 0s;
+  width: 0; /* Set width back to 0 */
 }

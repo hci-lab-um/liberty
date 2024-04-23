@@ -14,6 +14,7 @@ class GridItem extends Component {
             showTitle: true,
             hoverDuration: getHoverDuration(),
             dwellAnimation: getDwellAnimation(),
+            hovered: ''
           }
         this.colorItem = this.colorItem.bind(this);
         this.toggleTransition = this.toggleTransition.bind(this);
@@ -33,6 +34,10 @@ class GridItem extends Component {
       this.setState({transitionType: getTransition()});
     }
 
+    handleDwellAnimationChange =(event) =>{
+      this.setState({dwellAnimation: getDwellAnimation()});
+    }
+
     componentWillMount(){
       // call function when component will mount
         this.colorItem();
@@ -44,11 +49,13 @@ class GridItem extends Component {
       updateCSSBgColour();
       // listen to event
       document.addEventListener('transitionChanged', this.handleTransitionChange);
+      document.addEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
     }
 
     componentWillUnmount(){
       // remove event listener
       document.removeEventListener('transitionChanged', this.handleTransitionChange);
+      document.removeEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
     }
 
     componentWillReceiveProps(nextProps){
@@ -78,22 +85,25 @@ class GridItem extends Component {
     handleMouseEnter = () => {
       if (getScanningType() === scanningTypes.MOUSE_SCANNING) {
         //console.log("Current hover duration: ", this.state.hoverDuration);
-        console.log(getDwellAnimation())
-        console.log(getHoverDuration())
-        console.log('Mouse entered the grid item.');
+        // console.log(getDwellAnimation())
+        // console.log(getHoverDuration())
+        // console.log('Mouse entered the grid item.');
+        this.setState({ hovered: 'hovered' });
         document.dispatchEvent(new CustomEvent('hoverScanning', {detail: this.props.id}));
         if (this.hoverTimeout) {
           clearTimeout(this.hoverTimeout);
         }
         this.hoverTimeout = setTimeout(() => {
             document.dispatchEvent(new CustomEvent('hoverSelection'));
+            this.setState({ hovered: '' });
         }, this.state.hoverDuration);
       }
     }
 
     handleMouseLeave = () => {
         if (getScanningType() === scanningTypes.MOUSE_SCANNING) {
-          console.log('Mouse left the grid item.');
+          // console.log('Mouse left the grid item.');
+          this.setState({ hovered: '' });
           if (this.hoverTimeout) {
             clearTimeout(this.hoverTimeout);
             this.hoverTimeout = null;
@@ -105,7 +115,7 @@ class GridItem extends Component {
       return (
         
           <Transition animation={this.state.transitionType} duration={500} visible={this.state.transitionActive}>
-              <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className={`gridColumn ${this.state.dwellAnimation}`} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+              <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className={`gridColumn ${this.state.dwellAnimation} ${this.state.hovered}`} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                   <div className="gridItem" style={{ height: `${this.props.height}px`}}>
                       <Image src={this.props.item.image} size='small' centered />
                       <p>
