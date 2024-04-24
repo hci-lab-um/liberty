@@ -958,6 +958,7 @@ function changeConfig(configObject) {
     updateCSSBgColour();
     setScanningType();
     setTransition();
+    setDwellAnimation();
     // send the new configuration to the main process
     ipcRenderer.send('configChange', configObject);
   }
@@ -1031,8 +1032,8 @@ function getHoverDuration() {
 function getDwellAnimation() {
   return dwellAnimation;
 }
-function setDwellAnimation(newColor) {
-  dwellAnimation = newColor;
+function setDwellAnimation() {
+  document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 function getTransition() {
   return transition;
@@ -2333,7 +2334,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }]);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
-    _defineProperty(this, "dwellAnimations", ['fill-up']);
+    _defineProperty(this, "dwellAnimations", ['fill-up', 'horizontal-out']);
     _defineProperty(this, "transitionOptions", this.transitions.map(name => ({
       key: name,
       text: name,
@@ -4380,12 +4381,20 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         transitionType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)()
       });
     });
+    _defineProperty(this, "handleDwellAnimationChange", event => {
+      this.setState({
+        dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      });
+    });
     _defineProperty(this, "handleMouseEnter", () => {
       if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
         //console.log("Current hover duration: ", this.state.hoverDuration);
-        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)());
-        console.log((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)());
-        console.log('Mouse entered the grid item.');
+        // console.log(getDwellAnimation())
+        // console.log(getHoverDuration())
+        // console.log('Mouse entered the grid item.');
+        this.setState({
+          hovered: 'hovered'
+        });
         document.dispatchEvent(new CustomEvent('hoverScanning', {
           detail: this.props.id
         }));
@@ -4394,12 +4403,18 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         }
         this.hoverTimeout = setTimeout(() => {
           document.dispatchEvent(new CustomEvent('hoverSelection'));
+          this.setState({
+            hovered: ''
+          });
         }, this.state.hoverDuration);
       }
     });
     _defineProperty(this, "handleMouseLeave", () => {
       if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        console.log('Mouse left the grid item.');
+        // console.log('Mouse left the grid item.');
+        this.setState({
+          hovered: ''
+        });
         if (this.hoverTimeout) {
           clearTimeout(this.hoverTimeout);
           this.hoverTimeout = null;
@@ -4413,7 +4428,8 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       transitionType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
       showTitle: true,
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
+      hovered: ''
     };
     this.colorItem = this.colorItem.bind(this);
     this.toggleTransition = this.toggleTransition.bind(this);
@@ -4439,10 +4455,12 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.updateCSSBgColour)();
     // listen to event
     document.addEventListener('transitionChanged', this.handleTransitionChange);
+    document.addEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
   }
   componentWillUnmount() {
     // remove event listener
     document.removeEventListener('transitionChanged', this.handleTransitionChange);
+    document.removeEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
   }
   componentWillReceiveProps(nextProps) {
     // call functions when component receives props
@@ -4474,7 +4492,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       color: this.state.bgColor
     } : {}, {
       floated: "left",
-      className: "gridColumn ".concat(this.state.dwellAnimation),
+      className: "gridColumn ".concat(this.state.dwellAnimation, " ").concat(this.state.hovered),
       onMouseEnter: this.handleMouseEnter,
       onMouseLeave: this.handleMouseLeave
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -5522,10 +5540,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   color: red;
 }
 
-
 .fill-up {
   position: relative;
-  overflow: hidden;
+  overflow: hidden; 
 }
 
 .fill-up::after {
@@ -5540,12 +5557,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   transition: top var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
 }
 
-.fill-up:hover::after {
-  top: 0;
+.fill-up.hovered::after {
+  top: 0; 
 }
 
-.fill-up:not(:hover)::after {
-  transition: none;
+.fill-up:not(.hovered)::after {
+  transition: none; 
   top: 100%;
 }
 

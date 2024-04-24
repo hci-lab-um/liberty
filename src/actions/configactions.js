@@ -46,6 +46,7 @@ export function changeConfig(configObject, save = false){
         updateCSSBgColour();
         setScanningType();
         setTransition();
+        setDwellAnimation();
         // send the new configuration to the main process
         ipcRenderer.send('configChange', configObject);
     }
@@ -135,8 +136,8 @@ export function getDwellAnimation(){
     return dwellAnimation;
 }
 
-export function setDwellAnimation(newColor){
-    dwellAnimation = newColor;
+export function setDwellAnimation(){
+    document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 
 export function getTransition(){
