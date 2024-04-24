@@ -696,6 +696,15 @@ class GridBoard extends Component {
     // callback function is called once to apply the transition after the vocabulary loads
     chooseScanningType(callback = ()=>{}){
         let scanningType = getScanningType();
+        if(scanningType === scanningTypes.MOUSE_SCANNING){
+            this.setupCustomCursor();
+            this.setState({scanningType: scanningType, isSelectingColumn: false, isSelectingRow: false}, ()=>{
+                callback();
+            });
+        }
+        else {
+            this.resetCursor();
+        }
         if(scanningType === scanningTypes.ROW_BASED_SCANNING){
            // condition for roe based scanning
             this.setState({selectedRowIndex: 0, isSelectingColumn: false, isSelectingRegion: false, scanningType: scanningType}, () =>{
@@ -963,6 +972,48 @@ class GridBoard extends Component {
         return elementsToRender;
     }
 
+    setupCustomCursor() {
+        document.body.style.cursor = 'none';
+        const cursorImg = document.querySelector('.cursor-img');
+        cursorImg.style.opacity = '0.7';
+        // Threshold of much the mouse can move before the image moves
+        const threshold = 25;
+        let mouseX = 0, mouseY = 0, posX = 0, posY = 0, lastMouseX = 0, lastMouseY = 0;
+    
+        function animate() {
+            let dx = mouseX - lastMouseX;
+            let dy = mouseY - lastMouseY;
+    
+            if (Math.sqrt(dx * dx + dy * dy) > threshold) {
+            posX += (mouseX - posX);
+            posY += (mouseY - posY);
+            
+            cursorImg.style.top = posY + 'px';
+            cursorImg.style.left = posX + 'px';
+    
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            }
+    
+            requestAnimationFrame(animate); 
+        }
+    
+        document.addEventListener('mousemove', e => {
+            mouseX = e.pageX - 37;
+            mouseY = e.pageY - 37;
+        });
+
+        animate();
+    }
+
+    resetCursor() {
+        document.body.style.cursor = 'auto';
+        const cursorImg = document.querySelector('.cursor-img');
+        if (cursorImg) {
+            cursorImg.style.opacity = '0'; // Hide the custom cursor
+        }
+    }
+
     componentDidMount(){
         // add event listeners
         document.addEventListener('mousedown', this.handleMouseDownEvent);
@@ -975,7 +1026,6 @@ class GridBoard extends Component {
         document.addEventListener('hoverScanning', (event) => {
             this.handleItemScanning(event.detail);
         });
-          
         
         // ask main process to send configuration
         ipcRenderer.send('getConfiguration');

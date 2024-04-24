@@ -93,3 +93,13 @@
   transition: none;
   top: 100%;
 }
+
+.cursor-img {
+  position: absolute;
+  pointer-events: none;
+  width: 70px;
+  height: 70px;
+  transition: all 0.2s ease-out;
+  z-index: 9999;
+  opacity: 0;
+}

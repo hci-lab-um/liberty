@@ -73,7 +73,8 @@
       "public/icon.png",
       "config.json",
       "demoboard.json",
-      "images/goback.png"
+      "images/goback.png",
+      "images/cursor_image.png"
     ]
   }
 }

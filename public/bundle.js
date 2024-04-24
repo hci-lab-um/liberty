@@ -3918,6 +3918,18 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   chooseScanningType() {
     let callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : () => {};
     let scanningType = (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getScanningType)();
+    if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+      this.setupCustomCursor();
+      this.setState({
+        scanningType: scanningType,
+        isSelectingColumn: false,
+        isSelectingRow: false
+      }, () => {
+        callback();
+      });
+    } else {
+      this.resetCursor();
+    }
     if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.ROW_BASED_SCANNING) {
       // condition for roe based scanning
       this.setState({
@@ -4243,6 +4255,44 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     })));
     return elementsToRender;
+  }
+  setupCustomCursor() {
+    document.body.style.cursor = 'none';
+    const cursorImg = document.querySelector('.cursor-img');
+    cursorImg.style.opacity = '0.7';
+    // Threshold of much the mouse can move before the image moves
+    const threshold = 25;
+    let mouseX = 0,
+      mouseY = 0,
+      posX = 0,
+      posY = 0,
+      lastMouseX = 0,
+      lastMouseY = 0;
+    function animate() {
+      let dx = mouseX - lastMouseX;
+      let dy = mouseY - lastMouseY;
+      if (Math.sqrt(dx * dx + dy * dy) > threshold) {
+        posX += mouseX - posX;
+        posY += mouseY - posY;
+        cursorImg.style.top = posY + 'px';
+        cursorImg.style.left = posX + 'px';
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+      }
+      requestAnimationFrame(animate);
+    }
+    document.addEventListener('mousemove', e => {
+      mouseX = e.pageX - 37;
+      mouseY = e.pageY - 37;
+    });
+    animate();
+  }
+  resetCursor() {
+    document.body.style.cursor = 'auto';
+    const cursorImg = document.querySelector('.cursor-img');
+    if (cursorImg) {
+      cursorImg.style.opacity = '0'; // Hide the custom cursor
+    }
   }
   componentDidMount() {
     // add event listeners
@@ -4580,7 +4630,11 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       as: "h1",
       textAlign: "center"
-    }, this.state.currentTitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GridBoard__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }, this.state.currentTitle)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      src: "../images/cursor_image.png",
+      className: "cursor-img",
+      alt: "cursor"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GridBoard__WEBPACK_IMPORTED_MODULE_1__["default"], {
       key: this.state.gridBoardHeight,
       height: this.state.gridBoardHeight,
       onGoToSubFolder: this.handleGoToSubFolder,
@@ -5494,7 +5548,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   transition: none;
   top: 100%;
 }
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;;AAGA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX","sourceRoot":""}]);
+
+.cursor-img {
+  position: absolute;
+  pointer-events: none;
+  width: 70px;
+  height: 70px;
+  transition: all 0.2s ease-out;
+  z-index: 9999;
+  opacity: 0;
+}`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;;AAGA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

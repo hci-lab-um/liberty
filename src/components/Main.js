@@ -90,6 +90,9 @@ class Main extends Component {
           <div style={{ height: `${headerHeight}px` }}>
             <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
           </div>
+          <div>
+            <img src='../images/cursor_image.png' className='cursor-img' alt='cursor' />
+          </div>
           <GridBoard key={this.state.gridBoardHeight} height={this.state.gridBoardHeight} onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
           {renderCreateEditBoardModal}
           <ConfigBoardModal />
