@@ -6,6 +6,7 @@ import ConfigBoardModal from './ConfigBoardModal'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {DndProvider} from 'react-dnd'
 const {ipcRenderer} = window.require('electron')
+import Webgazer from 'webgazer';
 
 class Main extends Component {
   constructor(props){
@@ -69,6 +70,16 @@ class Main extends Component {
   }
 
   componentDidMount(){
+
+    Webgazer.begin();
+
+    // Start capturing gaze data
+    Webgazer.setGazeListener((data, elapsedTime) => {
+      if (data == null) {
+        return;
+      }
+      console.log(data); // Log gaze data
+    });
     // add event listeners on component mount
     ipcRenderer.on('createBoard', this.eventCreateVocabulary);
     ipcRenderer.on('editExistingBoard', this.handleEditExistingVocabulary);

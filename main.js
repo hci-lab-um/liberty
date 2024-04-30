@@ -120,6 +120,7 @@ function createWindow() {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
+            webSecurity: false 
         },
         minWidth: 1024,
         minHeight: 768,
