@@ -118,9 +118,9 @@ class GridItem extends Component {
               <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className={`gridColumn ${this.state.dwellAnimation} ${this.state.hovered}`} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                   <div className="gridItem" style={{ height: `${this.props.height}px`}}>
                       <Image src={this.props.item.image} size='small' centered />
-                      <p>
+                      <p className='labelCentered'>
                           {this.state.showTitle && <span>{this.props.item.title} </span>}
-                          <span>{this.props.isParent && <Icon name='folder'/>}</span>
+                          <span>{this.props.isParent && <img className="folderImg" src='../images/folder.svg'/>}</span>
                       </p>            
                   </div>
               </Grid.Column>
