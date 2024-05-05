@@ -19,9 +19,10 @@ class GridBoard extends Component {
     restItem = {
         title: "Toggle Rest Mode",
         image: '../images/settings/eye eyes.png',
-        function: "restMode",
+        function: "restModeChange",
         children: []
     }
+
     settingsItems = {
         title: "Settings",
         image: '../images/settings/cog.png',
@@ -115,7 +116,7 @@ class GridBoard extends Component {
             scanningRegionIndex: 0,
             currentItemInRegionIndex: 0,
             divisionMetaData: {},
-            restMode: false,
+            restModeBool: false,
             isGoBackFromDivisionScanning: false
         }
         
@@ -154,12 +155,13 @@ class GridBoard extends Component {
         // bind goBack function to "goBack" title in function dictionary
         // if function is not null, then the function defined in the dictionary will be executed
         this.functionDict["goBack"] = this.goBack;
-        this.functionDict["restMode"] = this.restMode;
+        this.functionDict["restModeChange"] = this.restModeChange;
         this.functionDict["changeDwellTime"] = this.changeDwellTime;
         this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
     }
 
     changeDwellTime = (time) =>{
+        console.log("triggered")
         setHoverDuration(parseInt(time));
         this.setState({hoverDuration: getHoverDuration()});
         const root = document.documentElement;
@@ -167,15 +169,7 @@ class GridBoard extends Component {
         this.saveConfig();
     }
 
-    restMode = () => {
-        if(this.state.restMode === true){
-            setRestMode(false);
-        }else{
-            setRestMode(true);
-        }
-        this.setState({restMode: getRestMode()})
-        console.log(this.state.restMode)
-    }
+
 
     changeDwellAnimation = (animation) =>{
         setDwellAnimation(animation);
@@ -228,6 +222,19 @@ class GridBoard extends Component {
                 setTimeout(()=>{unlockSelector()},1000); // unlock selector after transition finishes
             });
         });
+    }
+
+
+    restModeChange = () => {
+        if(this.state.currentItems[this.state.selectedItemIndex].title === "Toggle Rest Mode"){
+            let cursorImg = document.querySelector('.cursor-img');
+            if(this.state.restModeBool === true){
+                setRestMode(false);
+            }else{
+                setRestMode(true);
+            }
+            this.setState({restModeBool: getRestMode()})
+        }
     }
 
     // handle key press
@@ -459,6 +466,9 @@ class GridBoard extends Component {
     // selection of item in step-scanning
     handleItemSelection(){
         let selectedItem = this.state.currentItems[this.state.selectedItemIndex];
+            if(this.state.restModeBool == true && selectedItem.title != "Toggle Rest Mode"){
+               return
+            }
             if(selectedItem.children.length !== 0){
                 // case for folder item
                 this.setState({transitionVisible: false});
@@ -1133,7 +1143,7 @@ class GridBoard extends Component {
     setupCustomCursor() {
         document.body.style.cursor = 'none';
         const cursorImg = document.querySelector('.cursor-img');
-        cursorImg.style.opacity = '0.7';
+        cursorImg.style.opacity = '0.4';
         // Threshold of much the mouse can move before the image moves
         const threshold = 25;
         let mouseX = 0, mouseY = 0, posX = 0, posY = 0, lastMouseX = 0, lastMouseY = 0;

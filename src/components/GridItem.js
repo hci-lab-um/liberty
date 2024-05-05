@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Image, Transition, Icon } from 'semantic-ui-react';
-import { getHighlightColor, getDwellAnimation, getTransition, getScanningType, getHoverDuration, updateCSSBgColour } from '../actions/configactions';
+import { getHighlightColor, getDwellAnimation, getTransition, getScanningType, getHoverDuration, updateCSSBgColour, getRestMode} from '../actions/configactions';
 import * as scanningTypes from '../configuration/scanningtypes'
 
 class GridItem extends Component {
@@ -83,11 +83,7 @@ class GridItem extends Component {
     }
 
     handleMouseEnter = () => {
-      if (getScanningType() === scanningTypes.MOUSE_SCANNING) {
-        //console.log("Current hover duration: ", this.state.hoverDuration);
-        // console.log(getDwellAnimation())
-        // console.log(getHoverDuration())
-        // console.log('Mouse entered the grid item.');
+      if (getScanningType() === scanningTypes.MOUSE_SCANNING && (getRestMode() === false || this.props.item.title === "Toggle Rest Mode")) {
         this.setState({ hovered: 'hovered' });
         document.dispatchEvent(new CustomEvent('hoverScanning', {detail: this.props.id}));
         if (this.hoverTimeout) {
@@ -101,8 +97,7 @@ class GridItem extends Component {
     }
 
     handleMouseLeave = () => {
-        if (getScanningType() === scanningTypes.MOUSE_SCANNING) {
-          // console.log('Mouse left the grid item.');
+        if (getScanningType() === scanningTypes.MOUSE_SCANNING && (getRestMode() === false || this.props.item.title === "Toggle Rest Mode")) {
           this.setState({ hovered: '' });
           if (this.hoverTimeout) {
             clearTimeout(this.hoverTimeout);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Input, Form, Divider, Dropdown, Checkbox } from 'semantic-ui-react';
-import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation, getEyeTrackingOption } from '../actions/configactions';
+import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation, getEyeTrackingOption, getRestMode } from '../actions/configactions';
 import * as gestures from '../configuration/gestures.js';
 import * as scanningTypes from '../configuration/scanningtypes.js'
 const {ipcRenderer} = window.require('electron')
@@ -268,7 +268,7 @@ class ConfigBoardModal extends Component {
                 isLeap: isLeap,
                 vocabularyFile: this.state.addVocabulary,
                 regionScanningRows: this.state.regionScanningRows,
-                regionScanningColumns: this.state.regionScanningColumns
+                regionScanningColumns: this.state.regionScanningColumns,
             };
     
             changeConfig(configObject, true);

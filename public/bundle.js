@@ -941,7 +941,7 @@ let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
 let eyeTrackingOption = 'eyetracker';
-let restMode = false;
+let restModeBool = false;
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -959,7 +959,6 @@ function changeConfig(configObject) {
   hoverDuration = configObject.hoverDuration;
   dwellAnimation = configObject.dwellAnimation;
   eyeTrackingOption = configObject.eyeTrackingOption;
-  restMode = false;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
@@ -1005,10 +1004,10 @@ function getScanningType() {
   return scanningType;
 }
 function getRestMode() {
-  return restMode;
+  return restModeBool;
 }
 function setRestMode(rMode) {
-  restMode = rMode;
+  restModeBool = rMode;
 }
 function setScanningType() {
   // dispatch event to change the scanning type instantly
@@ -3149,7 +3148,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     _defineProperty(this, "restItem", {
       title: "Toggle Rest Mode",
       image: '../images/settings/eye eyes.png',
-      function: "restMode",
+      function: "restModeChange",
       children: []
     });
     _defineProperty(this, "settingsItems", {
@@ -3205,6 +3204,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     _defineProperty(this, "functionDict", {});
     _defineProperty(this, "changeDwellTime", time => {
+      console.log("triggered");
       (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setHoverDuration)(parseInt(time));
       this.setState({
         hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHoverDuration)()
@@ -3212,17 +3212,6 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       const root = document.documentElement;
       root.style.setProperty('--dwell-time', "".concat(time, "ms"));
       this.saveConfig();
-    });
-    _defineProperty(this, "restMode", () => {
-      if (this.state.restMode === true) {
-        (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(false);
-      } else {
-        (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(true);
-      }
-      this.setState({
-        restMode: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRestMode)()
-      });
-      console.log(this.state.restMode);
     });
     _defineProperty(this, "changeDwellAnimation", animation => {
       (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setDwellAnimation)(animation);
@@ -3286,6 +3275,19 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           }, 1000); // unlock selector after transition finishes
         });
       });
+    });
+    _defineProperty(this, "restModeChange", () => {
+      if (this.state.currentItems[this.state.selectedItemIndex].title === "Toggle Rest Mode") {
+        let cursorImg = document.querySelector('.cursor-img');
+        if (this.state.restModeBool === true) {
+          (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(false);
+        } else {
+          (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(true);
+        }
+        this.setState({
+          restModeBool: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRestMode)()
+        });
+      }
     });
     // handle key press
     _defineProperty(this, "handleKeyDownEvent", event => {
@@ -3528,7 +3530,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       scanningRegionIndex: 0,
       currentItemInRegionIndex: 0,
       divisionMetaData: {},
-      restMode: false,
+      restModeBool: false,
       isGoBackFromDivisionScanning: false
     };
     this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
@@ -3564,7 +3566,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // bind goBack function to "goBack" title in function dictionary
     // if function is not null, then the function defined in the dictionary will be executed
     this.functionDict["goBack"] = this.goBack;
-    this.functionDict["restMode"] = this.restMode;
+    this.functionDict["restModeChange"] = this.restModeChange;
     this.functionDict["changeDwellTime"] = this.changeDwellTime;
     this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
   }
@@ -3647,6 +3649,9 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   // selection of item in step-scanning
   handleItemSelection() {
     let selectedItem = this.state.currentItems[this.state.selectedItemIndex];
+    if (this.state.restModeBool == true && selectedItem.title != "Toggle Rest Mode") {
+      return;
+    }
     if (selectedItem.children.length !== 0) {
       // case for folder item
       this.setState({
@@ -4465,7 +4470,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   setupCustomCursor() {
     document.body.style.cursor = 'none';
     const cursorImg = document.querySelector('.cursor-img');
-    cursorImg.style.opacity = '0.7';
+    cursorImg.style.opacity = '0.4';
     // Threshold of much the mouse can move before the image moves
     const threshold = 25;
     let mouseX = 0,
@@ -4591,11 +4596,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     _defineProperty(this, "handleMouseEnter", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        //console.log("Current hover duration: ", this.state.hoverDuration);
-        // console.log(getDwellAnimation())
-        // console.log(getHoverDuration())
-        // console.log('Mouse entered the grid item.');
+      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING && ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRestMode)() === false || this.props.item.title === "Toggle Rest Mode")) {
         this.setState({
           hovered: 'hovered'
         });
@@ -4614,8 +4615,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       }
     });
     _defineProperty(this, "handleMouseLeave", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        // console.log('Mouse left the grid item.');
+      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING && ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRestMode)() === false || this.props.item.title === "Toggle Rest Mode")) {
         this.setState({
           hovered: ''
         });
