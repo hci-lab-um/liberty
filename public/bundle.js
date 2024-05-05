@@ -884,6 +884,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getChosenSelectorGesture: () => (/* binding */ getChosenSelectorGesture),
 /* harmony export */   getDefaultVocabularyPath: () => (/* binding */ getDefaultVocabularyPath),
 /* harmony export */   getDwellAnimation: () => (/* binding */ getDwellAnimation),
+/* harmony export */   getEyeTrackingOption: () => (/* binding */ getEyeTrackingOption),
 /* harmony export */   getHighlightColor: () => (/* binding */ getHighlightColor),
 /* harmony export */   getHoverDuration: () => (/* binding */ getHoverDuration),
 /* harmony export */   getItemsPerRow: () => (/* binding */ getItemsPerRow),
@@ -936,6 +937,7 @@ let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
+let eyeTrackingOption = 'eyetracker';
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -952,6 +954,7 @@ function changeConfig(configObject) {
   setAutomaticScanningInterval(configObject.automaticScanningInterval);
   hoverDuration = configObject.hoverDuration;
   dwellAnimation = configObject.dwellAnimation;
+  eyeTrackingOption = configObject.eyeTrackingOption;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
@@ -1031,6 +1034,10 @@ function getHoverDuration() {
 }
 function getDwellAnimation() {
   return dwellAnimation;
+}
+function getEyeTrackingOption() {
+  console.log(eyeTrackingOption);
+  return eyeTrackingOption;
 }
 function setDwellAnimation() {
   document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
@@ -2332,10 +2339,16 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       text: '5 seconds',
       value: 5000
     }]);
+    _defineProperty(this, "eyeTracking", ['eyetracker', 'webcam']);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
     _defineProperty(this, "dwellAnimations", ['fill-up', 'horizontal-out']);
     _defineProperty(this, "transitionOptions", this.transitions.map(name => ({
+      key: name,
+      text: name,
+      value: name
+    })));
+    _defineProperty(this, "eyeTrackingOptions", this.eyeTracking.map(name => ({
       key: name,
       text: name,
       value: name
@@ -2354,13 +2367,20 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       this.setState({
         hoverDuration: data.value
       });
-      //setting css variable to be used for hover animatons
       const root = document.documentElement;
       root.style.setProperty('--dwell-time', "".concat(data.value, "ms"));
     });
     _defineProperty(this, "handleDwellAnimationChange", (e, data) => {
       this.setState({
         dwellAnimation: data.value
+      });
+    });
+    _defineProperty(this, "handleEyeTrackingOptionChange", (e, data) => {
+      console.log("Selected Eye Tracking Option:", data.value);
+      this.setState({
+        eyeTrackingOption: data.value
+      }, () => {
+        console.log("State updated. Eye Tracking Option:", this.state.eyeTrackingOption);
       });
     });
     _defineProperty(this, "handleColorChange", (e, data) => {
@@ -2439,6 +2459,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           highlightColor: this.state.color,
           hoverDuration: this.state.hoverDuration,
           dwellAnimation: this.state.dwellAnimation,
+          eyeTrackingOption: this.state.eyeTrackingOption,
           transition: this.state.transition,
           automaticScanningInterval: this.state.automaticScanningInterval,
           leapInterval: this.state.leapInterval,
@@ -2546,6 +2567,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningColumns)(),
       regionsHidden: true,
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
+      eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getEyeTrackingOption)(),
       dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
     };
 
@@ -2562,6 +2584,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleEyeTrackingOptionChange = this.handleEyeTrackingOptionChange.bind(this);
     this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
     this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
     this.automaticShow = this.automaticShow.bind(this);
@@ -2582,6 +2605,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       color: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
       dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
+      eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getEyeTrackingOption)(),
       automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getAutomaticScanningInterval)(),
       leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getLeapInterval)(),
       transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
@@ -2595,8 +2619,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.lockSelector)(); // lock gesture detection
-    // const root = document.documentElement;
-    // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
   }
   closeConfigBoardModal() {
     this.setState({
@@ -2688,6 +2710,14 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       selection: true,
       onChange: this.handleSelectorGestureChange
     })), this.isMouseScanning() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      hidden: true
+    }), "Choose Eyetracking Option:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: this.state.eyeTrackingOption,
+      options: this.eyeTrackingOptions,
+      fluid: true,
+      selection: true,
+      onChange: this.handleEyeTrackingOptionChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Enter Dwelling Time:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       value: this.state.hoverDuration,
@@ -5574,7 +5604,37 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   transition: all 0.2s ease-out;
   z-index: 9999;
   opacity: 0;
-}`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;;AAGA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ","sourceRoot":""}]);
+}
+
+.horizontal-out {
+  position: relative; 
+}
+
+.horizontal-out::before {
+  content: "";
+  top: 0;
+  position: absolute;
+  height: 100%;
+  margin-top: 0;
+  left: 50%; 
+  transform: translate(-50%, 0); 
+  border-top: 10px solid olive; 
+  border-bottom: 10px solid olive; 
+  width: 0; 
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7); 
+}
+
+.horizontal-out.hovered::before {
+  width: calc(100% - 10px); /* Expand width to fill the remaining space */
+}
+
+.horizontal-out:not(.hovered)::before {
+  transition-duration: 0s;
+  width: 0; /* Set width back to 0 */
+}
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

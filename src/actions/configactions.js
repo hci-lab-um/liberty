@@ -23,6 +23,7 @@ let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
+let eyeTrackingOption = 'eyetracker';
 
 export function changeConfig(configObject, save = false){
     chosenScanningGesture = configObject.scanningGesture;
@@ -39,6 +40,7 @@ export function changeConfig(configObject, save = false){
     setAutomaticScanningInterval(configObject.automaticScanningInterval);
     hoverDuration = configObject.hoverDuration;
     dwellAnimation = configObject.dwellAnimation;
+    eyeTrackingOption = configObject.eyeTrackingOption;
 
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
@@ -134,6 +136,11 @@ export function getHoverDuration(){
 
 export function getDwellAnimation(){
     return dwellAnimation;
+}
+
+export function getEyeTrackingOption(){
+    console.log(eyeTrackingOption);
+    return eyeTrackingOption;
 }
 
 export function setDwellAnimation(){
