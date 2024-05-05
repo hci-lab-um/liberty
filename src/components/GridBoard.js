@@ -15,6 +15,77 @@ class GridBoard extends Component {
         children: []
     }
 
+    // voacbulary items to be injected when user is on home screen and using eyetracking
+    restItem = {
+        title: "Rest Mode",
+        image: '../images/settings/eye eyes.png',
+        function: "restMode",
+        children: []
+    }
+    settingsItems = {
+        title: "Settings",
+        image: '../images/settings/cog.png',
+        function: "",
+        children: [
+            {
+                title: "Dwell Time",
+                image: '../images/settings/clockwatch_1.png',
+                function: "",
+                children: [
+                    {
+                        title: "1 Second",
+                        image: '../images/settings/one.png',
+                        function: "",
+                        children: []
+                    },
+                    {
+                        title: "2 Seconds",
+                        image: '../images/settings/two_1.png',
+                        function: "",
+                        children: []
+                    },
+                    {
+                        title: "3 Seconds",
+                        image: '../images/settings/three.png',
+                        function: "",
+                        children: []
+                    },
+                    {
+                        title: "4 Seconds",
+                        image: '../images/settings/four_1.png',
+                        function: "",
+                        children: []
+                    },
+                    {
+                        title: "5 Seconds",
+                        image: '../images/settings/number five_1.png',
+                        function: "",
+                        children: []
+                    }
+                ]
+            },
+            {
+                title: "Dwell Animation",
+                image: '../images/settings/cog.png',
+                function: "",
+                children: [
+                    {
+                        title: "Fill Up",
+                        image: '../images/settings/fill-up.png',
+                        function: "",
+                        children: []
+                    },
+                    {
+                        title: "Horizontal Out",
+                        image: '../images/settings/horizontal-out.png',
+                        function: "",
+                        children: []
+                    }
+                ]
+            },
+        ]
+    }
+
     functionDict = {}
 
     constructor(props){
@@ -46,6 +117,7 @@ class GridBoard extends Component {
             divisionMetaData: {},
             isGoBackFromDivisionScanning: false
         }
+        
         this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
         this.handleMouseDownEvent = this.handleMouseDownEvent.bind(this);
         this.loadConfig = this.loadConfig.bind(this);
@@ -88,6 +160,15 @@ class GridBoard extends Component {
         // reset board vocabulary with parent vocabulary
         this.setState({currentItems: this.state.previousItems.pop(), selectedItemIndex: 0, transitionVisible: false, 
             scanningRegionIndex: 0}, () =>{
+            // catering for the scenario where someone enters software in mouse scanning but then changes to another config in a folder.
+            if(this.state.scanningType !== scanningTypes.MOUSE_SCANNING){
+                if(this.state.currentItems[this.state.currentItems.length-1].title === "Settings" && this.state.currentItems[this.state.currentItems.length-2].title === "Rest Mode"){
+                    var newItems = this.state.currentItems
+                    newItems.pop(this.restItem);
+                    newItems.pop(this.settingsItems);
+                    this.setState({currentItems: newItems});
+                }
+            }
             // re-set number of items per row
             setItemsPerRow(this.state.currentItems.length, () =>{
                 this.setState({itemsPerRow: getItemsPerRow()})
@@ -118,6 +199,7 @@ class GridBoard extends Component {
 
     // handle vocabulary received from main process
     loadVocabulary = (event, vocabulary) =>{
+        console.log(event)
         this.props.onFreshBoard(); // reset title in parent component
         // re-set states to default
         this.setState({currentItems: vocabulary, selectedItemIndex:0, previousItems:[]}, () =>{
@@ -126,8 +208,13 @@ class GridBoard extends Component {
                     selectedColumnIndex: 0, lastScannableItemIndex: 0, initialScannableItemIndex: 0}, ()=>{
                         // re-set scanning type state variables after the other variables have been set
                         this.chooseScanningType(()=>{
-                            // set the transition state variable after the scanning type has been set
                             this.setState({transitionVisible:true})
+                            if(this.state.currentItems[this.state.currentItems.length-1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode" && this.state.scanningType === scanningTypes.MOUSE_SCANNING){
+                                var newItems = this.state.currentItems
+                                newItems.push(this.restItem);
+                                newItems.push(this.settingsItems);
+                                this.setState({currentItems: newItems});
+                            }
                         });
                     });
             });
@@ -696,14 +783,27 @@ class GridBoard extends Component {
     // callback function is called once to apply the transition after the vocabulary loads
     chooseScanningType(callback = ()=>{}){
         let scanningType = getScanningType();
+        let previousScan = this.state.scanningType;
         if(scanningType === scanningTypes.MOUSE_SCANNING){
             this.setupCustomCursor();
             this.setState({scanningType: scanningType, isSelectingColumn: false, isSelectingRow: false}, ()=>{
                 callback();
             });
+            if(this.state.previousItems.length === 0 && this.state.currentItems[this.state.currentItems.length-1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode"){
+                var newItems = this.state.currentItems
+                newItems.push(this.restItem);
+                newItems.push(this.settingsItems);
+                this.setState({currentItems: newItems});
+            }
         }
         else {
             this.resetCursor();
+            if(previousScan === scanningTypes.MOUSE_SCANNING && this.state.previousItems.length === 0){
+                var newItems = this.state.currentItems
+                newItems.pop(this.restItem);
+                newItems.pop(this.settingsItems);
+                this.setState({currentItems: newItems});
+            }
         }
         if(scanningType === scanningTypes.ROW_BASED_SCANNING){
            // condition for roe based scanning

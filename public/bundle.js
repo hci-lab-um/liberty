@@ -3046,8 +3046,10 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
       currentItems,
       parentIndexList
     } = this.state;
+    //max length for sub folders
     var showAddButton = currentItems.length < 27;
     if (parentIndexList.length === 0) {
+      //max length for home 
       showAddButton = currentItems.length < 25;
     }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -3126,6 +3128,64 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       function: "goBack",
       children: []
     });
+    // voacbulary items to be injected when user is on home screen and using eyetracking
+    _defineProperty(this, "restItem", {
+      title: "Rest Mode",
+      image: '../images/settings/eye eyes.png',
+      function: "restMode",
+      children: []
+    });
+    _defineProperty(this, "settingsItems", {
+      title: "Settings",
+      image: '../images/settings/cog.png',
+      function: "",
+      children: [{
+        title: "Dwell Time",
+        image: '../images/settings/clockwatch_1.png',
+        function: "",
+        children: [{
+          title: "1 Second",
+          image: '../images/settings/one.png',
+          function: "",
+          children: []
+        }, {
+          title: "2 Seconds",
+          image: '../images/settings/two_1.png',
+          function: "",
+          children: []
+        }, {
+          title: "3 Seconds",
+          image: '../images/settings/three.png',
+          function: "",
+          children: []
+        }, {
+          title: "4 Seconds",
+          image: '../images/settings/four_1.png',
+          function: "",
+          children: []
+        }, {
+          title: "5 Seconds",
+          image: '../images/settings/number five_1.png',
+          function: "",
+          children: []
+        }]
+      }, {
+        title: "Dwell Animation",
+        image: '../images/settings/cog.png',
+        function: "",
+        children: [{
+          title: "Fill Up",
+          image: '../images/settings/fill-up.png',
+          function: "",
+          children: []
+        }, {
+          title: "Horizontal Out",
+          image: '../images/settings/horizontal-out.png',
+          function: "",
+          children: []
+        }]
+      }]
+    });
     _defineProperty(this, "functionDict", {});
     // Go back from current folder
     _defineProperty(this, "goBack", () => {
@@ -3136,6 +3196,17 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         transitionVisible: false,
         scanningRegionIndex: 0
       }, () => {
+        // catering for the scenario where someone enters software in mouse scanning but then changes to another config in a folder.
+        if (this.state.scanningType !== _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+          if (this.state.currentItems[this.state.currentItems.length - 1].title === "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title === "Rest Mode") {
+            var newItems = this.state.currentItems;
+            newItems.pop(this.restItem);
+            newItems.pop(this.settingsItems);
+            this.setState({
+              currentItems: newItems
+            });
+          }
+        }
         // re-set number of items per row
         (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setItemsPerRow)(this.state.currentItems.length, () => {
           this.setState({
@@ -3168,6 +3239,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     // handle vocabulary received from main process
     _defineProperty(this, "loadVocabulary", (event, vocabulary) => {
+      console.log(event);
       this.props.onFreshBoard(); // reset title in parent component
       // re-set states to default
       this.setState({
@@ -3185,10 +3257,17 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           }, () => {
             // re-set scanning type state variables after the other variables have been set
             this.chooseScanningType(() => {
-              // set the transition state variable after the scanning type has been set
               this.setState({
                 transitionVisible: true
               });
+              if (this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode" && this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+                var newItems = this.state.currentItems;
+                newItems.push(this.restItem);
+                newItems.push(this.settingsItems);
+                this.setState({
+                  currentItems: newItems
+                });
+              }
             });
           });
         });
@@ -3953,6 +4032,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   chooseScanningType() {
     let callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : () => {};
     let scanningType = (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getScanningType)();
+    let previousScan = this.state.scanningType;
     if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
       this.setupCustomCursor();
       this.setState({
@@ -3962,8 +4042,24 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       }, () => {
         callback();
       });
+      if (this.state.previousItems.length === 0 && this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode") {
+        var newItems = this.state.currentItems;
+        newItems.push(this.restItem);
+        newItems.push(this.settingsItems);
+        this.setState({
+          currentItems: newItems
+        });
+      }
     } else {
       this.resetCursor();
+      if (previousScan === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING && this.state.previousItems.length === 0) {
+        var newItems = this.state.currentItems;
+        newItems.pop(this.restItem);
+        newItems.pop(this.settingsItems);
+        this.setState({
+          currentItems: newItems
+        });
+      }
     }
     if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.ROW_BASED_SCANNING) {
       // condition for roe based scanning
