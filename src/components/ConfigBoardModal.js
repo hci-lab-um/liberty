@@ -170,12 +170,14 @@ class ConfigBoardModal extends Component {
 
     handleHoverDurationChange=(e, data)=>{
         this.setState({hoverDuration: data.value});
+        console.log(this.state.hoverDuration);
         const root = document.documentElement;
         root.style.setProperty('--dwell-time', `${data.value}ms`);
     }
 
     handleDwellAnimationChange=(e, data)=>{
         this.setState({dwellAnimation: data.value});
+        
     }
 
     handleEyeTrackingOptionChange = (e, data) => {

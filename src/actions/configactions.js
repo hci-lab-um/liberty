@@ -48,7 +48,7 @@ export function changeConfig(configObject, save = false){
         updateCSSBgColour();
         setScanningType();
         setTransition();
-        setDwellAnimation();
+        setDwellAnimation(configObject.dwellAnimation);
         // send the new configuration to the main process
         ipcRenderer.send('configChange', configObject);
     }
@@ -134,6 +134,10 @@ export function getHoverDuration(){
     return hoverDuration;
 }
 
+export function setHoverDuration(duration){
+    hoverDuration = duration
+}
+
 export function getDwellAnimation(){
     return dwellAnimation;
 }
@@ -143,7 +147,8 @@ export function getEyeTrackingOption(){
     return eyeTrackingOption;
 }
 
-export function setDwellAnimation(){
+export function setDwellAnimation(animation){
+    dwellAnimation = animation;
     document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 

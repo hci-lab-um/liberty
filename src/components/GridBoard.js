@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Grid, GridRow, Transition} from 'semantic-ui-react'
 import GridItem from './GridItem'
-import {getChosenScanningGesture, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows} from '../actions/configactions'
+import {getChosenScanningGesture, setHoverDuration, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows, setDwellAnimation} from '../actions/configactions'
 import {handleMouseDown, handleKeyDown} from '../actions/eventsactions'
 import * as scanningTypes from '../configuration/scanningtypes'
 const {ipcRenderer} = window.require('electron')
@@ -35,31 +35,31 @@ class GridBoard extends Component {
                     {
                         title: "1 Second",
                         image: '../images/settings/one.png',
-                        function: "",
+                        function: "changeDwellTime(1000)",
                         children: []
                     },
                     {
                         title: "2 Seconds",
                         image: '../images/settings/two_1.png',
-                        function: "",
+                        function: "changeDwellTime(2000)",
                         children: []
                     },
                     {
                         title: "3 Seconds",
                         image: '../images/settings/three.png',
-                        function: "",
+                        function: "changeDwellTime(3000)",
                         children: []
                     },
                     {
                         title: "4 Seconds",
                         image: '../images/settings/four_1.png',
-                        function: "",
+                        function: "changeDwellTime(4000)",
                         children: []
                     },
                     {
                         title: "5 Seconds",
                         image: '../images/settings/number five_1.png',
-                        function: "",
+                        function: "changeDwellTime(5000)",
                         children: []
                     }
                 ]
@@ -70,15 +70,15 @@ class GridBoard extends Component {
                 function: "",
                 children: [
                     {
-                        title: "Fill Up",
+                        title: "fill-up",
                         image: '../images/settings/fill-up.png',
-                        function: "",
+                        function: "changeDwellAnimation(fill-up)",
                         children: []
                     },
                     {
-                        title: "Horizontal Out",
+                        title: "horizontal-out",
                         image: '../images/settings/horizontal-out.png',
-                        function: "",
+                        function: "changeDwellAnimation(horizontal-out)",
                         children: []
                     }
                 ]
@@ -153,6 +153,21 @@ class GridBoard extends Component {
         // bind goBack function to "goBack" title in function dictionary
         // if function is not null, then the function defined in the dictionary will be executed
         this.functionDict["goBack"] = this.goBack;
+        this.functionDict["restMode"] = this.restMode;
+        this.functionDict["changeDwellTime"] = this.changeDwellTime;
+        this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
+    }
+
+    changeDwellTime = (time) =>{
+        setHoverDuration(parseInt(time));
+        const root = document.documentElement;
+        root.style.setProperty('--dwell-time', `${time}ms`);
+        console.log(this.state.hoverDuration);
+    }
+
+    changeDwellAnimation = (animation) =>{
+        this.setState({dwellAnimation: animation});
+        setDwellAnimation(animation);
     }
 
     // Go back from current folder
@@ -199,7 +214,6 @@ class GridBoard extends Component {
 
     // handle vocabulary received from main process
     loadVocabulary = (event, vocabulary) =>{
-        console.log(event)
         this.props.onFreshBoard(); // reset title in parent component
         // re-set states to default
         this.setState({currentItems: vocabulary, selectedItemIndex:0, previousItems:[]}, () =>{
@@ -437,7 +451,16 @@ class GridBoard extends Component {
             }else if(selectedItem.function !== null){
                 // case when function is not null
                 // currently only used for go back function
-                this.functionDict[selectedItem.function](); // get function definition from function dictionary
+                if(selectedItem.function[selectedItem.function.length-1] === ')'){
+                    const str = selectedItem.function;
+                    const matches = str.match(/(.+?)\((.*?)\)/);
+                    const name = matches[1]; // Get the name before the parentheses
+                    const param = matches[2]; // Get the parameter inside the parentheses
+                    this.functionDict[name](param) // get function definition from function dictionary and pass parameters
+                }else{
+                    this.functionDict[selectedItem.function]();// get function definition from function dictionary
+                }
+                 
                 this.chooseScanningType(); // refresh the state variables for the chosen scanning type
             }else{
                 // activate item to do transition

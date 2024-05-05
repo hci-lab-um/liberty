@@ -899,6 +899,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setAutomaticScanningInterval: () => (/* binding */ setAutomaticScanningInterval),
 /* harmony export */   setDwellAnimation: () => (/* binding */ setDwellAnimation),
 /* harmony export */   setHighlightColor: () => (/* binding */ setHighlightColor),
+/* harmony export */   setHoverDuration: () => (/* binding */ setHoverDuration),
 /* harmony export */   setItemsPerRow: () => (/* binding */ setItemsPerRow),
 /* harmony export */   setLeapInterval: () => (/* binding */ setLeapInterval),
 /* harmony export */   setScanningType: () => (/* binding */ setScanningType),
@@ -961,7 +962,7 @@ function changeConfig(configObject) {
     updateCSSBgColour();
     setScanningType();
     setTransition();
-    setDwellAnimation();
+    setDwellAnimation(configObject.dwellAnimation);
     // send the new configuration to the main process
     ipcRenderer.send('configChange', configObject);
   }
@@ -1032,6 +1033,9 @@ function setHighlightColor(newColor) {
 function getHoverDuration() {
   return hoverDuration;
 }
+function setHoverDuration(duration) {
+  hoverDuration = duration;
+}
 function getDwellAnimation() {
   return dwellAnimation;
 }
@@ -1039,7 +1043,8 @@ function getEyeTrackingOption() {
   console.log(eyeTrackingOption);
   return eyeTrackingOption;
 }
-function setDwellAnimation() {
+function setDwellAnimation(animation) {
+  dwellAnimation = animation;
   document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 function getTransition() {
@@ -2367,6 +2372,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       this.setState({
         hoverDuration: data.value
       });
+      console.log(this.state.hoverDuration);
       const root = document.documentElement;
       root.style.setProperty('--dwell-time', "".concat(data.value, "ms"));
     });
@@ -3146,27 +3152,27 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         children: [{
           title: "1 Second",
           image: '../images/settings/one.png',
-          function: "",
+          function: "changeDwellTime(1000)",
           children: []
         }, {
           title: "2 Seconds",
           image: '../images/settings/two_1.png',
-          function: "",
+          function: "changeDwellTime(2000)",
           children: []
         }, {
           title: "3 Seconds",
           image: '../images/settings/three.png',
-          function: "",
+          function: "changeDwellTime(3000)",
           children: []
         }, {
           title: "4 Seconds",
           image: '../images/settings/four_1.png',
-          function: "",
+          function: "changeDwellTime(4000)",
           children: []
         }, {
           title: "5 Seconds",
           image: '../images/settings/number five_1.png',
-          function: "",
+          function: "changeDwellTime(5000)",
           children: []
         }]
       }, {
@@ -3174,19 +3180,31 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         image: '../images/settings/cog.png',
         function: "",
         children: [{
-          title: "Fill Up",
+          title: "fill-up",
           image: '../images/settings/fill-up.png',
-          function: "",
+          function: "changeDwellAnimation(fill-up)",
           children: []
         }, {
-          title: "Horizontal Out",
+          title: "horizontal-out",
           image: '../images/settings/horizontal-out.png',
-          function: "",
+          function: "changeDwellAnimation(horizontal-out)",
           children: []
         }]
       }]
     });
     _defineProperty(this, "functionDict", {});
+    _defineProperty(this, "changeDwellTime", time => {
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setHoverDuration)(parseInt(time));
+      const root = document.documentElement;
+      root.style.setProperty('--dwell-time', "".concat(time, "ms"));
+      console.log(this.state.hoverDuration);
+    });
+    _defineProperty(this, "changeDwellAnimation", animation => {
+      this.setState({
+        dwellAnimation: animation
+      });
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setDwellAnimation)(animation);
+    });
     // Go back from current folder
     _defineProperty(this, "goBack", () => {
       // reset board vocabulary with parent vocabulary
@@ -3239,7 +3257,6 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     // handle vocabulary received from main process
     _defineProperty(this, "loadVocabulary", (event, vocabulary) => {
-      console.log(event);
       this.props.onFreshBoard(); // reset title in parent component
       // re-set states to default
       this.setState({
@@ -3500,6 +3517,9 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // bind goBack function to "goBack" title in function dictionary
     // if function is not null, then the function defined in the dictionary will be executed
     this.functionDict["goBack"] = this.goBack;
+    this.functionDict["restMode"] = this.restMode;
+    this.functionDict["changeDwellTime"] = this.changeDwellTime;
+    this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
   }
   // scanning previous item
   handleItemBackScanning() {
@@ -3620,7 +3640,15 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     } else if (selectedItem.function !== null) {
       // case when function is not null
       // currently only used for go back function
-      this.functionDict[selectedItem.function](); // get function definition from function dictionary
+      if (selectedItem.function[selectedItem.function.length - 1] === ')') {
+        const str = selectedItem.function;
+        const matches = str.match(/(.+?)\((.*?)\)/);
+        const name = matches[1]; // Get the name before the parentheses
+        const param = matches[2]; // Get the parameter inside the parentheses
+        this.functionDict[name](param); // get function definition from function dictionary and pass parameters
+      } else {
+        this.functionDict[selectedItem.function](); // get function definition from function dictionary
+      }
       this.chooseScanningType(); // refresh the state variables for the chosen scanning type
     } else {
       // activate item to do transition
