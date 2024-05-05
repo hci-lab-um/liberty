@@ -891,6 +891,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getLeapInterval: () => (/* binding */ getLeapInterval),
 /* harmony export */   getRegionScanningColumns: () => (/* binding */ getRegionScanningColumns),
 /* harmony export */   getRegionScanningRows: () => (/* binding */ getRegionScanningRows),
+/* harmony export */   getRestMode: () => (/* binding */ getRestMode),
 /* harmony export */   getScanningType: () => (/* binding */ getScanningType),
 /* harmony export */   getTransition: () => (/* binding */ getTransition),
 /* harmony export */   lockSelector: () => (/* binding */ lockSelector),
@@ -902,6 +903,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setHoverDuration: () => (/* binding */ setHoverDuration),
 /* harmony export */   setItemsPerRow: () => (/* binding */ setItemsPerRow),
 /* harmony export */   setLeapInterval: () => (/* binding */ setLeapInterval),
+/* harmony export */   setRestMode: () => (/* binding */ setRestMode),
 /* harmony export */   setScanningType: () => (/* binding */ setScanningType),
 /* harmony export */   setTransition: () => (/* binding */ setTransition),
 /* harmony export */   unlockSelector: () => (/* binding */ unlockSelector),
@@ -939,6 +941,7 @@ let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
 let eyeTrackingOption = 'eyetracker';
+let restMode = false;
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -956,6 +959,7 @@ function changeConfig(configObject) {
   hoverDuration = configObject.hoverDuration;
   dwellAnimation = configObject.dwellAnimation;
   eyeTrackingOption = configObject.eyeTrackingOption;
+  restMode = false;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
@@ -999,6 +1003,12 @@ function getChosenSelectorGesture() {
 }
 function getScanningType() {
   return scanningType;
+}
+function getRestMode() {
+  return restMode;
+}
+function setRestMode(rMode) {
+  restMode = rMode;
 }
 function setScanningType() {
   // dispatch event to change the scanning type instantly
@@ -2574,7 +2584,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       regionsHidden: true,
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
       eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getEyeTrackingOption)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
+      restMode: false
     };
 
     // definie binding of methods
@@ -3136,7 +3147,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     // voacbulary items to be injected when user is on home screen and using eyetracking
     _defineProperty(this, "restItem", {
-      title: "Rest Mode",
+      title: "Toggle Rest Mode",
       image: '../images/settings/eye eyes.png',
       function: "restMode",
       children: []
@@ -3195,15 +3206,50 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     _defineProperty(this, "functionDict", {});
     _defineProperty(this, "changeDwellTime", time => {
       (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setHoverDuration)(parseInt(time));
+      this.setState({
+        hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHoverDuration)()
+      });
       const root = document.documentElement;
       root.style.setProperty('--dwell-time', "".concat(time, "ms"));
-      console.log(this.state.hoverDuration);
+      this.saveConfig();
+    });
+    _defineProperty(this, "restMode", () => {
+      if (this.state.restMode === true) {
+        (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(false);
+      } else {
+        (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(true);
+      }
+      this.setState({
+        restMode: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRestMode)()
+      });
+      console.log(this.state.restMode);
     });
     _defineProperty(this, "changeDwellAnimation", animation => {
-      this.setState({
-        dwellAnimation: animation
-      });
       (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setDwellAnimation)(animation);
+      this.setState({
+        dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDwellAnimation)()
+      });
+      this.saveConfig();
+    });
+    _defineProperty(this, "saveConfig", () => {
+      let configObject = {
+        scanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenScanningGesture)(),
+        selectorGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenSelectorGesture)(),
+        backScanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenBackScanningGesture)(),
+        scanningType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getScanningType)(),
+        highlightColor: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHighlightColor)(),
+        hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHoverDuration)(),
+        dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDwellAnimation)(),
+        eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getEyeTrackingOption)(),
+        transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getTransition)(),
+        automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getAutomaticScanningInterval)(),
+        leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getLeapInterval)(),
+        isLeap: false,
+        vocabularyFile: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDefaultVocabularyPath)(),
+        regionScanningRows: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRegionScanningRows)(),
+        regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRegionScanningColumns)()
+      };
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.changeConfig)(configObject, true);
     });
     // Go back from current folder
     _defineProperty(this, "goBack", () => {
@@ -3482,6 +3528,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       scanningRegionIndex: 0,
       currentItemInRegionIndex: 0,
       divisionMetaData: {},
+      restMode: false,
       isGoBackFromDivisionScanning: false
     };
     this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);

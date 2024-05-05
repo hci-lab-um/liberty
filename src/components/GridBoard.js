@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Grid, GridRow, Transition} from 'semantic-ui-react'
 import GridItem from './GridItem'
-import {getChosenScanningGesture, setHoverDuration, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows, setDwellAnimation} from '../actions/configactions'
+import {getChosenScanningGesture, setHoverDuration, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows, setDwellAnimation, setRestMode, getRestMode, getDwellAnimation, getHoverDuration, getHighlightColor, getEyeTrackingOption, getTransition, getAutomaticScanningInterval, getLeapInterval, getDefaultVocabularyPath} from '../actions/configactions'
 import {handleMouseDown, handleKeyDown} from '../actions/eventsactions'
 import * as scanningTypes from '../configuration/scanningtypes'
 const {ipcRenderer} = window.require('electron')
@@ -17,7 +17,7 @@ class GridBoard extends Component {
 
     // voacbulary items to be injected when user is on home screen and using eyetracking
     restItem = {
-        title: "Rest Mode",
+        title: "Toggle Rest Mode",
         image: '../images/settings/eye eyes.png',
         function: "restMode",
         children: []
@@ -115,6 +115,7 @@ class GridBoard extends Component {
             scanningRegionIndex: 0,
             currentItemInRegionIndex: 0,
             divisionMetaData: {},
+            restMode: false,
             isGoBackFromDivisionScanning: false
         }
         
@@ -160,14 +161,48 @@ class GridBoard extends Component {
 
     changeDwellTime = (time) =>{
         setHoverDuration(parseInt(time));
+        this.setState({hoverDuration: getHoverDuration()});
         const root = document.documentElement;
         root.style.setProperty('--dwell-time', `${time}ms`);
-        console.log(this.state.hoverDuration);
+        this.saveConfig();
+    }
+
+    restMode = () => {
+        if(this.state.restMode === true){
+            setRestMode(false);
+        }else{
+            setRestMode(true);
+        }
+        this.setState({restMode: getRestMode()})
+        console.log(this.state.restMode)
     }
 
     changeDwellAnimation = (animation) =>{
-        this.setState({dwellAnimation: animation});
         setDwellAnimation(animation);
+        this.setState({dwellAnimation: getDwellAnimation()});
+        this.saveConfig();
+    }
+
+    saveConfig =() =>{
+        let configObject = {
+            scanningGesture: getChosenScanningGesture(),
+            selectorGesture: getChosenSelectorGesture(),
+            backScanningGesture: getChosenBackScanningGesture(),
+            scanningType: getScanningType(),
+            highlightColor: getHighlightColor(),
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
+            eyeTrackingOption: getEyeTrackingOption(),
+            transition: getTransition(),
+            automaticScanningInterval: getAutomaticScanningInterval(),
+            leapInterval: getLeapInterval(),
+            isLeap: false,
+            vocabularyFile: getDefaultVocabularyPath(),
+            regionScanningRows: getRegionScanningRows(),
+            regionScanningColumns: getRegionScanningColumns()
+        };
+
+        changeConfig(configObject, true);
     }
 
     // Go back from current folder

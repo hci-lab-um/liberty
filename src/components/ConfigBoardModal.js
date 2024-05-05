@@ -116,6 +116,7 @@ class ConfigBoardModal extends Component {
             hoverDuration: getHoverDuration(),
             eyeTrackingOption : getEyeTrackingOption(),
             dwellAnimation: getDwellAnimation(),
+            restMode: false
         }
 
         // definie binding of methods

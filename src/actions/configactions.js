@@ -24,6 +24,7 @@ let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
 let eyeTrackingOption = 'eyetracker';
+let restMode = false;
 
 export function changeConfig(configObject, save = false){
     chosenScanningGesture = configObject.scanningGesture;
@@ -41,6 +42,8 @@ export function changeConfig(configObject, save = false){
     hoverDuration = configObject.hoverDuration;
     dwellAnimation = configObject.dwellAnimation;
     eyeTrackingOption = configObject.eyeTrackingOption;
+    restMode = false;
+    
 
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
@@ -92,6 +95,14 @@ export function getChosenSelectorGesture(){
 
 export function getScanningType(){
     return scanningType;
+}
+
+export function getRestMode(){
+    return restMode;
+}
+
+export function setRestMode(rMode){
+    restMode = rMode
 }
 
 export function setScanningType(){
