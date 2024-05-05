@@ -3043,9 +3043,13 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   render() {
     const renderModal = this.renderItemModal();
     const {
-      currentItems
+      currentItems,
+      parentIndexList
     } = this.state;
-    const showAddButton = currentItems.length < 27;
+    var showAddButton = currentItems.length < 27;
+    if (parentIndexList.length === 0) {
+      showAddButton = currentItems.length < 25;
+    }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
       open: this.state.CreateEditVocabularyModalOpen,
       onClose: this.closeCreateEditVocabularyModal,
