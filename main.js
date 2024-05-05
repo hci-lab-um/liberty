@@ -1,11 +1,15 @@
 const {app, BrowserWindow, ipcMain, Menu, dialog} = require('electron')
+
+
 const fs = require('fs')
 const configfile = 'config.json';
 const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
-const express = require('express');
-const robotjs = require('robotjs');
+
+const { mouse, Point, straightTo } = require("@nut-tree/nut-js");
+
+let isWebGazerEnabled = false;
 
 
 
@@ -85,13 +89,6 @@ const menuTemplate = [
         },
         {
             type: 'separator'
-        },
-        {
-            label: 'Change board configuration',
-            click: function() {
-                // send message to main window to open configuration modal
-                mainWindow.webContents.send('configBoard');
-            }
         }
     ]
     } /**Options below commented out as these were meant to be used in development only**/ , {
@@ -105,11 +102,16 @@ const menuTemplate = [
         click: function() {
             mainWindow.reload();
         }
-    }];
+    },
+    {
+        label: 'Toggle Webcam Eyetracking',
+        click: function() {
+            isWebGazerEnabled = !isWebGazerEnabled;
+        }
+    
+    }
+];
 
-
-const expressApp = express();
-expressApp.use(express.static(path.join(__dirname, 'build')));
 
 function createWindow() {
     // create the main window
@@ -138,9 +140,9 @@ function createWindow() {
         mainWindow = null;
     });
 }
-
 ipcMain.once('windowLoaded', (event) => {
     mainWindow.show();
+    
 })
 
 app.on('window-all-closed', function() {
@@ -240,8 +242,15 @@ ipcMain.on('newBoard', (event, newBoard) => {
 })
 
 ipcMain.on('gaze-data', (event, data) => {
-    robotjs.moveMouse(data.x, data.y);
-  });
+    const targetPoint = new Point(data.x, data.y);
+    if (isWebGazerEnabled) {
+        mouse.move(straightTo(targetPoint));
+    }
+});
+
+module.exports = {
+    isWebGazerEnabled
+}
 
 //call createWindow function when Electron app is ready
 app.on('ready', createWindow);

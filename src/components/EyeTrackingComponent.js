@@ -2,19 +2,22 @@
 import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 
-
 const EyeTrackingComponent = () => {
   useEffect(() => {
     // Check if webgazer has loaded
     if (window.webgazer) {
+
+      window.webgazer.showVideo(false);
+      window.webgazer.showPredictionPoints(false);
+
       window.webgazer.setGazeListener((data, timestamp) => {
         if (data) {
-          console.log("HELLLLOOOOO"); // Or handle the gaze data as needed
           const simpleData = {
             x: data.x,
             y: data.y,
           };
-          ipcRenderer.send('gaze-data', simpleData); // Send simplified data
+          
+          ipcRenderer.send('gaze-data', simpleData);
         }
       }).begin();
     }
