@@ -884,12 +884,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getChosenSelectorGesture: () => (/* binding */ getChosenSelectorGesture),
 /* harmony export */   getDefaultVocabularyPath: () => (/* binding */ getDefaultVocabularyPath),
 /* harmony export */   getDwellAnimation: () => (/* binding */ getDwellAnimation),
+/* harmony export */   getEyeTrackingOption: () => (/* binding */ getEyeTrackingOption),
 /* harmony export */   getHighlightColor: () => (/* binding */ getHighlightColor),
 /* harmony export */   getHoverDuration: () => (/* binding */ getHoverDuration),
 /* harmony export */   getItemsPerRow: () => (/* binding */ getItemsPerRow),
 /* harmony export */   getLeapInterval: () => (/* binding */ getLeapInterval),
 /* harmony export */   getRegionScanningColumns: () => (/* binding */ getRegionScanningColumns),
 /* harmony export */   getRegionScanningRows: () => (/* binding */ getRegionScanningRows),
+/* harmony export */   getRestMode: () => (/* binding */ getRestMode),
 /* harmony export */   getScanningType: () => (/* binding */ getScanningType),
 /* harmony export */   getTransition: () => (/* binding */ getTransition),
 /* harmony export */   lockSelector: () => (/* binding */ lockSelector),
@@ -898,8 +900,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setAutomaticScanningInterval: () => (/* binding */ setAutomaticScanningInterval),
 /* harmony export */   setDwellAnimation: () => (/* binding */ setDwellAnimation),
 /* harmony export */   setHighlightColor: () => (/* binding */ setHighlightColor),
+/* harmony export */   setHoverDuration: () => (/* binding */ setHoverDuration),
 /* harmony export */   setItemsPerRow: () => (/* binding */ setItemsPerRow),
 /* harmony export */   setLeapInterval: () => (/* binding */ setLeapInterval),
+/* harmony export */   setRestMode: () => (/* binding */ setRestMode),
 /* harmony export */   setScanningType: () => (/* binding */ setScanningType),
 /* harmony export */   setTransition: () => (/* binding */ setTransition),
 /* harmony export */   unlockSelector: () => (/* binding */ unlockSelector),
@@ -936,6 +940,8 @@ let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
+let eyeTrackingOption = 'eyetracker';
+let restModeBool = false;
 function changeConfig(configObject) {
   let save = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   chosenScanningGesture = configObject.scanningGesture;
@@ -952,13 +958,14 @@ function changeConfig(configObject) {
   setAutomaticScanningInterval(configObject.automaticScanningInterval);
   hoverDuration = configObject.hoverDuration;
   dwellAnimation = configObject.dwellAnimation;
+  eyeTrackingOption = configObject.eyeTrackingOption;
   if (save) {
     /*if the configuration is to be said then this means that the user has modified the configuration
       and the setters that dispatch events to the main board need to be called */
     updateCSSBgColour();
     setScanningType();
     setTransition();
-    setDwellAnimation();
+    setDwellAnimation(configObject.dwellAnimation);
     // send the new configuration to the main process
     ipcRenderer.send('configChange', configObject);
   }
@@ -996,6 +1003,12 @@ function getChosenSelectorGesture() {
 function getScanningType() {
   return scanningType;
 }
+function getRestMode() {
+  return restModeBool;
+}
+function setRestMode(rMode) {
+  restModeBool = rMode;
+}
 function setScanningType() {
   // dispatch event to change the scanning type instantly
   document.dispatchEvent(new CustomEvent('scanningTypeChanged'));
@@ -1029,10 +1042,18 @@ function setHighlightColor(newColor) {
 function getHoverDuration() {
   return hoverDuration;
 }
+function setHoverDuration(duration) {
+  hoverDuration = duration;
+}
 function getDwellAnimation() {
   return dwellAnimation;
 }
-function setDwellAnimation() {
+function getEyeTrackingOption() {
+  console.log(eyeTrackingOption);
+  return eyeTrackingOption;
+}
+function setDwellAnimation(animation) {
+  dwellAnimation = animation;
   document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 function getTransition() {
@@ -2332,10 +2353,16 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       text: '5 seconds',
       value: 5000
     }]);
+    _defineProperty(this, "eyeTracking", ['eyetracker', 'webcam']);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
     _defineProperty(this, "dwellAnimations", ['fill-up', 'horizontal-out']);
     _defineProperty(this, "transitionOptions", this.transitions.map(name => ({
+      key: name,
+      text: name,
+      value: name
+    })));
+    _defineProperty(this, "eyeTrackingOptions", this.eyeTracking.map(name => ({
       key: name,
       text: name,
       value: name
@@ -2354,13 +2381,21 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       this.setState({
         hoverDuration: data.value
       });
-      //setting css variable to be used for hover animatons
+      console.log(this.state.hoverDuration);
       const root = document.documentElement;
       root.style.setProperty('--dwell-time', "".concat(data.value, "ms"));
     });
     _defineProperty(this, "handleDwellAnimationChange", (e, data) => {
       this.setState({
         dwellAnimation: data.value
+      });
+    });
+    _defineProperty(this, "handleEyeTrackingOptionChange", (e, data) => {
+      console.log("Selected Eye Tracking Option:", data.value);
+      this.setState({
+        eyeTrackingOption: data.value
+      }, () => {
+        console.log("State updated. Eye Tracking Option:", this.state.eyeTrackingOption);
       });
     });
     _defineProperty(this, "handleColorChange", (e, data) => {
@@ -2439,6 +2474,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           highlightColor: this.state.color,
           hoverDuration: this.state.hoverDuration,
           dwellAnimation: this.state.dwellAnimation,
+          eyeTrackingOption: this.state.eyeTrackingOption,
           transition: this.state.transition,
           automaticScanningInterval: this.state.automaticScanningInterval,
           leapInterval: this.state.leapInterval,
@@ -2546,7 +2582,9 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRegionScanningColumns)(),
       regionsHidden: true,
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
-      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)()
+      eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getEyeTrackingOption)(),
+      dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
+      restMode: false
     };
 
     // definie binding of methods
@@ -2562,6 +2600,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleEyeTrackingOptionChange = this.handleEyeTrackingOptionChange.bind(this);
     this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
     this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
     this.automaticShow = this.automaticShow.bind(this);
@@ -2582,6 +2621,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       color: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHighlightColor)(),
       hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getHoverDuration)(),
       dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getDwellAnimation)(),
+      eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getEyeTrackingOption)(),
       automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getAutomaticScanningInterval)(),
       leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getLeapInterval)(),
       transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getTransition)(),
@@ -2595,8 +2635,6 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.lockSelector)(); // lock gesture detection
-    // const root = document.documentElement;
-    // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
   }
   closeConfigBoardModal() {
     this.setState({
@@ -2688,6 +2726,14 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       selection: true,
       onChange: this.handleSelectorGestureChange
     })), this.isMouseScanning() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      hidden: true
+    }), "Choose Eyetracking Option:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: this.state.eyeTrackingOption,
+      options: this.eyeTrackingOptions,
+      fluid: true,
+      selection: true,
+      onChange: this.handleEyeTrackingOptionChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Enter Dwelling Time:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       value: this.state.hoverDuration,
@@ -3013,9 +3059,15 @@ class CreateEditVocabularyModal extends react__WEBPACK_IMPORTED_MODULE_0__.Compo
   render() {
     const renderModal = this.renderItemModal();
     const {
-      currentItems
+      currentItems,
+      parentIndexList
     } = this.state;
-    const showAddButton = currentItems.length < 27;
+    //max length for sub folders
+    var showAddButton = currentItems.length < 27;
+    if (parentIndexList.length === 0) {
+      //max length for home 
+      showAddButton = currentItems.length < 25;
+    }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
       open: this.state.CreateEditVocabularyModalOpen,
       onClose: this.closeCreateEditVocabularyModal,
@@ -3092,7 +3144,102 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       function: "goBack",
       children: []
     });
+    // voacbulary items to be injected when user is on home screen and using eyetracking
+    _defineProperty(this, "restItem", {
+      title: "Toggle Rest Mode",
+      image: '../images/settings/eye eyes.png',
+      function: "restModeChange",
+      children: []
+    });
+    _defineProperty(this, "settingsItems", {
+      title: "Settings",
+      image: '../images/settings/cog.png',
+      function: "",
+      children: [{
+        title: "Dwell Time",
+        image: '../images/settings/clockwatch_1.png',
+        function: "",
+        children: [{
+          title: "1 Second",
+          image: '../images/settings/one.png',
+          function: "changeDwellTime(1000)",
+          children: []
+        }, {
+          title: "2 Seconds",
+          image: '../images/settings/two_1.png',
+          function: "changeDwellTime(2000)",
+          children: []
+        }, {
+          title: "3 Seconds",
+          image: '../images/settings/three.png',
+          function: "changeDwellTime(3000)",
+          children: []
+        }, {
+          title: "4 Seconds",
+          image: '../images/settings/four_1.png',
+          function: "changeDwellTime(4000)",
+          children: []
+        }, {
+          title: "5 Seconds",
+          image: '../images/settings/number five_1.png',
+          function: "changeDwellTime(5000)",
+          children: []
+        }]
+      }, {
+        title: "Dwell Animation",
+        image: '../images/settings/cog.png',
+        function: "",
+        children: [{
+          title: "fill-up",
+          image: '../images/settings/fill-up.png',
+          function: "changeDwellAnimation(fill-up)",
+          children: []
+        }, {
+          title: "horizontal-out",
+          image: '../images/settings/horizontal-out.png',
+          function: "changeDwellAnimation(horizontal-out)",
+          children: []
+        }]
+      }]
+    });
     _defineProperty(this, "functionDict", {});
+    _defineProperty(this, "changeDwellTime", time => {
+      console.log("triggered");
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setHoverDuration)(parseInt(time));
+      this.setState({
+        hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHoverDuration)()
+      });
+      const root = document.documentElement;
+      root.style.setProperty('--dwell-time', "".concat(time, "ms"));
+      this.saveConfig();
+    });
+    _defineProperty(this, "changeDwellAnimation", animation => {
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setDwellAnimation)(animation);
+      this.setState({
+        dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDwellAnimation)()
+      });
+      this.saveConfig();
+    });
+    _defineProperty(this, "saveConfig", () => {
+      let configObject = {
+        scanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenScanningGesture)(),
+        selectorGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenSelectorGesture)(),
+        backScanningGesture: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getChosenBackScanningGesture)(),
+        scanningType: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getScanningType)(),
+        highlightColor: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHighlightColor)(),
+        hoverDuration: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getHoverDuration)(),
+        dwellAnimation: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDwellAnimation)(),
+        eyeTrackingOption: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getEyeTrackingOption)(),
+        transition: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getTransition)(),
+        automaticScanningInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getAutomaticScanningInterval)(),
+        leapInterval: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getLeapInterval)(),
+        isLeap: false,
+        vocabularyFile: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getDefaultVocabularyPath)(),
+        regionScanningRows: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRegionScanningRows)(),
+        regionScanningColumns: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRegionScanningColumns)()
+      };
+      (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.changeConfig)(configObject, true);
+    });
     // Go back from current folder
     _defineProperty(this, "goBack", () => {
       // reset board vocabulary with parent vocabulary
@@ -3102,6 +3249,17 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         transitionVisible: false,
         scanningRegionIndex: 0
       }, () => {
+        // catering for the scenario where someone enters software in mouse scanning but then changes to another config in a folder.
+        if (this.state.scanningType !== _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+          if (this.state.currentItems[this.state.currentItems.length - 1].title === "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title === "Rest Mode") {
+            var newItems = this.state.currentItems;
+            newItems.pop(this.restItem);
+            newItems.pop(this.settingsItems);
+            this.setState({
+              currentItems: newItems
+            });
+          }
+        }
         // re-set number of items per row
         (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setItemsPerRow)(this.state.currentItems.length, () => {
           this.setState({
@@ -3117,6 +3275,19 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           }, 1000); // unlock selector after transition finishes
         });
       });
+    });
+    _defineProperty(this, "restModeChange", () => {
+      if (this.state.currentItems[this.state.selectedItemIndex].title === "Toggle Rest Mode") {
+        let cursorImg = document.querySelector('.cursor-img');
+        if (this.state.restModeBool === true) {
+          (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(false);
+        } else {
+          (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setRestMode)(true);
+        }
+        this.setState({
+          restModeBool: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getRestMode)()
+        });
+      }
     });
     // handle key press
     _defineProperty(this, "handleKeyDownEvent", event => {
@@ -3151,10 +3322,17 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           }, () => {
             // re-set scanning type state variables after the other variables have been set
             this.chooseScanningType(() => {
-              // set the transition state variable after the scanning type has been set
               this.setState({
                 transitionVisible: true
               });
+              if (this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode" && this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+                var newItems = this.state.currentItems;
+                newItems.push(this.restItem);
+                newItems.push(this.settingsItems);
+                this.setState({
+                  currentItems: newItems
+                });
+              }
             });
           });
         });
@@ -3352,6 +3530,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       scanningRegionIndex: 0,
       currentItemInRegionIndex: 0,
       divisionMetaData: {},
+      restModeBool: false,
       isGoBackFromDivisionScanning: false
     };
     this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
@@ -3387,6 +3566,9 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // bind goBack function to "goBack" title in function dictionary
     // if function is not null, then the function defined in the dictionary will be executed
     this.functionDict["goBack"] = this.goBack;
+    this.functionDict["restModeChange"] = this.restModeChange;
+    this.functionDict["changeDwellTime"] = this.changeDwellTime;
+    this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
   }
   // scanning previous item
   handleItemBackScanning() {
@@ -3467,6 +3649,9 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   // selection of item in step-scanning
   handleItemSelection() {
     let selectedItem = this.state.currentItems[this.state.selectedItemIndex];
+    if (this.state.restModeBool == true && selectedItem.title != "Toggle Rest Mode") {
+      return;
+    }
     if (selectedItem.children.length !== 0) {
       // case for folder item
       this.setState({
@@ -3507,7 +3692,15 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     } else if (selectedItem.function !== null) {
       // case when function is not null
       // currently only used for go back function
-      this.functionDict[selectedItem.function](); // get function definition from function dictionary
+      if (selectedItem.function[selectedItem.function.length - 1] === ')') {
+        const str = selectedItem.function;
+        const matches = str.match(/(.+?)\((.*?)\)/);
+        const name = matches[1]; // Get the name before the parentheses
+        const param = matches[2]; // Get the parameter inside the parentheses
+        this.functionDict[name](param); // get function definition from function dictionary and pass parameters
+      } else {
+        this.functionDict[selectedItem.function](); // get function definition from function dictionary
+      }
       this.chooseScanningType(); // refresh the state variables for the chosen scanning type
     } else {
       // activate item to do transition
@@ -3919,6 +4112,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   chooseScanningType() {
     let callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : () => {};
     let scanningType = (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getScanningType)();
+    let previousScan = this.state.scanningType;
     if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
       this.setupCustomCursor();
       this.setState({
@@ -3928,8 +4122,24 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       }, () => {
         callback();
       });
+      if (this.state.previousItems.length === 0 && this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode") {
+        var newItems = this.state.currentItems;
+        newItems.push(this.restItem);
+        newItems.push(this.settingsItems);
+        this.setState({
+          currentItems: newItems
+        });
+      }
     } else {
       this.resetCursor();
+      if (previousScan === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING && this.state.previousItems.length === 0) {
+        var newItems = this.state.currentItems;
+        newItems.pop(this.restItem);
+        newItems.pop(this.settingsItems);
+        this.setState({
+          currentItems: newItems
+        });
+      }
     }
     if (scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.ROW_BASED_SCANNING) {
       // condition for roe based scanning
@@ -4260,7 +4470,7 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   setupCustomCursor() {
     document.body.style.cursor = 'none';
     const cursorImg = document.querySelector('.cursor-img');
-    cursorImg.style.opacity = '0.7';
+    cursorImg.style.opacity = '0.4';
     // Threshold of much the mouse can move before the image moves
     const threshold = 25;
     let mouseX = 0,
@@ -4361,7 +4571,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/modules/Transition/Transition.js");
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/collections/Grid/Grid.js");
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Image/Image.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/elements/Icon/Icon.js");
 /* harmony import */ var _actions_configactions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/configactions */ "./src/actions/configactions.js");
 /* harmony import */ var _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../configuration/scanningtypes */ "./src/configuration/scanningtypes.js");
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -4387,11 +4596,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     _defineProperty(this, "handleMouseEnter", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        //console.log("Current hover duration: ", this.state.hoverDuration);
-        // console.log(getDwellAnimation())
-        // console.log(getHoverDuration())
-        // console.log('Mouse entered the grid item.');
+      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING && ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRestMode)() === false || this.props.item.title === "Toggle Rest Mode")) {
         this.setState({
           hovered: 'hovered'
         });
@@ -4410,8 +4615,7 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       }
     });
     _defineProperty(this, "handleMouseLeave", () => {
-      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING) {
-        // console.log('Mouse left the grid item.');
+      if ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getScanningType)() === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_2__.MOUSE_SCANNING && ((0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.getRestMode)() === false || this.props.item.title === "Toggle Rest Mode")) {
         this.setState({
           hovered: ''
         });
@@ -4504,8 +4708,11 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       src: this.props.item.image,
       size: "small",
       centered: true
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, this.state.showTitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.item.title, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.isParent && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      name: "folder"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      className: "labelCentered"
+    }, this.state.showTitle && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.item.title, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, this.props.isParent && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      className: "folderImg",
+      src: "../images/folder.svg"
     }))))));
   }
 }
@@ -5574,7 +5781,50 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   transition: all 0.2s ease-out;
   z-index: 9999;
   opacity: 0;
-}`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;;AAGA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ","sourceRoot":""}]);
+}
+
+.horizontal-out {
+  position: relative; 
+}
+
+.horizontal-out::before {
+  content: "";
+  top: 0;
+  position: absolute;
+  height: 100%;
+  margin-top: 0;
+  left: 50%; 
+  transform: translate(-50%, 0); 
+  border-top: 10px solid olive; 
+  border-bottom: 10px solid olive; 
+  width: 0; 
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7); 
+}
+
+.horizontal-out.hovered::before {
+  width: calc(100% - 10px); /* Expand width to fill the remaining space */
+}
+
+.horizontal-out:not(.hovered)::before {
+  transition-duration: 0s;
+  width: 0; /* Set width back to 0 */
+}
+
+.folderImg {
+  margin-top: 2px;
+  margin-left: 6px;
+  width: 25px;
+  height: 25px;
+}
+
+.labelCentered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

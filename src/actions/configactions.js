@@ -23,6 +23,8 @@ let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
 let hoverDuration = 3000;
 let dwellAnimation = 'fill-up';
+let eyeTrackingOption = 'eyetracker';
+let restModeBool = false;
 
 export function changeConfig(configObject, save = false){
     chosenScanningGesture = configObject.scanningGesture;
@@ -39,6 +41,8 @@ export function changeConfig(configObject, save = false){
     setAutomaticScanningInterval(configObject.automaticScanningInterval);
     hoverDuration = configObject.hoverDuration;
     dwellAnimation = configObject.dwellAnimation;
+    eyeTrackingOption = configObject.eyeTrackingOption;
+    
 
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
@@ -46,7 +50,7 @@ export function changeConfig(configObject, save = false){
         updateCSSBgColour();
         setScanningType();
         setTransition();
-        setDwellAnimation();
+        setDwellAnimation(configObject.dwellAnimation);
         // send the new configuration to the main process
         ipcRenderer.send('configChange', configObject);
     }
@@ -92,6 +96,14 @@ export function getScanningType(){
     return scanningType;
 }
 
+export function getRestMode(){
+    return restModeBool;
+}
+
+export function setRestMode(rMode){
+    restModeBool = rMode
+}
+
 export function setScanningType(){
     // dispatch event to change the scanning type instantly
     document.dispatchEvent(new CustomEvent('scanningTypeChanged'));
@@ -132,11 +144,21 @@ export function getHoverDuration(){
     return hoverDuration;
 }
 
+export function setHoverDuration(duration){
+    hoverDuration = duration
+}
+
 export function getDwellAnimation(){
     return dwellAnimation;
 }
 
-export function setDwellAnimation(){
+export function getEyeTrackingOption(){
+    console.log(eyeTrackingOption);
+    return eyeTrackingOption;
+}
+
+export function setDwellAnimation(animation){
+    dwellAnimation = animation;
     document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 

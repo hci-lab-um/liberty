@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Input, Form, Divider, Dropdown, Checkbox } from 'semantic-ui-react';
-import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation } from '../actions/configactions';
+import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation, getEyeTrackingOption, getRestMode } from '../actions/configactions';
 import * as gestures from '../configuration/gestures.js';
 import * as scanningTypes from '../configuration/scanningtypes.js'
 const {ipcRenderer} = window.require('electron')
@@ -83,11 +83,13 @@ class ConfigBoardModal extends Component {
         { text: '5 seconds', value: 5000 }
     ];
 
+    eyeTracking = ['eyetracker', 'webcam']
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
     dwellAnimations = ['fill-up', 'horizontal-out']
     
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
+    eyeTrackingOptions = this.eyeTracking.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));
     dwellAnimationOptions = this.dwellAnimations.map(name => ({text: name, value: name, color: name}));
 
@@ -112,7 +114,9 @@ class ConfigBoardModal extends Component {
             regionScanningColumns: getRegionScanningColumns(),
             regionsHidden: true,
             hoverDuration: getHoverDuration(),
+            eyeTrackingOption : getEyeTrackingOption(),
             dwellAnimation: getDwellAnimation(),
+            restMode: false
         }
 
         // definie binding of methods
@@ -128,6 +132,7 @@ class ConfigBoardModal extends Component {
         this.handleModalOpen = this.handleModalOpen.bind(this);
         this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
+        this.handleEyeTrackingOptionChange = this.handleEyeTrackingOptionChange.bind(this)
         this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
         this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
         this.automaticShow = this.automaticShow.bind(this);
@@ -149,6 +154,7 @@ class ConfigBoardModal extends Component {
             color: getHighlightColor(),
             hoverDuration: getHoverDuration(),
             dwellAnimation: getDwellAnimation(),
+            eyeTrackingOption: getEyeTrackingOption(),
             automaticScanningInterval: getAutomaticScanningInterval(),
             leapInterval: getLeapInterval(),
             transition: getTransition(),
@@ -161,19 +167,25 @@ class ConfigBoardModal extends Component {
                 this.setState({regionsHidden: false}); 
         });
         lockSelector(); // lock gesture detection
-        // const root = document.documentElement;
-        // root.style.setProperty('--dwell-time', `${this.hoverDuration}ms`);
     }
 
     handleHoverDurationChange=(e, data)=>{
         this.setState({hoverDuration: data.value});
-        //setting css variable to be used for hover animatons
+        console.log(this.state.hoverDuration);
         const root = document.documentElement;
         root.style.setProperty('--dwell-time', `${data.value}ms`);
     }
 
     handleDwellAnimationChange=(e, data)=>{
         this.setState({dwellAnimation: data.value});
+        
+    }
+
+    handleEyeTrackingOptionChange = (e, data) => {
+        console.log("Selected Eye Tracking Option:", data.value);
+        this.setState({ eyeTrackingOption: data.value }, () => {
+            console.log("State updated. Eye Tracking Option:", this.state.eyeTrackingOption);
+        });
     }
 
     handleColorChange=(e, data)=>{
@@ -249,13 +261,14 @@ class ConfigBoardModal extends Component {
                 highlightColor: this.state.color,
                 hoverDuration: this.state.hoverDuration,
                 dwellAnimation: this.state.dwellAnimation,
+                eyeTrackingOption: this.state.eyeTrackingOption,
                 transition: this.state.transition,
                 automaticScanningInterval: this.state.automaticScanningInterval,
                 leapInterval: this.state.leapInterval,
                 isLeap: isLeap,
                 vocabularyFile: this.state.addVocabulary,
                 regionScanningRows: this.state.regionScanningRows,
-                regionScanningColumns: this.state.regionScanningColumns
+                regionScanningColumns: this.state.regionScanningColumns,
             };
     
             changeConfig(configObject, true);
@@ -387,6 +400,9 @@ class ConfigBoardModal extends Component {
                         )}
                         {this.isMouseScanning() && (
                             <>
+                                <Divider hidden/>
+                                Choose Eyetracking Option:
+                                <Dropdown value={this.state.eyeTrackingOption} options={this.eyeTrackingOptions} fluid selection onChange={this.handleEyeTrackingOptionChange}/>
                                 <Divider hidden/>
                                 Enter Dwelling Time:
                                 <Dropdown value={this.state.hoverDuration} options={this.hoverTimeOptions} fluid selection onChange={this.handleHoverDurationChange}/>
