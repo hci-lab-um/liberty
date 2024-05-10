@@ -4,9 +4,12 @@ const configfile = 'config.json';
 const defaultVocabularyFile = 'demoboard.json';
 const path = require('path');
 const url = require('url')
+var robot = require("@jitsi/robotjs");
 
 //Disables caching
 app.commandLine.appendSwitch ("disable-http-cache");
+
+
 
 let mainWindow;
 //default configuration if configuration file does not exist
@@ -240,6 +243,10 @@ ipcMain.on('newBoard', (event, newBoard) => {
     } catch (e) {
         console.log(e);
     }
+})
+
+ipcMain.on('gaze-data', (event, data) => {
+    robot.moveMouse(data.x, data.y);
 })
 
 //call createWindow function when Electron app is ready
