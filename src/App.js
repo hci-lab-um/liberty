@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css';
 import Main from './components/Main'
+import EyeTrackingComponent from './components/EyeTrackingComponent.js';
 const {ipcRenderer} = window.require('electron')
 
 class App extends Component {
@@ -16,6 +17,7 @@ componentDidMount(){
     return (
       <div>
         <Main/>
+        <EyeTrackingComponent/> 
       </div>
     );
   }

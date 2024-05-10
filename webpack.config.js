@@ -1,3 +1,5 @@
+const path = require('path');
+
 // Configuration for webpack to bundle the React application
 module.exports = {
   mode: 'development', 
@@ -7,6 +9,13 @@ module.exports = {
       path: require('path').resolve(__dirname, 'public'),
       filename: 'bundle.js',
       publicPath: '/public/',
+  },
+  target: 'electron-renderer',
+  resolve: {
+    fallback: {
+        "path": require.resolve("path-browserify"),
+        "fs": false 
+    }
   },
   module: {
       rules: [
