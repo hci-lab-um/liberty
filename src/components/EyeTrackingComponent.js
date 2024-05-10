@@ -9,8 +9,12 @@ const EyeTrackingComponent = () => {
     // Check if webgazer has loaded
     if (window.webgazer) {
 
+      
+
+
+      window.webgazer.saveDataAcrossSessions(true);
       window.webgazer.showVideo(false);
-      window.webgazer.showPredictionPoints(false);
+      //window.webgazer.showPredictionPoints(false);
 
       window.webgazer.setGazeListener((data, timestamp) => {
         if (data) {

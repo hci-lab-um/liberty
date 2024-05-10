@@ -9,6 +9,8 @@ var robot = require("@jitsi/robotjs");
 //Disables caching
 app.commandLine.appendSwitch ("disable-http-cache");
 
+let isWebGazerEnabled = false; 
+
 
 
 let mainWindow;
@@ -108,6 +110,11 @@ const menuTemplate = [
         label: 'Refresh Page',
         click: function() {
             mainWindow.reload();
+        }
+    }, {
+        label: 'Toggle Webcam Eyetracking',
+        click: function() {
+            isWebGazerEnabled = !isWebGazerEnabled;
         }
     }];
 
@@ -246,7 +253,9 @@ ipcMain.on('newBoard', (event, newBoard) => {
 })
 
 ipcMain.on('gaze-data', (event, data) => {
-    robot.moveMouse(data.x, data.y);
+    if (isWebGazerEnabled) {
+        robot.moveMouse(data.x, data.y);
+    }
 })
 
 //call createWindow function when Electron app is ready

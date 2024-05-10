@@ -3066,8 +3066,10 @@ const EyeTrackingComponent = () => {
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     // Check if webgazer has loaded
     if (window.webgazer) {
+      window.webgazer.saveDataAcrossSessions(true);
       window.webgazer.showVideo(false);
-      window.webgazer.showPredictionPoints(false);
+      //window.webgazer.showPredictionPoints(false);
+
       window.webgazer.setGazeListener((data, timestamp) => {
         if (data) {
           const simpleData = {
