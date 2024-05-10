@@ -61,3 +61,35 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.alertText{
+  font-weight: bold;
+  color: red;
+}
+
+
+.fill-up {
+  position: relative;
+  overflow: hidden;
+}
+
+.fill-up::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-color: olive;
+  transition: top var(--dwell-time) cubic-bezier(0.5, 0, 0.25, 0.7);
+}
+
+.fill-up:hover::after {
+  top: 0;
+}
+
+.fill-up:not(:hover)::after {
+  transition: none;
+  top: 100%;
+}

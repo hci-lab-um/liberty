@@ -3,8 +3,8 @@ import {Header, Divider} from 'semantic-ui-react'
 import GridBoard from './GridBoard'
 import CreateEditVocabularyModal from './CreateEditVocabularyModal'
 import ConfigBoardModal from './ConfigBoardModal'
-import HTML5Backend from 'react-dnd-html5-backend'
-import {DragDropContext} from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import {DndProvider} from 'react-dnd'
 const {ipcRenderer} = window.require('electron')
 
 class Main extends Component {
@@ -15,7 +15,8 @@ class Main extends Component {
       vocabularyToEdit : [],
       createBoardModalOpen : false,
       currentTitle: "Home",
-      previousTitles: []
+      previousTitles: [],
+      gridBoardHeight: (window.innerHeight - 150)
     }
 
     this.renderCreateEditVocabularyModal = this.renderCreateEditVocabularyModal.bind(this);
@@ -24,6 +25,7 @@ class Main extends Component {
     this.handleGoBackFromFolder = this.handleGoBackFromFolder.bind(this);
     this.handleFreshBoard = this.handleFreshBoard.bind(this);
     this.closeCreateEditVocabularyModal = this.closeCreateEditVocabularyModal.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   closeCreateEditVocabularyModal(){
@@ -61,30 +63,40 @@ class Main extends Component {
     this.setState({editMode : true , vocabularyToEdit : vocabulary, createBoardModalOpen:true}  )
   }
 
+  handleResize() {
+    this.setState({ gridBoardHeight: window.innerHeight - 150 });
+    ipcRenderer.send('refreshPage');
+  }
+
   componentDidMount(){
     // add event listeners on component mount
     ipcRenderer.on('createBoard', this.eventCreateVocabulary);
     ipcRenderer.on('editExistingBoard', this.handleEditExistingVocabulary);
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount(){
     // remove event listeners on component unmount to avoid memory leakage
     ipcRenderer.removeListener('createBoard', this.renderCreateEditVocabularyModal);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   render() {
     const renderCreateEditBoardModal = this.renderCreateEditVocabularyModal();
+    const headerHeight = 36;
     return (
-      <div>
-        <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
-        <Divider  hidden/>
-        <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
-        {renderCreateEditBoardModal}
-        <ConfigBoardModal />
-      </div>
+      <DndProvider backend={HTML5Backend}>      
+        <div style={{ height: `${window.innerHeight}px` }}>
+          <div style={{ height: `${headerHeight}px` }}>
+            <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
+          </div>
+          <GridBoard key={this.state.gridBoardHeight} height={this.state.gridBoardHeight} onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
+          {renderCreateEditBoardModal}
+          <ConfigBoardModal />
+        </div>
+        </DndProvider>
     )
   }
 }
 
-// Documentation suggests to put the drag and drop context wrapper in the outer component
-export default DragDropContext(HTML5Backend)(Main);
+export default Main;

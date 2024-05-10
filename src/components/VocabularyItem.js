@@ -1,98 +1,68 @@
-import React, { Component } from 'react'
-import {Grid, Image} from 'semantic-ui-react'
-import {DragSource, DropTarget} from 'react-dnd'
-import {getHighlightColor} from '../actions/configactions'
-
-// Note that for drag and drop an item is both a drag source and a drop source
-// Items are being dropped into other items
+import React, { useState, useEffect } from 'react';
+import { Grid, Image } from 'semantic-ui-react';
+import { useDrag, useDrop } from 'react-dnd';
+import { getHighlightColor } from '../actions/configactions';
 
 // definition of type required by React DnD
 const Types = {
     ITEM: 'GridItem'
-}
-// define itemSource for drag and drop
-const itemSource = {
-    beginDrag(props){
-        return {index: props.index};
-    }
-}
+};
 
-// define drop source of drag and drop
-const dropSource ={
-    drop(props, monitor){
-        let fromIndex = monitor.getItem().index;
-        let toIndex = props.index;
-        // get the index of the dragged item and the index of where the item was dropped
-        props.onRepositionItem(fromIndex, toIndex);
-    }
-}
+const VocabularyItem = (props) => {
+    const [bgColor, setBgColor] = useState("");
 
-// collect function used for drag and drop
-function collect(connect, monitor){
-    return{
-        connectDragSource: connect.dragSource(),
-        isDragging: monitor.isDragging()
-    }
-}
+    // usingg the useDrag hook to enable drag functionality
+    const [{ isDragging }, dragRef] = useDrag({
+        type: Types.ITEM,
+        item: { index: props.index },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    });
+    
+    // using the useDrop hook to enable drop functionality
+    const [, dropRef] = useDrop({
+        accept: Types.ITEM,
+        drop(item, monitor) {
+            const fromIndex = monitor.getItem().index;
+            const toIndex = props.index;
+            if (fromIndex !== toIndex) {
+                props.onRepositionItem(fromIndex, toIndex);
+            }
+        },
+    });
 
-// drop collect function used for drag and drop
-function dropCollect(connect, monitor){
-    return {
-      connectDropTarget: connect.dropTarget()
-    }
-  }
-
-class VocabularyItem extends Component {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            bgColor: ""
+    // colouring the item if it was clicked before 
+    useEffect(() => {
+        if (props.selected) {
+            const color = getHighlightColor();
+            setBgColor(color);
+        } else {
+            setBgColor("");
         }
-        this.colorItem = this.colorItem.bind(this);
-    }
+    }, [props.selected]);
 
-    // colour item if the item is clicked
-    colorItem(props = this.props){
-        if(props.selected){
-        let color = getHighlightColor(); // same colour as the scanning colour
-        this.setState({
-            bgColor: color
-          });
-        }
-          else{
-            this.setState({
-                bgColor: ""
-              });
-          }
-    }
+    //handling the item click 
+    const handleItemClick = () => {
+        props.selectItem(props.index);
+    };
 
-    componentWillReceiveProps(nextProps){
-        this.colorItem(nextProps);
-    }
+    const { elem } = props;
+    const divStyle = {
+        backgroundColor: bgColor,
+        opacity: isDragging ? 0.5 : 1,
+    };
 
-    handleItemClick(){
-        this.props.selectItem(index); //call parent's component method when item is clicked       
-    }
-
-    render() {
-        const {elem, index,connectDragSource, connectDropTarget} = this.props;  
-        var divStyle = {
-            backgroundColor: this.state.bgColor
-        }
-        // wrap the returned component in the connectDragSource and connectDtopTarget functions
-        return connectDragSource(connectDropTarget(
-            <div>
-            <Grid.Column  onClick={() =>this.props.selectItem(index)}  >
-                <div className='gridItem' style={divStyle}>
+    return (
+        <div ref={dragRef} onClick={handleItemClick}>
+            <Grid.Column>
+                <div className='gridItem' style={divStyle} ref={dropRef}>
                     <Image src={elem.image} size='small' centered/>
                     <p>{elem.title}</p>
                 </div>
-            </Grid.Column>    
-            </div>
-        ))
-    }
-}
+            </Grid.Column>
+        </div>
+    );
+};
 
-// Higher Order Component wrapper for exported component
-export default DragSource(Types.ITEM, itemSource, collect)(DropTarget(Types.ITEM, dropSource, dropCollect)(VocabularyItem));
+export default VocabularyItem;
