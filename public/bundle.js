@@ -2610,6 +2610,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.validateSelectorGesture = this.validateSelectorGesture.bind(this);
     this.handleVocabularyLoad = this.handleVocabularyLoad.bind(this);
     this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);
+    this.defaultCursor = null;
+    this.cursorImgOpacity = null;
   }
   handleModalOpen() {
     // get all the configuration values when the modal opens
@@ -2635,6 +2637,10 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       });
     });
     (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_1__.lockSelector)(); // lock gesture detection
+    this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity;
+    this.defaultCursor = document.body.style.cursor;
+    document.body.style.cursor = 'auto';
+    document.querySelector('.cursor-img').style.opacity = '0';
   }
   closeConfigBoardModal() {
     this.setState({
@@ -2673,6 +2679,8 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // remove listeners on unmounting of component
     ipcRenderer.removeListener('configBoard', this.openConfigBoardModal);
     ipcRenderer.removeListener('vocabularySent', this.handleVocabularyLoad);
+    document.body.style.cursor = this.defaultCursor;
+    document.querySelector('.cursor-img').style.opacity = this.cursorImgOpacity;
   }
   isMouseScanning() {
     return this.state.chosenScanningType === _configuration_scanningtypes_js__WEBPACK_IMPORTED_MODULE_3__.MOUSE_SCANNING;

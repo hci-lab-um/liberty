@@ -141,7 +141,9 @@ class ConfigBoardModal extends Component {
         this.validateBackScanningGesture = this.validateBackScanningGesture.bind(this);
         this.validateSelectorGesture = this.validateSelectorGesture.bind(this);
         this.handleVocabularyLoad = this.handleVocabularyLoad.bind(this);
-        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);        
+        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);   
+        this.defaultCursor = null;
+        this.cursorImgOpacity = null;
     }
 
     handleModalOpen(){
@@ -167,6 +169,10 @@ class ConfigBoardModal extends Component {
                 this.setState({regionsHidden: false}); 
         });
         lockSelector(); // lock gesture detection
+        this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity; 
+        this.defaultCursor = document.body.style.cursor; 
+        document.body.style.cursor = 'auto';
+        document.querySelector('.cursor-img').style.opacity = '0';
     }
 
     handleHoverDurationChange=(e, data)=>{
@@ -365,6 +371,8 @@ class ConfigBoardModal extends Component {
         // remove listeners on unmounting of component
         ipcRenderer.removeListener('configBoard', this.openConfigBoardModal);
         ipcRenderer.removeListener('vocabularySent', this.handleVocabularyLoad);
+        document.body.style.cursor = this.defaultCursor;
+        document.querySelector('.cursor-img').style.opacity = this.cursorImgOpacity;
     }
 
     isMouseScanning() {
