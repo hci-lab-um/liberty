@@ -2338,20 +2338,35 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }]);
     _defineProperty(this, "leapTypes", [_configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_GRAB, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_PINCH, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CIRCLE, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_LEFT]);
     _defineProperty(this, "hoverTimeOptions", [{
+      text: '0.7 seconds',
+      value: 800
+    }, {
+      text: '0.8 seconds',
+      value: 800
+    }, {
+      text: '0.9 seconds',
+      value: 900
+    }, {
       text: '1 second',
       value: 1000
+    }, {
+      text: '1.2 second',
+      value: 1200
+    }, {
+      text: '1.4 second',
+      value: 1400
+    }, {
+      text: '1.6 second',
+      value: 1600
+    }, {
+      text: '1.8 second',
+      value: 1800
     }, {
       text: '2 seconds',
       value: 2000
     }, {
       text: '3 seconds',
       value: 3000
-    }, {
-      text: '4 seconds',
-      value: 4000
-    }, {
-      text: '5 seconds',
-      value: 5000
     }]);
     _defineProperty(this, "eyeTracking", ['eyetracker']);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
@@ -3168,9 +3183,44 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         image: '../images/settings/clockwatch_1.png',
         function: "",
         children: [{
+          title: "0.7 Seconds",
+          image: '../images/settings/point7.png',
+          function: "changeDwellTime(700)",
+          children: []
+        }, {
+          title: "0.8 Seconds",
+          image: '../images/settings/point8.png',
+          function: "changeDwellTime(800)",
+          children: []
+        }, {
+          title: "0.9 Seconds",
+          image: '../images/settings/point9.png',
+          function: "changeDwellTime(900)",
+          children: []
+        }, {
           title: "1 Second",
           image: '../images/settings/one.png',
           function: "changeDwellTime(1000)",
+          children: []
+        }, {
+          title: "1.2 Seconds",
+          image: '../images/settings/onePointTwo.png',
+          function: "changeDwellTime(1200)",
+          children: []
+        }, {
+          title: "1.4 Seconds",
+          image: '../images/settings/onePointFour.png',
+          function: "changeDwellTime(1400)",
+          children: []
+        }, {
+          title: "1.6 Seconds",
+          image: '../images/settings/onePointSix.png',
+          function: "changeDwellTime(1600)",
+          children: []
+        }, {
+          title: "1.8 Seconds",
+          image: '../images/settings/onePointEight.png',
+          function: "changeDwellTime(1800)",
           children: []
         }, {
           title: "2 Seconds",
@@ -3181,16 +3231,6 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
           title: "3 Seconds",
           image: '../images/settings/three.png',
           function: "changeDwellTime(3000)",
-          children: []
-        }, {
-          title: "4 Seconds",
-          image: '../images/settings/four_1.png',
-          function: "changeDwellTime(4000)",
-          children: []
-        }, {
-          title: "5 Seconds",
-          image: '../images/settings/number five_1.png',
-          function: "changeDwellTime(5000)",
           children: []
         }]
       }, {

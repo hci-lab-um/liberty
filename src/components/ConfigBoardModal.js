@@ -76,11 +76,16 @@ class ConfigBoardModal extends Component {
     ]
 
     hoverTimeOptions = [
+        { text: '0.7 seconds', value: 800},
+        { text: '0.8 seconds', value: 800},
+        { text: '0.9 seconds', value: 900},
         { text: '1 second', value: 1000 },
+        { text: '1.2 second', value: 1200 },
+        { text: '1.4 second', value: 1400 },
+        { text: '1.6 second', value: 1600 },
+        { text: '1.8 second', value: 1800 },
         { text: '2 seconds', value: 2000 },
-        { text: '3 seconds', value: 3000 },
-        { text: '4 seconds', value: 4000 },
-        { text: '5 seconds', value: 5000 }
+        { text: '3 seconds', value: 3000 }
     ];
 
     eyeTracking = ['eyetracker']

@@ -34,9 +34,51 @@ class GridBoard extends Component {
                 function: "",
                 children: [
                     {
+                        title: "0.7 Seconds",
+                        image: '../images/settings/point7.png',
+                        function: "changeDwellTime(700)",
+                        children: []
+                    },
+                    {
+                        title: "0.8 Seconds",
+                        image: '../images/settings/point8.png',
+                        function: "changeDwellTime(800)",
+                        children: []
+                    },
+                    {
+                        title: "0.9 Seconds",
+                        image: '../images/settings/point9.png',
+                        function: "changeDwellTime(900)",
+                        children: []
+                    },
+                    {
                         title: "1 Second",
                         image: '../images/settings/one.png',
                         function: "changeDwellTime(1000)",
+                        children: []
+                    },
+                    {
+                        title: "1.2 Seconds",
+                        image: '../images/settings/onePointTwo.png',
+                        function: "changeDwellTime(1200)",
+                        children: []
+                    },
+                    {
+                        title: "1.4 Seconds",
+                        image: '../images/settings/onePointFour.png',
+                        function: "changeDwellTime(1400)",
+                        children: []
+                    },
+                    {
+                        title: "1.6 Seconds",
+                        image: '../images/settings/onePointSix.png',
+                        function: "changeDwellTime(1600)",
+                        children: []
+                    },
+                    {
+                        title: "1.8 Seconds",
+                        image: '../images/settings/onePointEight.png',
+                        function: "changeDwellTime(1800)",
                         children: []
                     },
                     {
@@ -49,18 +91,6 @@ class GridBoard extends Component {
                         title: "3 Seconds",
                         image: '../images/settings/three.png',
                         function: "changeDwellTime(3000)",
-                        children: []
-                    },
-                    {
-                        title: "4 Seconds",
-                        image: '../images/settings/four_1.png',
-                        function: "changeDwellTime(4000)",
-                        children: []
-                    },
-                    {
-                        title: "5 Seconds",
-                        image: '../images/settings/number five_1.png',
-                        function: "changeDwellTime(5000)",
                         children: []
                     }
                 ]
