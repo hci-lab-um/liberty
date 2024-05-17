@@ -2353,7 +2353,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       text: '5 seconds',
       value: 5000
     }]);
-    _defineProperty(this, "eyeTracking", ['eyetracker', 'webcam']);
+    _defineProperty(this, "eyeTracking", ['eyetracker']);
     _defineProperty(this, "transitions", ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']);
     _defineProperty(this, "colors", ['red', 'yellow', 'orange', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']);
     _defineProperty(this, "dwellAnimations", ['fill-up', 'horizontal-out']);
@@ -5734,6 +5734,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
 }
 
 .ui.celled.grid>.row>.column{
+  border-color: #000000; 
+  border-width: 2px;
+  border-style: solid;
   margin-top: 0; 
   margin-bottom: 0;
 }
@@ -5832,7 +5835,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   align-items: center;
   justify-content: center;
 }
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,iBAAiB;EACjB,mBAAmB;EACnB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

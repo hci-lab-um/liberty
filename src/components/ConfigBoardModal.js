@@ -83,7 +83,7 @@ class ConfigBoardModal extends Component {
         { text: '5 seconds', value: 5000 }
     ];
 
-    eyeTracking = ['eyetracker', 'webcam']
+    eyeTracking = ['eyetracker']
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
     dwellAnimations = ['fill-up', 'horizontal-out']
