@@ -234,15 +234,6 @@ class GridBoard extends Component {
         // reset board vocabulary with parent vocabulary
         this.setState({currentItems: this.state.previousItems.pop(), selectedItemIndex: 0, transitionVisible: false, 
             scanningRegionIndex: 0}, () =>{
-            // catering for the scenario where someone enters software in mouse scanning but then changes to another config in a folder.
-            if(this.state.scanningType !== scanningTypes.MOUSE_SCANNING){
-                if(this.state.currentItems[this.state.currentItems.length-1].title === "Settings" && this.state.currentItems[this.state.currentItems.length-2].title === "Rest Mode"){
-                    var newItems = this.state.currentItems
-                    newItems.pop(this.restItem);
-                    newItems.pop(this.settingsItems);
-                    this.setState({currentItems: newItems});
-                }
-            }
             // re-set number of items per row
             setItemsPerRow(this.state.currentItems.length, () =>{
                 this.setState({itemsPerRow: getItemsPerRow()})
@@ -295,7 +286,8 @@ class GridBoard extends Component {
                         // re-set scanning type state variables after the other variables have been set
                         this.chooseScanningType(()=>{
                             this.setState({transitionVisible:true})
-                            if(this.state.currentItems[this.state.currentItems.length-1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode" && this.state.scanningType === scanningTypes.MOUSE_SCANNING){
+                            //making sure settings menu isnt being added multiple times.
+                            if((this.state.currentItems[this.state.currentItems.length-1] && this.state.currentItems[this.state.currentItems.length-1].title !== "Settings") && (this.state.currentItems[this.state.currentItems.length-2] && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode") && this.state.scanningType === scanningTypes.MOUSE_SCANNING){
                                 var newItems = this.state.currentItems
                                 newItems.push(this.restItem);
                                 newItems.push(this.settingsItems);
@@ -887,7 +879,8 @@ class GridBoard extends Component {
             this.setState({scanningType: scanningType, isSelectingColumn: false, isSelectingRow: false}, ()=>{
                 callback();
             });
-            if(this.state.previousItems.length === 0 && this.state.currentItems[this.state.currentItems.length-1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode"){
+            //injecting settings items if scanning type changes to mouse scanning 
+            if(this.state.previousItems.length === 0 && (this.state.currentItems[this.state.currentItems.length-1] && this.state.currentItems[this.state.currentItems.length-1].title) !== "Settings" && (this.state.currentItems[this.state.currentItems.length-2] && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode")){
                 var newItems = this.state.currentItems
                 newItems.push(this.restItem);
                 newItems.push(this.settingsItems);
