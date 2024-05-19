@@ -76,7 +76,7 @@ class ConfigBoardModal extends Component {
     ]
 
     hoverTimeOptions = [
-        { text: '0.7 seconds', value: 800},
+        { text: '0.7 seconds', value: 700},
         { text: '0.8 seconds', value: 800},
         { text: '0.9 seconds', value: 900},
         { text: '1 second', value: 1000 },
