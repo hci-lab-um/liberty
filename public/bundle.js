@@ -2339,7 +2339,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     _defineProperty(this, "leapTypes", [_configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_GRAB, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_PINCH, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CIRCLE, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_LEFT]);
     _defineProperty(this, "hoverTimeOptions", [{
       text: '0.7 seconds',
-      value: 800
+      value: 700
     }, {
       text: '0.8 seconds',
       value: 800
@@ -3290,37 +3290,27 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     });
     // Go back from current folder
     _defineProperty(this, "goBack", () => {
-      // reset board vocabulary with parent vocabulary
+      const previousItemsCopy = [...this.state.previousItems];
+      const newCurrentItems = previousItemsCopy.pop();
       this.setState({
-        currentItems: this.state.previousItems.pop(),
+        currentItems: newCurrentItems,
         selectedItemIndex: 0,
         transitionVisible: false,
-        scanningRegionIndex: 0
+        scanningRegionIndex: 0,
+        previousItems: previousItemsCopy
       }, () => {
-        // catering for the scenario where someone enters software in mouse scanning but then changes to another config in a folder.
-        if (this.state.scanningType !== _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
-          if (this.state.currentItems[this.state.currentItems.length - 1].title === "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title === "Rest Mode") {
-            var newItems = this.state.currentItems;
-            newItems.pop(this.restItem);
-            newItems.pop(this.settingsItems);
-            this.setState({
-              currentItems: newItems
-            });
-          }
-        }
-        // re-set number of items per row
         (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.setItemsPerRow)(this.state.currentItems.length, () => {
           this.setState({
             itemsPerRow: (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.getItemsPerRow)()
           });
         });
-        this.props.onGoBackFromFolder(); // call parent component function to change title
+        this.props.onGoBackFromFolder();
         this.setState({
           transitionVisible: true
         }, () => {
           setTimeout(() => {
             (0,_actions_configactions__WEBPACK_IMPORTED_MODULE_2__.unlockSelector)();
-          }, 1000); // unlock selector after transition finishes
+          }, 1000);
         });
       });
     });
@@ -3373,7 +3363,8 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
               this.setState({
                 transitionVisible: true
               });
-              if (this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode" && this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
+              //making sure settings menu isnt being added multiple times.
+              if (this.state.currentItems[this.state.currentItems.length - 1] && this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2] && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode" && this.state.scanningType === _configuration_scanningtypes__WEBPACK_IMPORTED_MODULE_4__.MOUSE_SCANNING) {
                 var newItems = this.state.currentItems;
                 newItems.push(this.restItem);
                 newItems.push(this.settingsItems);
@@ -4170,7 +4161,8 @@ class GridBoard extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       }, () => {
         callback();
       });
-      if (this.state.previousItems.length === 0 && this.state.currentItems[this.state.currentItems.length - 1].title !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode") {
+      //injecting settings items if scanning type changes to mouse scanning 
+      if (this.state.previousItems.length === 0 && (this.state.currentItems[this.state.currentItems.length - 1] && this.state.currentItems[this.state.currentItems.length - 1].title) !== "Settings" && this.state.currentItems[this.state.currentItems.length - 2] && this.state.currentItems[this.state.currentItems.length - 2].title !== "Rest Mode") {
         var newItems = this.state.currentItems;
         newItems.push(this.restItem);
         newItems.push(this.settingsItems);
@@ -5726,7 +5718,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `.App {
+___CSS_LOADER_EXPORT___.push([module.id, `body {
+  overflow: hidden;
+}
+
+.App {
   text-align: center;
 }
 
@@ -5875,7 +5871,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.App {
   align-items: center;
   justify-content: center;
 }
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,iBAAiB;EACjB,mBAAmB;EACnB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,iBAAiB;EACjB,mBAAmB;EACnB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -49246,6 +49242,39 @@ if (
 
 /***/ }),
 
+/***/ "./node_modules/react-dom/client.js":
+/*!******************************************!*\
+  !*** ./node_modules/react-dom/client.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var m = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+if (false) {} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/react-dom/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/react-dom/index.js ***!
@@ -82407,7 +82436,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var semantic_ui_css_semantic_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! semantic-ui-css/semantic.min.css */ "./node_modules/semantic-ui-css/semantic.min.css");
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
 /* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Main */ "./src/components/Main.js");
@@ -82428,7 +82457,8 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Main__WEBPACK_IMPORTED_MODULE_4__["default"], null));
   }
 }
-react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(App, null), document.getElementById('root'));
+const root = document.getElementById('root');
+(0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(root).render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(App, null));
 })();
 
 /******/ })()

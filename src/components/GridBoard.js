@@ -230,17 +230,25 @@ class GridBoard extends Component {
     }
 
     // Go back from current folder
-    goBack = () =>{
-        // reset board vocabulary with parent vocabulary
-        this.setState({currentItems: this.state.previousItems.pop(), selectedItemIndex: 0, transitionVisible: false, 
-            scanningRegionIndex: 0}, () =>{
-            // re-set number of items per row
-            setItemsPerRow(this.state.currentItems.length, () =>{
-                this.setState({itemsPerRow: getItemsPerRow()})
+    goBack = () => {
+        const previousItemsCopy = [...this.state.previousItems];
+        const newCurrentItems = previousItemsCopy.pop();
+        this.setState({
+            currentItems: newCurrentItems,
+            selectedItemIndex: 0,
+            transitionVisible: false,
+            scanningRegionIndex: 0,
+            previousItems: previousItemsCopy
+        }, () => {
+
+            setItemsPerRow(this.state.currentItems.length, () => {
+                this.setState({ itemsPerRow: getItemsPerRow() });
             });
-            this.props.onGoBackFromFolder(); // call parent component function to change title
-            this.setState({transitionVisible: true}, ()=>{
-                setTimeout(()=>{unlockSelector()},1000); // unlock selector after transition finishes
+    
+            this.props.onGoBackFromFolder();
+
+            this.setState({ transitionVisible: true }, () => {
+                setTimeout(() => { unlockSelector(); }, 1000);
             });
         });
     }

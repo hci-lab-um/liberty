@@ -23,7 +23,7 @@
     "start": "webpack --watch",
     "electron": "electron .",
     "dev": "concurrently \"npm start\" \"npm run electron\"",
-    "dist": "build"
+    "dist": "webpack && electron-builder"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,7 +54,12 @@
     "style-loader": "^3.3.4",
     "url-loader": "^4.1.1",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.5"
   },
   "build": {
     "appId": "com.gapt.communicationboard",
