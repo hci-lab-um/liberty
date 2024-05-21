@@ -409,6 +409,8 @@ class ConfigBoardModal extends Component {
                                 <Divider hidden/>
                                 Enter Selector Gesture:
                                 <Dropdown id="text3" value={this.state.chosenSelectorGesture} options={this.gestureType} fluid selection onChange={this.handleSelectorGestureChange}/>
+                                <Divider hidden/>
+                                {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
                             </>
                         )}
                         {this.isMouseScanning() && (
@@ -431,8 +433,6 @@ class ConfigBoardModal extends Component {
                         <Divider hidden/>
                         Item Transition:
                         <Dropdown value={this.state.transition} options={this.transitionOptions} fluid selection onChange={this.handleTransitionChange}/>
-                        <Divider hidden/>
-                        {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
                         {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
                         <Divider hidden/>
                         <Form.Button type="button" value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
