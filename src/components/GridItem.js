@@ -26,8 +26,14 @@ class GridItem extends Component {
 
     toggleTransition(){
       // activate transition on item
-      this.setState({transitionActive: !this.state.transitionActive});
-    }
+      this.setState({transitionActive: !this.state.transitionActive}, () => {
+          if (!this.state.transitionActive) {
+              setTimeout(() => {
+                  this.setState({transitionActive: true});
+              }, 500);
+          }
+      });
+  }
 
     handleTransitionChange =(event)=>{
       // handle event of user changing the transition type

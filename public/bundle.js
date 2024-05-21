@@ -2019,6 +2019,8 @@ class AddEditItemModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     this.handleItemTitleChange = this.handleItemTitleChange.bind(this);
     this.handleFunctionNameChange = this.handleFunctionNameChange.bind(this);
     this.addUpdateItem = this.addUpdateItem.bind(this);
+    this.defaultCursor = null;
+    this.cursorImgOpacity = null;
   }
   closeAddEditItemModal() {
     // set state to false to close modal
@@ -2044,10 +2046,16 @@ class AddEditItemModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   componentDidMount() {
     // add event listener to listen for message from main process with the image path
     ipcRenderer.on('imageSent', this.handleImageLoaded);
+    this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity;
+    this.defaultCursor = document.body.style.cursor;
+    document.body.style.cursor = 'auto';
+    document.querySelector('.cursor-img').style.opacity = '0';
   }
   componentWillUnmount() {
     // remove event listener on unmounting of component
     ipcRenderer.removeListener('imageSent', this.handleImageLoaded);
+    document.body.style.cursor = this.defaultCursor;
+    document.querySelector('.cursor-img').style.opacity = this.cursorImgOpacity;
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -2162,180 +2170,66 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       value: 'NONE'
     }, {
       text: 'Spacebar',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SPACEBAR,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SPACEBAR
     }, {
       text: 'Left Click',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.LEFT_CLICK,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.LEFT_CLICK
     }, {
       text: 'Center Click',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CENTER_CLICK,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CENTER_CLICK
     }, {
       text: 'Right Click',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.RIGHT_CLICK,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.RIGHT_CLICK
     }, {
       text: 'Enter',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ENTER,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ENTER
     }, {
       text: 'Left Arrow',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.LEFT_ARROW,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.LEFT_ARROW
     }, {
       text: 'Right Arrow',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.RIGHT_ARROW,
-      icon: 'keyboard'
+      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.RIGHT_ARROW
     }, {
       text: 'Automatic',
       value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.AUTOMATIC
-    }, {
-      text: 'Palm Point Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_LEFT,
-      icon: 'signing'
-    }, {
-      text: 'Palm Point Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_RIGHT,
-      icon: 'signing'
-    }, {
-      text: 'Palm Point Up',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_UP,
-      icon: 'signing'
-    }, {
-      text: 'Palm Point Down',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_DOWN,
-      icon: 'signing'
-    }, {
-      text: 'Palm Point Front',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_FRONT,
-      icon: 'signing'
-    }, {
-      text: 'Palm Point Back',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_BACK,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_LEFT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_RIGHT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Up',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_UP,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Down',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_DOWN,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Front',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_FRONT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Point Back',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_BACK,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_LEFT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_RIGHT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Up',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_UP,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Down',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_DOWN,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Front',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_FRONT,
-      icon: 'signing'
-    }, {
-      text: 'Hand Position Back',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_BACK,
-      icon: 'signing'
-    }, {
-      text: 'Hand Grab',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_GRAB,
-      icon: 'signing'
-    }, {
-      text: 'Hand Pinch',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_PINCH,
-      icon: 'signing'
-    }, {
-      text: 'Swipe Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT,
-      icon: 'signing'
-    }, {
-      text: 'Swipe Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT,
-      icon: 'signing'
-    }, {
-      text: 'Roll Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_RIGHT,
-      icon: 'signing'
-    }, {
-      text: 'Roll Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_LEFT,
-      icon: 'signing'
-    }, {
-      text: 'Myo Fist',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_FIST,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Spread',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_SPREAD,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Wave In',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_WAVE_IN,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Wave Out',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_WAVE_OUT,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Double Tap',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_DOUBLE_TAP,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Swipe Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_SWIPE_RIGHT,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Swipe Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_SWIPE_LEFT,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Position Up',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_POSITION_UP,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Position Down',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_POSITION_DOWN,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Roll Right',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_ROLL_RIGHT,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Roll Left',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_ROLL_LEFT,
-      icon: 'band aid'
-    }, {
-      text: 'Myo Row Hand',
-      value: _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.MYO_ROW,
-      icon: 'band aid'
-    }]);
+    }
+    // {text: 'Palm Point Left', value: gestures.PALM_POINT_LEFT, icon: 'signing'},
+    // {text: 'Palm Point Right', value: gestures.PALM_POINT_RIGHT, icon: 'signing'},
+    // {text: 'Palm Point Up', value: gestures.PALM_POINT_UP, icon: 'signing'},
+    // {text: 'Palm Point Down', value: gestures.PALM_POINT_DOWN, icon: 'signing'},
+    // {text: 'Palm Point Front', value: gestures.PALM_POINT_FRONT, icon: 'signing'},
+    // {text: 'Palm Point Back', value: gestures.PALM_POINT_BACK, icon: 'signing'},
+    // {text: 'Hand Point Left', value: gestures.HAND_POINT_LEFT, icon: 'signing'},
+    // {text: 'Hand Point Right', value: gestures.HAND_POINT_RIGHT, icon: 'signing'},
+    // {text: 'Hand Point Up', value: gestures.HAND_POINT_UP, icon: 'signing'},
+    // {text: 'Hand Point Down', value: gestures.HAND_POINT_DOWN, icon: 'signing'},
+    // {text: 'Hand Point Front', value: gestures.HAND_POINT_FRONT, icon: 'signing'},
+    // {text: 'Hand Point Back', value: gestures.HAND_POINT_BACK, icon: 'signing'},
+    // {text: 'Hand Position Left', value: gestures.HAND_POSITION_LEFT, icon: 'signing'},
+    // {text: 'Hand Position Right', value: gestures.HAND_POSITION_RIGHT, icon: 'signing'},
+    // {text: 'Hand Position Up', value: gestures.HAND_POSITION_UP, icon: 'signing'},
+    // {text: 'Hand Position Down', value: gestures.HAND_POSITION_DOWN, icon: 'signing'},
+    // {text: 'Hand Position Front', value: gestures.HAND_POSITION_FRONT, icon: 'signing'},
+    // {text: 'Hand Position Back', value: gestures.HAND_POSITION_BACK, icon: 'signing'},
+    // {text: 'Hand Grab', value: gestures.HAND_GRAB, icon: 'signing'},
+    // {text: 'Hand Pinch', value: gestures.HAND_PINCH, icon: 'signing'},
+    // {text: 'Swipe Right', value: gestures.SWIPE_RIGHT, icon: 'signing'},
+    // {text: 'Swipe Left', value: gestures.SWIPE_LEFT, icon: 'signing'},
+    // {text: 'Roll Right', value: gestures.ROLL_RIGHT, icon: 'signing'},
+    // {text: 'Roll Left', value: gestures.ROLL_LEFT, icon: 'signing'},
+    // {text: 'Myo Fist', value: gestures.MYO_FIST, icon: 'band aid'},
+    // {text: 'Myo Spread', value: gestures.MYO_SPREAD, icon: 'band aid'},
+    // {text: 'Myo Wave In', value: gestures.MYO_WAVE_IN, icon: 'band aid'},
+    // {text: 'Myo Wave Out', value: gestures.MYO_WAVE_OUT, icon: 'band aid'},
+    // {text: 'Myo Double Tap', value: gestures.MYO_DOUBLE_TAP, icon: 'band aid'},
+    // {text: 'Myo Swipe Right', value: gestures.MYO_SWIPE_RIGHT, icon: 'band aid'},
+    // {text: 'Myo Swipe Left', value: gestures.MYO_SWIPE_LEFT, icon: 'band aid'},
+    // {text: 'Myo Position Up', value: gestures.MYO_POSITION_UP, icon: 'band aid'},
+    // {text: 'Myo Position Down', value: gestures.MYO_POSITION_DOWN, icon: 'band aid'},
+    // {text: 'Myo Roll Right', value: gestures.MYO_ROLL_RIGHT, icon: 'band aid'},
+    // {text: 'Myo Roll Left', value: gestures.MYO_ROLL_LEFT, icon: 'band aid'},
+    // {text: 'Myo Row Hand', value: gestures.MYO_ROW, icon: 'band aid'}
+    ]);
     _defineProperty(this, "leapTypes", [_configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_GRAB, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_PINCH, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.HAND_POSITION_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_BACK, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_FRONT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_DOWN, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_UP, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.PALM_POINT_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.CIRCLE, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.SWIPE_LEFT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_RIGHT, _configuration_gestures_js__WEBPACK_IMPORTED_MODULE_2__.ROLL_LEFT]);
     _defineProperty(this, "hoverTimeOptions", [{
       text: '0.7 seconds',
@@ -2748,7 +2642,14 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       fluid: true,
       selection: true,
       onChange: this.handleSelectorGestureChange
-    })), this.isMouseScanning() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      hidden: true
+    }), this.state.automaticHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Speed of Automatic Selector (in ms):"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      type: "text",
+      id: "speed",
+      value: this.state.automaticScanningInterval,
+      onChange: this.handleAutomaticIntervalChange
+    }))), this.isMouseScanning() && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
       hidden: true
     }), "Choose Eyetracking Option:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
       value: this.state.eyeTrackingOption,
@@ -2788,14 +2689,7 @@ class ConfigBoardModal extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       fluid: true,
       selection: true,
       onChange: this.handleTransitionChange
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      hidden: true
-    }), this.state.automaticHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Speed of Automatic Selector (in ms):"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
-      type: "text",
-      id: "speed",
-      value: this.state.automaticScanningInterval,
-      onChange: this.handleAutomaticIntervalChange
-    })), this.state.leapHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Leap Interval (in ms):"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), this.state.leapHidden && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "Leap Interval (in ms):"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
       type: "text",
       id: "leap",
       value: this.state.leapInterval,
@@ -4687,6 +4581,14 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     // activate transition on item
     this.setState({
       transitionActive: !this.state.transitionActive
+    }, () => {
+      if (!this.state.transitionActive) {
+        setTimeout(() => {
+          this.setState({
+            transitionActive: true
+          });
+        }, 500);
+      }
     });
   }
   componentWillMount() {
@@ -4745,8 +4647,8 @@ class GridItem extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         height: "".concat(this.props.height, "px")
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      className: "gridImage",
       src: this.props.item.image,
-      size: "small",
       centered: true
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       className: "labelCentered"
@@ -5777,6 +5679,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `body {
   margin-bottom: 0;
 }
 
+.gridImage{
+  height: 80%;
+  width: 80%;
+  object-fit: contain;
+}
+
 .ui.grid>* {
   padding-left: 0;
 }
@@ -5871,7 +5779,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `body {
   align-items: center;
   justify-content: center;
 }
-`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,iBAAiB;EACjB,mBAAmB;EACnB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,4CAA4C;EAC5C,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,yBAAyB;EACzB,iBAAiB;EACjB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,6BAA6B;EAC7B,YAAY;AACd;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;AACF;;AAEA;EACE,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;AAC3B;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,qBAAqB;EACrB,iBAAiB;EACjB,mBAAmB;EACnB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,UAAU;EACV,mBAAmB;AACrB;;AAEA;EACE,eAAe;AACjB;;;AAGA;EACE,iBAAiB;EACjB,eAAe;EACf,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,UAAU;AACZ;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,SAAS;EACT,OAAO;EACP,WAAW;EACX,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iEAAiE;AACnE;;AAEA;EACE,MAAM;AACR;;AAEA;EACE,gBAAgB;EAChB,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,oBAAoB;EACpB,WAAW;EACX,YAAY;EACZ,6BAA6B;EAC7B,aAAa;EACb,UAAU;AACZ;;AAEA;EACE,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,MAAM;EACN,kBAAkB;EAClB,YAAY;EACZ,aAAa;EACb,SAAS;EACT,6BAA6B;EAC7B,4BAA4B;EAC5B,+BAA+B;EAC/B,QAAQ;EACR,sBAAsB;EACtB,gBAAgB;EAChB,mEAAmE;AACrE;;AAEA;EACE,wBAAwB,EAAE,6CAA6C;AACzE;;AAEA;EACE,uBAAuB;EACvB,QAAQ,EAAE,wBAAwB;AACpC;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,uBAAuB;AACzB","sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
