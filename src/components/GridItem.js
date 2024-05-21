@@ -112,7 +112,7 @@ class GridItem extends Component {
           <Transition animation={this.state.transitionType} duration={500} visible={this.state.transitionActive}>
               <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className={`gridColumn ${this.state.dwellAnimation} ${this.state.hovered}`} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                   <div className="gridItem" style={{ height: `${this.props.height}px`}}>
-                      <Image src={this.props.item.image} size='small' centered />
+                      <Image className="gridImage" src={this.props.item.image}  centered />
                       <p className='labelCentered'>
                           {this.state.showTitle && <span>{this.props.item.title} </span>}
                           <span>{this.props.isParent && <img className="folderImg" src='../images/folder.svg'/>}</span>

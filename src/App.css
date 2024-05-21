@@ -57,6 +57,12 @@ body {
   margin-bottom: 0;
 }
 
+.gridImage{
+  height: 80%;
+  width: 80%;
+  object-fit: contain;
+}
+
 .ui.grid>* {
   padding-left: 0;
 }
