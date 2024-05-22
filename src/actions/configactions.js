@@ -55,7 +55,7 @@ export function changeConfig(configObject, save = false){
         ipcRenderer.send('configChange', configObject);
     }
 
-    if(configObject.scanningGesture === "AUTOMATIC"){
+    if(configObject.scanningGesture === "AUTOMATIC" && configObject.scanningType !== scanningTypes.MOUSE_SCANNING){
         /* if the selection is automatic then first the interval of the automatic scanning function has to be cleared
            in case automatic was the previous scanning gesture*/
         automaticIsLocked = false;

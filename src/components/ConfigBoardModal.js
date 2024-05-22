@@ -209,12 +209,17 @@ class ConfigBoardModal extends Component {
 
     handleScanningTypeChange = (e, data) =>{
         // show change region rows/columns section if region based scanning is selected
+        
         if(data.value === scanningTypes.REGION_BASED_SCANNING){
             this.setState({regionsHidden: false});
         }else{
             this.setState({regionsHidden: true});
         }
         this.setState({chosenScanningType: data.value});
+
+        if(data.value === scanningTypes.MOUSE_SCANNING){
+            this.setState({automaticHidden: false})
+        }
     }
 
     handleScanningGestureChange = (e, data) =>{
