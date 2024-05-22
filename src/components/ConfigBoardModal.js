@@ -13,7 +13,8 @@ class ConfigBoardModal extends Component {
         {text: 'Row based Scanning', value: scanningTypes.ROW_BASED_SCANNING},
         {text: 'Column based Scanning', value: scanningTypes.COLUMN_BASED_SCANNING},
         {text: 'Region based Scanning', value: scanningTypes.REGION_BASED_SCANNING},
-        {text: 'Division based Scanning', value: scanningTypes.DIVISION_BASED_SCANNING}
+        {text: 'Division based Scanning', value: scanningTypes.DIVISION_BASED_SCANNING},
+        {text: 'Mouse Scanning', value: scanningTypes.MOUSE_SCANNING}
     ]
 
     // definition of gesture type to include gesture name in title case and corresponding icon
@@ -95,6 +96,7 @@ class ConfigBoardModal extends Component {
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
     eyeTrackingOptions = this.eyeTracking.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));
+    dwellAnimationOptions = this.dwellAnimations.map(name => ({text: name, value: name, color: name}));
 
     constructor(props){
         super(props);
@@ -121,6 +123,7 @@ class ConfigBoardModal extends Component {
             dwellAnimation: getDwellAnimation(),
             restMode: false
         }
+
         // definie binding of methods
         this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
         this.openConfigBoardModal = this.openConfigBoardModal.bind(this);
@@ -257,10 +260,12 @@ class ConfigBoardModal extends Component {
         });
     }
 
-    saveConfiguration(){
-        this.setState({configBoardModalOpen: false}, ()=>{
+    saveConfiguration = (event) => {
+        event.preventDefault(); // Prevent default form submission
+    
+        this.setState({ configBoardModalOpen: false }, () => {
             let isLeap = this.isLeapConfiguration();
-            // pass configuration object to changeConfig function so that it can be saved in the file system
+            // Construct configuration object
             let configObject = {
                 scanningGesture: this.state.chosenScanningGesture,
                 selectorGesture: this.state.chosenSelectorGesture,
@@ -280,10 +285,11 @@ class ConfigBoardModal extends Component {
             };
     
             changeConfig(configObject, true);
+    
+            unlockSelector();
         });
-        unlockSelector();
     }
-
+    
     isLeapConfiguration(){
         // check if one of the gestures selected is a leap gesture
         let scanningGesture= this.state.chosenScanningGesture;
@@ -442,6 +448,7 @@ class ConfigBoardModal extends Component {
             </Modal>
         );
     }
+    
 
 }
 

@@ -3,8 +3,8 @@ import {Header, Divider} from 'semantic-ui-react'
 import GridBoard from './GridBoard'
 import CreateEditVocabularyModal from './CreateEditVocabularyModal'
 import ConfigBoardModal from './ConfigBoardModal'
-import HTML5Backend from 'react-dnd-html5-backend'
-import {DragDropContext} from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import {DndProvider} from 'react-dnd'
 const {ipcRenderer} = window.require('electron')
 
 class Main extends Component {
@@ -74,6 +74,7 @@ class Main extends Component {
 
   render() {
     const renderCreateEditBoardModal = this.renderCreateEditVocabularyModal();
+    const headerHeight = 36;
     return (
       <DndProvider backend={HTML5Backend}>      
         <div style={{ height: `${window.innerHeight}px` }}>
@@ -92,5 +93,4 @@ class Main extends Component {
   }
 }
 
-// Documentation suggests to put the drag and drop context wrapper in the outer component
-export default DragDropContext(HTML5Backend)(Main);
+export default Main;

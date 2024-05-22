@@ -380,13 +380,15 @@ class GridBoard extends Component {
     }
 
     // scanning next item
-    handleItemScanning(){
+    handleItemScanning = (itemIndex) => {
         // general case - scanning type is step scanning
         if(this.state.scanningType === scanningTypes.STEP_SCANNING){
             if(this.state.selectedItemIndex === this.state.currentItems.length-1)
                 this.setState({selectedItemIndex: 0}) // scan first item if no more items proceed
             else
                 this.setState({selectedItemIndex: this.state.selectedItemIndex+1}) // scan next item
+        }else if (this.state.scanningType === scanningTypes.MOUSE_SCANNING){
+            this.setState({ selectedItemIndex: itemIndex });
         }else if(this.state.isGoBackFromRowColumnScanning){
             // case when it is currently in the state of going back from current scanning region
             // scan to the initial scannable index of scanning region
@@ -1254,7 +1256,7 @@ class GridBoard extends Component {
     let show = 1000;
     return (
         <Transition animation='fade down' duration={{hide,show}} visible={visible}>
-            <Grid columns={this.state.itemsPerRow} container={this.state.currentItems.length < 30} celled='internally' >
+            <Grid columns={this.state.itemsPerRow} container={false} celled='internally'>
             {elementsToRender}
             </Grid>
         </Transition>

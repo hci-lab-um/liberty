@@ -8,6 +8,7 @@ class GridItem extends Component {
         super(props);
         this.state = {
             bgColor: "",
+            animationColor: getHighlightColor(),
             transitionActive:true,
             transitionType: 'jiggle',
             showTitle: true,
@@ -17,6 +18,10 @@ class GridItem extends Component {
           }
         this.colorItem = this.colorItem.bind(this);
         this.toggleTransition = this.toggleTransition.bind(this);
+    }
+
+    getCurrentHoverDuration(){
+      this.setState({hoverDuration: getHoverDuration()});
     }
 
     toggleTransition(){
@@ -45,6 +50,9 @@ class GridItem extends Component {
     }
 
     componentDidMount(){
+      const root = document.documentElement;
+      root.style.setProperty('--dwell-time', `${this.state.hoverDuration}ms`);
+      updateCSSBgColour();
       // listen to event
       document.addEventListener('transitionChanged', this.handleTransitionChange);
       document.addEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
@@ -59,6 +67,7 @@ class GridItem extends Component {
     componentWillReceiveProps(nextProps){
       // call functions when component receives props
         this.colorItem(nextProps);
+        this.getCurrentHoverDuration();
       // toggle transition when item is selected
         if(nextProps.itemActivated) 
           this.toggleTransition();
@@ -66,7 +75,7 @@ class GridItem extends Component {
 
     colorItem(props = this.props){
       // color item if it is being scanned
-        if(props.selected){
+        if(props.selected && (getScanningType() !== scanningTypes.MOUSE_SCANNING)){
         let color = getHighlightColor();
         this.setState({
             bgColor: color

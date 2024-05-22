@@ -43,16 +43,22 @@ class VocabularyGrid extends Component {
       right: 14
     }
     return(
-        <Grid columns={7} className='createBoardGrid'>
+        <Grid columns={7} container={false} className='createBoardGrid'>
           {this.state.currentItems.map((elem,index) =>
               <VocabularyItem key={index} elem={elem} index={index} onRepositionItem={this.handleItemsRepositioning} selectItem={this.handleSelectItem} 
               selected={itemSelected && index == selectedItemIndex}/>
           )}
+          {this.props.showAddButton ? (
           <Grid.Column onClick={()=> this.props.onAddNewItem()}>
             <Form.Button style={addStyle}>
               +
             </Form.Button>
           </Grid.Column>
+          ) : ( 
+          <Grid.Column>
+            <span className='alertText' >You have reached the maximum number of items. Please either remove one or create children to add more.</span>
+          </Grid.Column>
+          )}
         </Grid>
     )
   }

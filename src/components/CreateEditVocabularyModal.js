@@ -20,7 +20,7 @@ export default class CreateEditVocabularyModal extends Component {
             currentTitle: "Create New Board",
             previousTitles: [],
             editMode: false,
-            itemModalOpen: false
+            itemModalOpen: false,
         }
         this.closeCreateEditVocabularyModal = this.closeCreateEditVocabularyModal.bind(this);
         this.addNewItem = this.addNewItem.bind(this);
@@ -46,6 +46,7 @@ export default class CreateEditVocabularyModal extends Component {
 
     addNewItem(itemName, itemFunction, itemImage){
         // adding new item to the vocabulary
+
         let newItem ={
             title: itemName,
             function: itemFunction === "" ? null: itemFunction ,
@@ -198,7 +199,7 @@ export default class CreateEditVocabularyModal extends Component {
                     <Modal.Content>
                         {renderModal}
                         <Divider hidden/>
-                        <VocabularyGrid onAddNewItem={this.openAddEditItemModal} currentItems={this.state.currentItems} onSelectedItem={this.selectItem} selectedItemIndex={this.state.selectedItemIndex} itemSelected={this.state.itemSelected}/>
+                        <VocabularyGrid onAddNewItem={this.openAddEditItemModal} currentItems={this.state.currentItems} onSelectedItem={this.selectItem} selectedItemIndex={this.state.selectedItemIndex} itemSelected={this.state.itemSelected} showAddButton={showAddButton}/>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button disabled={!this.state.itemSelected} onClick={() =>this.modifyItem()}>Modify</Button>
