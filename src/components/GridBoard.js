@@ -147,7 +147,8 @@ class GridBoard extends Component {
             currentItemInRegionIndex: 0,
             divisionMetaData: {},
             restModeBool: false,
-            isGoBackFromDivisionScanning: false
+            isGoBackFromDivisionScanning: false,
+            gridBoardHeight: (window.innerHeight - 150)
         }
         
         this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
@@ -181,6 +182,7 @@ class GridBoard extends Component {
         this.handleDivisionSelection = this.handleDivisionSelection.bind(this);
         this.handleGoBackFromColumnRowScanning = this.handleGoBackFromColumnRowScanning.bind(this);
         this.checkIfItemIsActivated = this.checkIfItemIsActivated.bind(this);
+        this.handleResize = this.handleResize.bind(this);
 
         // bind goBack function to "goBack" title in function dictionary
         // if function is not null, then the function defined in the dictionary will be executed
@@ -199,7 +201,11 @@ class GridBoard extends Component {
         this.saveConfig();
     }
 
-
+    handleResize() {
+        this.setState({ gridBoardHeight: window.innerHeight - 150 }, () => {
+            console.log("success");
+        });
+    }
 
     changeDwellAnimation = (animation) =>{
         setDwellAnimation(animation);
@@ -1163,7 +1169,7 @@ class GridBoard extends Component {
                 let itemIsSelected = this.checkItemIsSelected(rowIndex, columnIndex, itemIndex); // if item is being scanned
                 let itemIsActivated = this.checkIfItemIsActivated(itemIndex); // if user selects item
                 let isParent = item.children.length > 0;
-                return <GridItem height={this.props.height/4} item={item} key={columnIndex} id={itemIndex} 
+                return <GridItem height={this.state.gridBoardHeight/4} item={item} key={columnIndex} id={itemIndex} 
                          selected={itemIsSelected} itemActivated={itemIsActivated} isParent={isParent} />
             })}
         </GridRow>
@@ -1232,12 +1238,14 @@ class GridBoard extends Component {
         // add event listeners for main process messages
         ipcRenderer.on('configLoad', this.loadConfig);
         ipcRenderer.on('vocabularyLoad', this.loadVocabulary);
+        window.addEventListener('resize', this.handleResize);
     }
 
     componentWillUnmount(){
         // remove listeners on component unmount
         ipcRenderer.removeListener('configLoad', this.loadConfig);
         ipcRenderer.removeListener('vocabularyLoad', this.loadVocabulary);
+        window.removeEventListener('resize', this.handleResize);
     }
    
     // render the grid of vocabulary items with a transition wrapper

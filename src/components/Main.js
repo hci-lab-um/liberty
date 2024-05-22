@@ -16,7 +16,6 @@ class Main extends Component {
       createBoardModalOpen : false,
       currentTitle: "Home",
       previousTitles: [],
-      gridBoardHeight: (window.innerHeight - 150)
     }
 
     this.renderCreateEditVocabularyModal = this.renderCreateEditVocabularyModal.bind(this);
@@ -25,7 +24,6 @@ class Main extends Component {
     this.handleGoBackFromFolder = this.handleGoBackFromFolder.bind(this);
     this.handleFreshBoard = this.handleFreshBoard.bind(this);
     this.closeCreateEditVocabularyModal = this.closeCreateEditVocabularyModal.bind(this);
-    this.handleResize = this.handleResize.bind(this);
   }
 
   closeCreateEditVocabularyModal(){
@@ -63,22 +61,15 @@ class Main extends Component {
     this.setState({editMode : true , vocabularyToEdit : vocabulary, createBoardModalOpen:true}  )
   }
 
-  handleResize() {
-    this.setState({ gridBoardHeight: window.innerHeight - 150 });
-    ipcRenderer.send('refreshPage');
-  }
-
   componentDidMount(){
     // add event listeners on component mount
     ipcRenderer.on('createBoard', this.eventCreateVocabulary);
     ipcRenderer.on('editExistingBoard', this.handleEditExistingVocabulary);
-    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount(){
     // remove event listeners on component unmount to avoid memory leakage
     ipcRenderer.removeListener('createBoard', this.renderCreateEditVocabularyModal);
-    window.removeEventListener('resize', this.handleResize);
   }
 
   render() {
@@ -93,7 +84,7 @@ class Main extends Component {
           <div>
             <img src='../images/cursor_image.png' className='cursor-img' alt='cursor' />
           </div>
-          <GridBoard key={this.state.gridBoardHeight} height={this.state.gridBoardHeight} onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
+          <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
           {renderCreateEditBoardModal}
           <ConfigBoardModal />
         </div>
