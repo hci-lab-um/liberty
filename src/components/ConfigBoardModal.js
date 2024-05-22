@@ -171,7 +171,7 @@ class ConfigBoardModal extends Component {
         }, ()=>{
             //show or hide change region columns and rows section
             if(this.state.chosenScanningType === scanningTypes.REGION_BASED_SCANNING)
-                this.setState({regionsHidden: false}); 
+                this.setState({regionsHidden: false});
         });
         lockSelector(); // lock gesture detection
         this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity; 
@@ -217,9 +217,6 @@ class ConfigBoardModal extends Component {
         }
         this.setState({chosenScanningType: data.value});
 
-        if(data.value === scanningTypes.MOUSE_SCANNING){
-            this.setState({automaticHidden: false})
-        }
     }
 
     handleScanningGestureChange = (e, data) =>{
