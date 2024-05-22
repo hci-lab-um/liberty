@@ -10,7 +10,7 @@ class GridItem extends Component {
             bgColor: "",
             animationColor: getHighlightColor(),
             transitionActive:true,
-            transitionType: getTransition(),
+            transitionType: 'jiggle',
             showTitle: true,
             hoverDuration: getHoverDuration(),
             dwellAnimation: getDwellAnimation(),
