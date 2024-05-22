@@ -1260,304 +1260,325 @@
   {
     "children": [
       {
-        "children": [],
+        "children": [
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to bathe to bath.png",
+            "title": "Bathe"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to blow the nose.png",
+            "title": "Blow nose"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to brush one's teeth brush teeth.png",
+            "title": "Brush teeth"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to clean.png",
+            "title": "Clean"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to dress oneself to dress to change clothes.png",
+            "title": "Dress"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to drink.png",
+            "title": "Drink"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to eat.png",
+            "title": "Eat"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to move.png",
+            "title": "Move"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to have a shit go to the bathroom evacuate.png",
+            "title": "Go to bathroom"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to open.png",
+            "title": "Open"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to play.png",
+            "title": "Play"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to read.png",
+            "title": "Read"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to shower.png",
+            "title": "Shower"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to sit_1.png",
+            "title": "Sit"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to sleep.png",
+            "title": "Sleep"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to use.png",
+            "title": "Use"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to wake up.png",
+            "title": "Wake up"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to wash up the hands.png",
+            "title": "Wash hands"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to walk_2.png",
+            "title": "Walk"
+          }
+        ],
         "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to add.png",
-        "title": "Add"
+        "image": "../images/ARASAAC_Symbol_Set/activity actitivities.png",
+        "title": "Daily Activities"
       },
       {
-        "children": [],
+        "children": [
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to add.png",
+            "title": "Add"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to allow.png",
+            "title": "Allow"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to answer.png",
+            "title": "Answer"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to arrive.png",
+            "title": "Arrive"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to ask.png",
+            "title": "Ask"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to be alone.png",
+            "title": "Be alone"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to caress.png",
+            "title": "Caress"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to celebrate celebrate.png",
+            "title": "Celebrate"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to cheer up.png",
+            "title": "Cheer up"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to communicate.png",
+            "title": "Communicate"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to continue.png",
+            "title": "Continue"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to decide to prefer.png",
+            "title": "Decide"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to explain.png",
+            "title": "Explain"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to help.png",
+            "title": "Help"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to listen.png",
+            "title": "Listen"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to say to express oneself to express.png",
+            "title": "Say"
+          }
+        ],
         "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to allow.png",
-        "title": "Allow"
+        "image": "../images/ARASAAC_Symbol_Set/talk to speak to talk dialogue conversation chat converse_1.png",
+        "title": "Communication and Social"
       },
       {
-        "children": [],
+        "children": [
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to assault.png",
+            "title": "Assault"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to break.png",
+            "title": "Break"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to cover.png",
+            "title": "Cover"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to cry.png",
+            "title": "Cry"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to cut_2.png",
+            "title": "Cut"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to dance.png",
+            "title": "Dance"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to draw.png",
+            "title": "Draw"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to fall_1.png",
+            "title": "Fall"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to grow.png",
+            "title": "Grow"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to learn learn.png",
+            "title": "Learn"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to pray_4.png",
+            "title": "Pray"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to rinse.png",
+            "title": "Rinse"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/to sing.png",
+            "title": "Sing"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/turn on the light to turn on.png",
+            "title": "Turn on light"
+          },
+          {
+            "children": [],
+            "function": null,
+            "image": "../images/ARASAAC_Symbol_Set/turn off the light.png",
+            "title": "Turn off light"
+          }
+        ],
         "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to answer.png",
-        "title": "Answer"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to arrive.png",
-        "title": "Arrive"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to ask.png",
-        "title": "Ask"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to assault.png",
-        "title": "Assault"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to bathe to bath.png",
-        "title": "Bathe"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to be alone.png",
-        "title": "Be alone"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to blow the nose.png",
-        "title": "Blow nose"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to break.png",
-        "title": "Break"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to brush one's teeth brush teeth.png",
-        "title": "Brush teeth"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to caress.png",
-        "title": "Caress"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to celebrate celebrate.png",
-        "title": "Celebrate"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to cheer up.png",
-        "title": "Cheer up"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to clean.png",
-        "title": "Clean"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to communicate.png",
-        "title": "Communicate"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to continue.png",
-        "title": "Continue"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to cover.png",
-        "title": "Cover"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to cry.png",
-        "title": "Cry"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to cut_2.png",
-        "title": "Cut"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to dance.png",
-        "title": "Dance"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to decide to prefer.png",
-        "title": "Decide"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to draw.png",
-        "title": "Draw"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to dress oneself to dress to change clothes.png",
-        "title": "Dress"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to drink.png",
-        "title": "Drink"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to eat.png",
-        "title": "Eat"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to explain.png",
-        "title": "Explain"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to fall_1.png",
-        "title": "Fall"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to have a shit go to the bathroom evacuate.png",
-        "title": "Go to bathroom"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to grow.png",
-        "title": "Grow"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to help.png",
-        "title": "Help"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to learn learn.png",
-        "title": "Learn"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to listen.png",
-        "title": "Listen"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to move.png",
-        "title": "Move"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to open.png",
-        "title": "Open"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to play.png",
-        "title": "Play"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to pray_4.png",
-        "title": "Pray"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to read.png",
-        "title": "Read"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to rinse.png",
-        "title": "Rinse"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to say to express oneself to express.png",
-        "title": "Say"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to shower.png",
-        "title": "Shower"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to sing.png",
-        "title": "Sing"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to sit_1.png",
-        "title": "Sit"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to sleep.png",
-        "title": "Sleep"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to use.png",
-        "title": "Use"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to wake up.png",
-        "title": "Wake up"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to wash up the hands.png",
-        "title": "Wash hands"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/to walk_2.png",
-        "title": "Walk"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/turn on the light to turn on.png",
-        "title": "Turn on light"
-      },
-      {
-        "children": [],
-        "function": null,
-        "image": "../images/ARASAAC_Symbol_Set/turn off the light.png",
-        "title": "Turn off light"
+        "image": "../images/ARASAAC_Symbol_Set/question mark.png",
+        "title": "Miscellaneous"
       }
     ],
     "function": null,

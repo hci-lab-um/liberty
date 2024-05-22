@@ -15,7 +15,7 @@ class Main extends Component {
       vocabularyToEdit : [],
       createBoardModalOpen : false,
       currentTitle: "Home",
-      previousTitles: []
+      previousTitles: [],
     }
 
     this.renderCreateEditVocabularyModal = this.renderCreateEditVocabularyModal.bind(this);
@@ -75,13 +75,19 @@ class Main extends Component {
   render() {
     const renderCreateEditBoardModal = this.renderCreateEditVocabularyModal();
     return (
-      <div>
-        <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
-        <Divider  hidden/>
-        <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
-        {renderCreateEditBoardModal}
-        <ConfigBoardModal />
-      </div>
+      <DndProvider backend={HTML5Backend}>      
+        <div style={{ height: `${window.innerHeight}px` }}>
+          <div style={{ height: `${headerHeight}px` }}>
+            <Header as='h1' textAlign='center'>{this.state.currentTitle}</Header>
+          </div>
+          <div>
+            <img src='../images/cursor_image.png' className='cursor-img' alt='cursor' />
+          </div>
+          <GridBoard onGoToSubFolder={this.handleGoToSubFolder} onGoBackFromFolder={this.handleGoBackFromFolder} onFreshBoard={this.handleFreshBoard}/>
+          {renderCreateEditBoardModal}
+          <ConfigBoardModal />
+        </div>
+        </DndProvider>
     )
   }
 }

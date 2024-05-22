@@ -21,6 +21,8 @@ class AddEditItemModal extends Component {
         this.handleItemTitleChange = this.handleItemTitleChange.bind(this);
         this.handleFunctionNameChange = this.handleFunctionNameChange.bind(this);
         this.addUpdateItem = this.addUpdateItem.bind(this);
+        this.defaultCursor = null;
+        this.cursorImgOpacity = null;
     }  
 
     closeAddEditItemModal(){
@@ -61,11 +63,17 @@ class AddEditItemModal extends Component {
     componentDidMount(){
         // add event listener to listen for message from main process with the image path
         ipcRenderer.on('imageSent', this.handleImageLoaded);
+        this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity; 
+        this.defaultCursor = document.body.style.cursor; 
+        document.body.style.cursor = 'auto';
+        document.querySelector('.cursor-img').style.opacity = '0';
     }
 
     componentWillUnmount(){
         // remove event listener on unmounting of component
         ipcRenderer.removeListener('imageSent', this.handleImageLoaded); 
+        document.body.style.cursor = this.defaultCursor;
+        document.querySelector('.cursor-img').style.opacity = this.cursorImgOpacity;
     }
 
     componentWillReceiveProps(nextProps){

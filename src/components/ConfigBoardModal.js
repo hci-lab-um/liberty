@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Input, Form, Divider, Dropdown, Checkbox } from 'semantic-ui-react';
-import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath } from '../actions/configactions';
+import { changeConfig, getChosenScanningGesture, getChosenBackScanningGesture, getChosenSelectorGesture, getScanningType, getHighlightColor, getAutomaticScanningInterval, getTransition, getLeapInterval, lockSelector, unlockSelector, getRegionScanningRows, getRegionScanningColumns, getDefaultVocabularyPath, getHoverDuration, getDwellAnimation, getEyeTrackingOption, getRestMode } from '../actions/configactions';
 import * as gestures from '../configuration/gestures.js';
 import * as scanningTypes from '../configuration/scanningtypes.js'
 const {ipcRenderer} = window.require('electron')
@@ -19,50 +19,50 @@ class ConfigBoardModal extends Component {
     // definition of gesture type to include gesture name in title case and corresponding icon
     gestureType = [
         {text: 'None', value: 'NONE'},
-        {text: 'Spacebar', value: gestures.SPACEBAR, icon: 'keyboard'},
-        {text: 'Left Click', value: gestures.LEFT_CLICK, icon: 'keyboard'},
-        {text: 'Center Click', value: gestures.CENTER_CLICK, icon: 'keyboard'},
-        {text: 'Right Click', value: gestures.RIGHT_CLICK, icon: 'keyboard'},
-        {text: 'Enter', value: gestures.ENTER, icon: 'keyboard'},
-        {text: 'Left Arrow', value: gestures.LEFT_ARROW, icon: 'keyboard'},
-        {text: 'Right Arrow', value: gestures.RIGHT_ARROW, icon: 'keyboard'},
-        {text: 'Automatic', value: gestures.AUTOMATIC},
-        {text: 'Palm Point Left', value: gestures.PALM_POINT_LEFT, icon: 'signing'},
-        {text: 'Palm Point Right', value: gestures.PALM_POINT_RIGHT, icon: 'signing'},
-        {text: 'Palm Point Up', value: gestures.PALM_POINT_UP, icon: 'signing'},
-        {text: 'Palm Point Down', value: gestures.PALM_POINT_DOWN, icon: 'signing'},
-        {text: 'Palm Point Front', value: gestures.PALM_POINT_FRONT, icon: 'signing'},
-        {text: 'Palm Point Back', value: gestures.PALM_POINT_BACK, icon: 'signing'},
-        {text: 'Hand Point Left', value: gestures.HAND_POINT_LEFT, icon: 'signing'},
-        {text: 'Hand Point Right', value: gestures.HAND_POINT_RIGHT, icon: 'signing'},
-        {text: 'Hand Point Up', value: gestures.HAND_POINT_UP, icon: 'signing'},
-        {text: 'Hand Point Down', value: gestures.HAND_POINT_DOWN, icon: 'signing'},
-        {text: 'Hand Point Front', value: gestures.HAND_POINT_FRONT, icon: 'signing'},
-        {text: 'Hand Point Back', value: gestures.HAND_POINT_BACK, icon: 'signing'},
-        {text: 'Hand Position Left', value: gestures.HAND_POSITION_LEFT, icon: 'signing'},
-        {text: 'Hand Position Right', value: gestures.HAND_POSITION_RIGHT, icon: 'signing'},
-        {text: 'Hand Position Up', value: gestures.HAND_POSITION_UP, icon: 'signing'},
-        {text: 'Hand Position Down', value: gestures.HAND_POSITION_DOWN, icon: 'signing'},
-        {text: 'Hand Position Front', value: gestures.HAND_POSITION_FRONT, icon: 'signing'},
-        {text: 'Hand Position Back', value: gestures.HAND_POSITION_BACK, icon: 'signing'},
-        {text: 'Hand Grab', value: gestures.HAND_GRAB, icon: 'signing'},
-        {text: 'Hand Pinch', value: gestures.HAND_PINCH, icon: 'signing'},
-        {text: 'Swipe Right', value: gestures.SWIPE_RIGHT, icon: 'signing'},
-        {text: 'Swipe Left', value: gestures.SWIPE_LEFT, icon: 'signing'},
-        {text: 'Roll Right', value: gestures.ROLL_RIGHT, icon: 'signing'},
-        {text: 'Roll Left', value: gestures.ROLL_LEFT, icon: 'signing'},
-        {text: 'Myo Fist', value: gestures.MYO_FIST, icon: 'band aid'},
-        {text: 'Myo Spread', value: gestures.MYO_SPREAD, icon: 'band aid'},
-        {text: 'Myo Wave In', value: gestures.MYO_WAVE_IN, icon: 'band aid'},
-        {text: 'Myo Wave Out', value: gestures.MYO_WAVE_OUT, icon: 'band aid'},
-        {text: 'Myo Double Tap', value: gestures.MYO_DOUBLE_TAP, icon: 'band aid'},
-        {text: 'Myo Swipe Right', value: gestures.MYO_SWIPE_RIGHT, icon: 'band aid'},
-        {text: 'Myo Swipe Left', value: gestures.MYO_SWIPE_LEFT, icon: 'band aid'},
-        {text: 'Myo Position Up', value: gestures.MYO_POSITION_UP, icon: 'band aid'},
-        {text: 'Myo Position Down', value: gestures.MYO_POSITION_DOWN, icon: 'band aid'},
-        {text: 'Myo Roll Right', value: gestures.MYO_ROLL_RIGHT, icon: 'band aid'},
-        {text: 'Myo Roll Left', value: gestures.MYO_ROLL_LEFT, icon: 'band aid'},
-        {text: 'Myo Row Hand', value: gestures.MYO_ROW, icon: 'band aid'}
+        {text: 'Spacebar', value: gestures.SPACEBAR},
+        {text: 'Left Click', value: gestures.LEFT_CLICK},
+        {text: 'Center Click', value: gestures.CENTER_CLICK},
+        {text: 'Right Click', value: gestures.RIGHT_CLICK},
+        {text: 'Enter', value: gestures.ENTER},
+        {text: 'Left Arrow', value: gestures.LEFT_ARROW},
+        {text: 'Right Arrow', value: gestures.RIGHT_ARROW},
+        {text: 'Automatic', value: gestures.AUTOMATIC}
+        // {text: 'Palm Point Left', value: gestures.PALM_POINT_LEFT, icon: 'signing'},
+        // {text: 'Palm Point Right', value: gestures.PALM_POINT_RIGHT, icon: 'signing'},
+        // {text: 'Palm Point Up', value: gestures.PALM_POINT_UP, icon: 'signing'},
+        // {text: 'Palm Point Down', value: gestures.PALM_POINT_DOWN, icon: 'signing'},
+        // {text: 'Palm Point Front', value: gestures.PALM_POINT_FRONT, icon: 'signing'},
+        // {text: 'Palm Point Back', value: gestures.PALM_POINT_BACK, icon: 'signing'},
+        // {text: 'Hand Point Left', value: gestures.HAND_POINT_LEFT, icon: 'signing'},
+        // {text: 'Hand Point Right', value: gestures.HAND_POINT_RIGHT, icon: 'signing'},
+        // {text: 'Hand Point Up', value: gestures.HAND_POINT_UP, icon: 'signing'},
+        // {text: 'Hand Point Down', value: gestures.HAND_POINT_DOWN, icon: 'signing'},
+        // {text: 'Hand Point Front', value: gestures.HAND_POINT_FRONT, icon: 'signing'},
+        // {text: 'Hand Point Back', value: gestures.HAND_POINT_BACK, icon: 'signing'},
+        // {text: 'Hand Position Left', value: gestures.HAND_POSITION_LEFT, icon: 'signing'},
+        // {text: 'Hand Position Right', value: gestures.HAND_POSITION_RIGHT, icon: 'signing'},
+        // {text: 'Hand Position Up', value: gestures.HAND_POSITION_UP, icon: 'signing'},
+        // {text: 'Hand Position Down', value: gestures.HAND_POSITION_DOWN, icon: 'signing'},
+        // {text: 'Hand Position Front', value: gestures.HAND_POSITION_FRONT, icon: 'signing'},
+        // {text: 'Hand Position Back', value: gestures.HAND_POSITION_BACK, icon: 'signing'},
+        // {text: 'Hand Grab', value: gestures.HAND_GRAB, icon: 'signing'},
+        // {text: 'Hand Pinch', value: gestures.HAND_PINCH, icon: 'signing'},
+        // {text: 'Swipe Right', value: gestures.SWIPE_RIGHT, icon: 'signing'},
+        // {text: 'Swipe Left', value: gestures.SWIPE_LEFT, icon: 'signing'},
+        // {text: 'Roll Right', value: gestures.ROLL_RIGHT, icon: 'signing'},
+        // {text: 'Roll Left', value: gestures.ROLL_LEFT, icon: 'signing'},
+        // {text: 'Myo Fist', value: gestures.MYO_FIST, icon: 'band aid'},
+        // {text: 'Myo Spread', value: gestures.MYO_SPREAD, icon: 'band aid'},
+        // {text: 'Myo Wave In', value: gestures.MYO_WAVE_IN, icon: 'band aid'},
+        // {text: 'Myo Wave Out', value: gestures.MYO_WAVE_OUT, icon: 'band aid'},
+        // {text: 'Myo Double Tap', value: gestures.MYO_DOUBLE_TAP, icon: 'band aid'},
+        // {text: 'Myo Swipe Right', value: gestures.MYO_SWIPE_RIGHT, icon: 'band aid'},
+        // {text: 'Myo Swipe Left', value: gestures.MYO_SWIPE_LEFT, icon: 'band aid'},
+        // {text: 'Myo Position Up', value: gestures.MYO_POSITION_UP, icon: 'band aid'},
+        // {text: 'Myo Position Down', value: gestures.MYO_POSITION_DOWN, icon: 'band aid'},
+        // {text: 'Myo Roll Right', value: gestures.MYO_ROLL_RIGHT, icon: 'band aid'},
+        // {text: 'Myo Roll Left', value: gestures.MYO_ROLL_LEFT, icon: 'band aid'},
+        // {text: 'Myo Row Hand', value: gestures.MYO_ROW, icon: 'band aid'}
     ]
 
     leapTypes = [
@@ -74,10 +74,26 @@ class ConfigBoardModal extends Component {
         gestures.SWIPE_LEFT, gestures.SWIPE_RIGHT, gestures.CIRCLE, gestures.SWIPE_RIGHT, gestures.SWIPE_LEFT, gestures.ROLL_RIGHT, gestures.ROLL_LEFT
     ]
 
+    hoverTimeOptions = [
+        { text: '0.7 seconds', value: 700},
+        { text: '0.8 seconds', value: 800},
+        { text: '0.9 seconds', value: 900},
+        { text: '1 second', value: 1000 },
+        { text: '1.2 second', value: 1200 },
+        { text: '1.4 second', value: 1400 },
+        { text: '1.6 second', value: 1600 },
+        { text: '1.8 second', value: 1800 },
+        { text: '2 seconds', value: 2000 },
+        { text: '3 seconds', value: 3000 }
+    ];
+
+    eyeTracking = ['eyetracker']
     transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce', 'glow']
     colors = ['red', 'yellow', 'orange',  'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'brown', 'grey', 'pink']  
-      
+    dwellAnimations = ['fill-up', 'horizontal-out']
+    
     transitionOptions = this.transitions.map(name => ({ key: name, text: name, value: name }))
+    eyeTrackingOptions = this.eyeTracking.map(name => ({ key: name, text: name, value: name }))
     colorOptions = this.colors.map(name => ({text: name, value: name, color: name}));
 
     constructor(props){
@@ -99,7 +115,11 @@ class ConfigBoardModal extends Component {
             addVocabulary: getDefaultVocabularyPath(),
             regionScanningRows: getRegionScanningRows(),
             regionScanningColumns: getRegionScanningColumns(),
-            regionsHidden: true
+            regionsHidden: true,
+            hoverDuration: getHoverDuration(),
+            eyeTrackingOption : getEyeTrackingOption(),
+            dwellAnimation: getDwellAnimation(),
+            restMode: false
         }
         // definie binding of methods
         this.closeConfigBoardModal = this.closeConfigBoardModal.bind(this);
@@ -114,13 +134,18 @@ class ConfigBoardModal extends Component {
         this.handleModalOpen = this.handleModalOpen.bind(this);
         this.isLeapConfiguration = this.isLeapConfiguration.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
+        this.handleEyeTrackingOptionChange = this.handleEyeTrackingOptionChange.bind(this)
+        this.handleHoverDurationChange = this.handleHoverDurationChange.bind(this);
+        this.handleDwellAnimationChange = this.handleDwellAnimationChange.bind(this);
         this.automaticShow = this.automaticShow.bind(this);
         this.leapShow = this.leapShow.bind(this);
         this.validateScanningGesture = this.validateScanningGesture.bind(this);
         this.validateBackScanningGesture = this.validateBackScanningGesture.bind(this);
         this.validateSelectorGesture = this.validateSelectorGesture.bind(this);
         this.handleVocabularyLoad = this.handleVocabularyLoad.bind(this);
-        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);
+        this.handleChangeDefaultVocabulary = this.handleChangeDefaultVocabulary.bind(this);   
+        this.defaultCursor = null;
+        this.cursorImgOpacity = null;
     }
 
     handleModalOpen(){
@@ -131,6 +156,9 @@ class ConfigBoardModal extends Component {
             chosenScanningGesture: getChosenScanningGesture(),
             chosenBackScanningGesture: getChosenBackScanningGesture(),
             color: getHighlightColor(),
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
+            eyeTrackingOption: getEyeTrackingOption(),
             automaticScanningInterval: getAutomaticScanningInterval(),
             leapInterval: getLeapInterval(),
             transition: getTransition(),
@@ -140,9 +168,32 @@ class ConfigBoardModal extends Component {
         }, ()=>{
             //show or hide change region columns and rows section
             if(this.state.chosenScanningType === scanningTypes.REGION_BASED_SCANNING)
-                this.setState({regionsHidden: false}); 
+                this.setState({regionsHidden: false});
         });
         lockSelector(); // lock gesture detection
+        this.cursorImgOpacity = document.querySelector('.cursor-img').style.opacity; 
+        this.defaultCursor = document.body.style.cursor; 
+        document.body.style.cursor = 'auto';
+        document.querySelector('.cursor-img').style.opacity = '0';
+    }
+
+    handleHoverDurationChange=(e, data)=>{
+        this.setState({hoverDuration: data.value});
+        console.log(this.state.hoverDuration);
+        const root = document.documentElement;
+        root.style.setProperty('--dwell-time', `${data.value}ms`);
+    }
+
+    handleDwellAnimationChange=(e, data)=>{
+        this.setState({dwellAnimation: data.value});
+        
+    }
+
+    handleEyeTrackingOptionChange = (e, data) => {
+        console.log("Selected Eye Tracking Option:", data.value);
+        this.setState({ eyeTrackingOption: data.value }, () => {
+            console.log("State updated. Eye Tracking Option:", this.state.eyeTrackingOption);
+        });
     }
 
     handleColorChange=(e, data)=>{
@@ -155,12 +206,14 @@ class ConfigBoardModal extends Component {
 
     handleScanningTypeChange = (e, data) =>{
         // show change region rows/columns section if region based scanning is selected
+        
         if(data.value === scanningTypes.REGION_BASED_SCANNING){
             this.setState({regionsHidden: false});
         }else{
             this.setState({regionsHidden: true});
         }
         this.setState({chosenScanningType: data.value});
+
     }
 
     handleScanningGestureChange = (e, data) =>{
@@ -214,14 +267,18 @@ class ConfigBoardModal extends Component {
                 backScanningGesture: this.state.chosenBackScanningGesture,
                 scanningType: this.state.chosenScanningType,
                 highlightColor: this.state.color,
+                hoverDuration: this.state.hoverDuration,
+                dwellAnimation: this.state.dwellAnimation,
+                eyeTrackingOption: this.state.eyeTrackingOption,
                 transition: this.state.transition,
                 automaticScanningInterval: this.state.automaticScanningInterval,
                 leapInterval: this.state.leapInterval,
                 isLeap: isLeap,
                 vocabularyFile: this.state.addVocabulary,
                 regionScanningRows: this.state.regionScanningRows,
-                regionScanningColumns: this.state.regionScanningColumns
-            }
+                regionScanningColumns: this.state.regionScanningColumns,
+            };
+    
             changeConfig(configObject, true);
         });
         unlockSelector();
@@ -315,48 +372,75 @@ class ConfigBoardModal extends Component {
         // remove listeners on unmounting of component
         ipcRenderer.removeListener('configBoard', this.openConfigBoardModal);
         ipcRenderer.removeListener('vocabularySent', this.handleVocabularyLoad);
+        document.body.style.cursor = this.defaultCursor;
+        document.querySelector('.cursor-img').style.opacity = this.cursorImgOpacity;
     }
+
+    isMouseScanning() {
+        return this.state.chosenScanningType === scanningTypes.MOUSE_SCANNING; 
+    }    
 
     render() {
         return (
-        <Modal open={this.state.configBoardModalOpen} onClose={this.closeConfigBoardModal}>
-           <Modal.Header>Configure Board</Modal.Header>
-           <Modal.Content>
-               <Form>
-                   Scanning Type:
-                   <Dropdown id="scanningtype" value={this.state.chosenScanningType} options={this.scanningType} fluid selection onChange={this.handleScanningTypeChange}/>
-                   {!this.state.regionsHidden && <div><p>Region Rows:</p><Input type="number" id="regionRows" value={this.state.regionScanningRows} onChange={this.handleRegionScanningRowsChange}/></div>}
-                   {!this.state.regionsHidden && <div><p>Region Columns:</p><Input type="number" id="regionColumns" value={this.state.regionScanningColumns} onChange={this.handleRegionScanningColumnsChange}/></div>}
-                   <Divider hidden/>
-                   Enter Scanning Gesture:
-                   <Dropdown id="text1" value={this.state.chosenScanningGesture} options={this.gestureType} fluid selection onChange={this.handleScanningGestureChange}/>
-                   <Divider hidden/>
-                   Enter Back Scanning Gesture:
-                   <Dropdown id="text2" value={this.state.chosenBackScanningGesture} options={this.gestureType} fluid selection onChange={this.handleBackScanningGestureChange}/>
-                   <Divider hidden/>
-                   Enter Selector Gesture:
-                   <Dropdown id="text3" value={this.state.chosenSelectorGesture} options={this.gestureType} fluid selection onChange={this.handleSelectorGestureChange}/>
-                   <Divider hidden/>
-                   Color:
-                   <Dropdown value={this.state.color} options={this.colorOptions} fluid selection onChange={this.handleColorChange}/>
-                   <Divider hidden/>
-                   Item Transition:
-                   <Dropdown value={this.state.transition} options={this.transitionOptions} fluid selection onChange={this.handleTransitionChange}/>
-                   <Divider hidden/>
-                   {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
-                   {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
-                   <Divider hidden/>
-                   <Form.Button value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
-                   <Form.Input fluid readOnly>
-                    {this.state.addVocabulary}
-                   </Form.Input>
-                   <Divider hidden/>
-                   <Form.Button value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
-               </Form>
-           </Modal.Content>
-        </Modal>
-        )
-        
+            <Modal open={this.state.configBoardModalOpen} onClose={this.closeConfigBoardModal}>
+                <Modal.Header>Configure Board</Modal.Header>
+                <Modal.Content>
+                    <Form>
+                        Scanning Type:
+                        <Dropdown id="scanningtype" value={this.state.chosenScanningType} options={this.scanningType} fluid selection onChange={this.handleScanningTypeChange}/>
+                        {!this.state.regionsHidden && (
+                            <>
+                                <div><p>Region Rows:</p><Input type="number" id="regionRows" value={this.state.regionScanningRows} onChange={this.handleRegionScanningRowsChange}/></div>
+                                <div><p>Region Columns:</p><Input type="number" id="regionColumns" value={this.state.regionScanningColumns} onChange={this.handleRegionScanningColumnsChange}/></div>
+                            </>
+                        )}
+                        {this.isMouseScanning() ? null : (
+                            <>
+                                <Divider hidden/>
+                                Enter Scanning Gesture:
+                                <Dropdown id="text1" value={this.state.chosenScanningGesture} options={this.gestureType} fluid selection onChange={this.handleScanningGestureChange}/>
+                                <Divider hidden/>
+                                Enter Back Scanning Gesture:
+                                <Dropdown id="text2" value={this.state.chosenBackScanningGesture} options={this.gestureType} fluid selection onChange={this.handleBackScanningGestureChange}/>
+                                <Divider hidden/>
+                                Enter Selector Gesture:
+                                <Dropdown id="text3" value={this.state.chosenSelectorGesture} options={this.gestureType} fluid selection onChange={this.handleSelectorGestureChange}/>
+                                <Divider hidden/>
+                                {this.state.automaticHidden && <div><p>Speed of Automatic Selector (in ms):</p><Input type="text" id="speed" value={this.state.automaticScanningInterval} onChange={this.handleAutomaticIntervalChange}/></div>}
+                            </>
+                        )}
+                        {this.isMouseScanning() && (
+                            <>
+                                <Divider hidden/>
+                                Choose Eyetracking Option:
+                                <Dropdown value={this.state.eyeTrackingOption} options={this.eyeTrackingOptions} fluid selection onChange={this.handleEyeTrackingOptionChange}/>
+                                <Divider hidden/>
+                                Enter Dwelling Time:
+                                <Dropdown value={this.state.hoverDuration} options={this.hoverTimeOptions} fluid selection onChange={this.handleHoverDurationChange}/>
+                                <Divider hidden/>
+                                Dwell Animation:
+                                <Dropdown value={this.state.dwellAnimation} options={this.dwellAnimationOptions} fluid selection onChange={this.handleDwellAnimationChange}/>
+                            </>
+                            
+                        )}
+                        <Divider hidden/>
+                        Color:
+                        <Dropdown value={this.state.color} options={this.colorOptions} fluid selection onChange={this.handleColorChange}/>
+                        <Divider hidden/>
+                        Item Transition:
+                        <Dropdown value={this.state.transition} options={this.transitionOptions} fluid selection onChange={this.handleTransitionChange}/>
+                        {this.state.leapHidden && <div><p>Leap Interval (in ms):</p><Input type="text" id="leap" value={this.state.leapInterval} onChange={this.handleLeapIntervalChange}/></div>}
+                        <Divider hidden/>
+                        <Form.Button type="button" value="Vocabulary" onClick={this.handleChangeDefaultVocabulary}>Change Default Vocabulary</Form.Button>
+                        <Form.Input fluid readOnly>
+                            {this.state.addVocabulary}
+                        </Form.Input>
+                        <Divider hidden/>
+                        <Form.Button type="submit" value="Submit" onClick={this.saveConfiguration}>Submit</Form.Button>
+                    </Form>
+                </Modal.Content>
+            </Modal>
+        );
     }
 
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css';
 import Main from './components/Main'
@@ -21,4 +21,5 @@ componentDidMount(){
   }
 }
 
-ReactDOM.render(<App/>,document.getElementById('root'));
+const root = document.getElementById('root');
+createRoot(root).render(<App />);

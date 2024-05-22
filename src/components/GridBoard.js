@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Grid, GridRow, Transition} from 'semantic-ui-react'
 import GridItem from './GridItem'
-import {getChosenScanningGesture, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows} from '../actions/configactions'
+import {getChosenScanningGesture, setHoverDuration, getChosenSelectorGesture, changeConfig, getScanningType, getChosenBackScanningGesture, getItemsPerRow, setItemsPerRow, lockSelector, unlockSelector, getRegionScanningColumns, getRegionScanningRows, setDwellAnimation, setRestMode, getRestMode, getDwellAnimation, getHoverDuration, getHighlightColor, getEyeTrackingOption, getTransition, getAutomaticScanningInterval, getLeapInterval, getDefaultVocabularyPath} from '../actions/configactions'
 import {handleMouseDown, handleKeyDown} from '../actions/eventsactions'
 import * as scanningTypes from '../configuration/scanningtypes'
 const {ipcRenderer} = window.require('electron')
@@ -13,6 +13,108 @@ class GridBoard extends Component {
         image: '../images/goback.png',
         function: "goBack",
         children: []
+    }
+
+    // voacbulary items to be injected when user is on home screen and using eyetracking
+    restItem = {
+        title: "Toggle Rest Mode",
+        image: '../images/settings/eye eyes.png',
+        function: "restModeChange",
+        children: []
+    }
+
+    settingsItems = {
+        title: "Settings",
+        image: '../images/settings/cog.png',
+        function: "",
+        children: [
+            {
+                title: "Dwell Time",
+                image: '../images/settings/clockwatch_1.png',
+                function: "",
+                children: [
+                    {
+                        title: "0.7 Seconds",
+                        image: '../images/settings/point7.png',
+                        function: "changeDwellTime(700)",
+                        children: []
+                    },
+                    {
+                        title: "0.8 Seconds",
+                        image: '../images/settings/point8.png',
+                        function: "changeDwellTime(800)",
+                        children: []
+                    },
+                    {
+                        title: "0.9 Seconds",
+                        image: '../images/settings/point9.png',
+                        function: "changeDwellTime(900)",
+                        children: []
+                    },
+                    {
+                        title: "1 Second",
+                        image: '../images/settings/one.png',
+                        function: "changeDwellTime(1000)",
+                        children: []
+                    },
+                    {
+                        title: "1.2 Seconds",
+                        image: '../images/settings/onePointTwo.png',
+                        function: "changeDwellTime(1200)",
+                        children: []
+                    },
+                    {
+                        title: "1.4 Seconds",
+                        image: '../images/settings/onePointFour.png',
+                        function: "changeDwellTime(1400)",
+                        children: []
+                    },
+                    {
+                        title: "1.6 Seconds",
+                        image: '../images/settings/onePointSix.png',
+                        function: "changeDwellTime(1600)",
+                        children: []
+                    },
+                    {
+                        title: "1.8 Seconds",
+                        image: '../images/settings/onePointEight.png',
+                        function: "changeDwellTime(1800)",
+                        children: []
+                    },
+                    {
+                        title: "2 Seconds",
+                        image: '../images/settings/two_1.png',
+                        function: "changeDwellTime(2000)",
+                        children: []
+                    },
+                    {
+                        title: "3 Seconds",
+                        image: '../images/settings/three.png',
+                        function: "changeDwellTime(3000)",
+                        children: []
+                    }
+                ]
+            },
+            {
+                title: "Dwell Animation",
+                image: '../images/settings/cog.png',
+                function: "",
+                children: [
+                    {
+                        title: "fill-up",
+                        image: '../images/settings/fill-up.png',
+                        function: "changeDwellAnimation(fill-up)",
+                        children: []
+                    },
+                    {
+                        title: "horizontal-out",
+                        image: '../images/settings/horizontal-out.png',
+                        function: "changeDwellAnimation(horizontal-out)",
+                        children: []
+                    }
+                ]
+            },
+        ]
     }
 
     functionDict = {}
@@ -44,8 +146,11 @@ class GridBoard extends Component {
             scanningRegionIndex: 0,
             currentItemInRegionIndex: 0,
             divisionMetaData: {},
-            isGoBackFromDivisionScanning: false
+            restModeBool: false,
+            isGoBackFromDivisionScanning: false,
+            gridBoardHeight: (window.innerHeight - 150)
         }
+        
         this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
         this.handleMouseDownEvent = this.handleMouseDownEvent.bind(this);
         this.loadConfig = this.loadConfig.bind(this);
@@ -77,26 +182,94 @@ class GridBoard extends Component {
         this.handleDivisionSelection = this.handleDivisionSelection.bind(this);
         this.handleGoBackFromColumnRowScanning = this.handleGoBackFromColumnRowScanning.bind(this);
         this.checkIfItemIsActivated = this.checkIfItemIsActivated.bind(this);
+        this.handleResize = this.handleResize.bind(this);
 
         // bind goBack function to "goBack" title in function dictionary
         // if function is not null, then the function defined in the dictionary will be executed
         this.functionDict["goBack"] = this.goBack;
+        this.functionDict["restModeChange"] = this.restModeChange;
+        this.functionDict["changeDwellTime"] = this.changeDwellTime;
+        this.functionDict["changeDwellAnimation"] = this.changeDwellAnimation;
+    }
+
+    changeDwellTime = (time) =>{
+        console.log("triggered")
+        setHoverDuration(parseInt(time));
+        this.setState({hoverDuration: getHoverDuration()});
+        const root = document.documentElement;
+        root.style.setProperty('--dwell-time', `${time}ms`);
+        this.saveConfig();
+    }
+
+    handleResize() {
+        this.setState({ gridBoardHeight: window.innerHeight - 150 }, () => {
+            console.log("success");
+        });
+    }
+
+    changeDwellAnimation = (animation) =>{
+        setDwellAnimation(animation);
+        this.setState({dwellAnimation: getDwellAnimation()});
+        this.saveConfig();
+    }
+
+    saveConfig =() =>{
+        let configObject = {
+            scanningGesture: getChosenScanningGesture(),
+            selectorGesture: getChosenSelectorGesture(),
+            backScanningGesture: getChosenBackScanningGesture(),
+            scanningType: getScanningType(),
+            highlightColor: getHighlightColor(),
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
+            eyeTrackingOption: getEyeTrackingOption(),
+            transition: getTransition(),
+            automaticScanningInterval: getAutomaticScanningInterval(),
+            leapInterval: getLeapInterval(),
+            isLeap: false,
+            vocabularyFile: getDefaultVocabularyPath(),
+            regionScanningRows: getRegionScanningRows(),
+            regionScanningColumns: getRegionScanningColumns()
+        };
+
+        changeConfig(configObject, true);
     }
 
     // Go back from current folder
-    goBack = () =>{
-        // reset board vocabulary with parent vocabulary
-        this.setState({currentItems: this.state.previousItems.pop(), selectedItemIndex: 0, transitionVisible: false, 
-            scanningRegionIndex: 0}, () =>{
-            // re-set number of items per row
-            setItemsPerRow(this.state.currentItems.length, () =>{
-                this.setState({itemsPerRow: getItemsPerRow()})
+    goBack = () => {
+        const previousItemsCopy = [...this.state.previousItems];
+        const newCurrentItems = previousItemsCopy.pop();
+        this.setState({
+            currentItems: newCurrentItems,
+            selectedItemIndex: 0,
+            transitionVisible: false,
+            scanningRegionIndex: 0,
+            previousItems: previousItemsCopy
+        }, () => {
+
+            setItemsPerRow(this.state.currentItems.length, () => {
+                this.setState({ itemsPerRow: getItemsPerRow() });
             });
-            this.props.onGoBackFromFolder(); // call parent component function to change title
-            this.setState({transitionVisible: true}, ()=>{
-                setTimeout(()=>{unlockSelector()},1000); // unlock selector after transition finishes
+    
+            this.props.onGoBackFromFolder();
+
+            this.setState({ transitionVisible: true }, () => {
+                setTimeout(() => { unlockSelector(); }, 1000);
             });
         });
+    }
+
+
+    restModeChange = () => {
+        if(this.state.currentItems[this.state.selectedItemIndex].title === "Toggle Rest Mode"){
+            let cursorImg = document.querySelector('.cursor-img');
+            if(this.state.restModeBool === true){
+                setRestMode(false);
+            }else{
+                setRestMode(true);
+            }
+            this.setState({restModeBool: getRestMode()})
+        }
     }
 
     // handle key press
@@ -126,8 +299,14 @@ class GridBoard extends Component {
                     selectedColumnIndex: 0, lastScannableItemIndex: 0, initialScannableItemIndex: 0}, ()=>{
                         // re-set scanning type state variables after the other variables have been set
                         this.chooseScanningType(()=>{
-                            // set the transition state variable after the scanning type has been set
                             this.setState({transitionVisible:true})
+                            //making sure settings menu isnt being added multiple times.
+                            if((this.state.currentItems[this.state.currentItems.length-1] && this.state.currentItems[this.state.currentItems.length-1].title !== "Settings") && (this.state.currentItems[this.state.currentItems.length-2] && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode") && this.state.scanningType === scanningTypes.MOUSE_SCANNING){
+                                var newItems = this.state.currentItems
+                                newItems.push(this.restItem);
+                                newItems.push(this.settingsItems);
+                                this.setState({currentItems: newItems});
+                            }
                         });
                     });
             });
@@ -321,6 +500,9 @@ class GridBoard extends Component {
     // selection of item in step-scanning
     handleItemSelection(){
         let selectedItem = this.state.currentItems[this.state.selectedItemIndex];
+            if(this.state.restModeBool == true && selectedItem.title != "Toggle Rest Mode"){
+               return
+            }
             if(selectedItem.children.length !== 0){
                 // case for folder item
                 this.setState({transitionVisible: false});
@@ -348,7 +530,16 @@ class GridBoard extends Component {
             }else if(selectedItem.function !== null){
                 // case when function is not null
                 // currently only used for go back function
-                this.functionDict[selectedItem.function](); // get function definition from function dictionary
+                if(selectedItem.function[selectedItem.function.length-1] === ')'){
+                    const str = selectedItem.function;
+                    const matches = str.match(/(.+?)\((.*?)\)/);
+                    const name = matches[1]; // Get the name before the parentheses
+                    const param = matches[2]; // Get the parameter inside the parentheses
+                    this.functionDict[name](param) // get function definition from function dictionary and pass parameters
+                }else{
+                    this.functionDict[selectedItem.function]();// get function definition from function dictionary
+                }
+                 
                 this.chooseScanningType(); // refresh the state variables for the chosen scanning type
             }else{
                 // activate item to do transition
@@ -694,6 +885,29 @@ class GridBoard extends Component {
     // callback function is called once to apply the transition after the vocabulary loads
     chooseScanningType(callback = ()=>{}){
         let scanningType = getScanningType();
+        let previousScan = this.state.scanningType;
+        if(scanningType === scanningTypes.MOUSE_SCANNING){
+            this.setupCustomCursor();
+            this.setState({scanningType: scanningType, isSelectingColumn: false, isSelectingRow: false}, ()=>{
+                callback();
+            });
+            //injecting settings items if scanning type changes to mouse scanning 
+            if(this.state.previousItems.length === 0 && (this.state.currentItems[this.state.currentItems.length-1] && this.state.currentItems[this.state.currentItems.length-1].title) !== "Settings" && (this.state.currentItems[this.state.currentItems.length-2] && this.state.currentItems[this.state.currentItems.length-2].title !== "Rest Mode")){
+                var newItems = this.state.currentItems
+                newItems.push(this.restItem);
+                newItems.push(this.settingsItems);
+                this.setState({currentItems: newItems});
+            }
+        }
+        else {
+            this.resetCursor();
+            if(previousScan === scanningTypes.MOUSE_SCANNING && this.state.previousItems.length === 0){
+                var newItems = this.state.currentItems
+                newItems.pop(this.restItem);
+                newItems.pop(this.settingsItems);
+                this.setState({currentItems: newItems});
+            }
+        }
         if(scanningType === scanningTypes.ROW_BASED_SCANNING){
            // condition for roe based scanning
             this.setState({selectedRowIndex: 0, isSelectingColumn: false, isSelectingRegion: false, scanningType: scanningType}, () =>{
@@ -953,12 +1167,54 @@ class GridBoard extends Component {
                 let itemIsSelected = this.checkItemIsSelected(rowIndex, columnIndex, itemIndex); // if item is being scanned
                 let itemIsActivated = this.checkIfItemIsActivated(itemIndex); // if user selects item
                 let isParent = item.children.length > 0;
-                return <GridItem item={item} key={columnIndex} id={itemIndex} 
+                return <GridItem height={this.state.gridBoardHeight/4} item={item} key={columnIndex} id={itemIndex} 
                          selected={itemIsSelected} itemActivated={itemIsActivated} isParent={isParent} />
             })}
         </GridRow>
         );
         return elementsToRender;
+    }
+
+    setupCustomCursor() {
+        document.body.style.cursor = 'none';
+        const cursorImg = document.querySelector('.cursor-img');
+        cursorImg.style.opacity = '0.4';
+        // Threshold of much the mouse can move before the image moves
+        const threshold = 25;
+        let mouseX = 0, mouseY = 0, posX = 0, posY = 0, lastMouseX = 0, lastMouseY = 0;
+    
+        function animate() {
+            let dx = mouseX - lastMouseX;
+            let dy = mouseY - lastMouseY;
+    
+            if (Math.sqrt(dx * dx + dy * dy) > threshold) {
+            posX += (mouseX - posX);
+            posY += (mouseY - posY);
+            
+            cursorImg.style.top = posY + 'px';
+            cursorImg.style.left = posX + 'px';
+    
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            }
+    
+            requestAnimationFrame(animate); 
+        }
+    
+        document.addEventListener('mousemove', e => {
+            mouseX = e.pageX - 37;
+            mouseY = e.pageY - 37;
+        });
+
+        animate();
+    }
+
+    resetCursor() {
+        document.body.style.cursor = 'auto';
+        const cursorImg = document.querySelector('.cursor-img');
+        if (cursorImg) {
+            cursorImg.style.opacity = '0'; // Hide the custom cursor
+        }
     }
 
     componentDidMount(){
@@ -969,6 +1225,10 @@ class GridBoard extends Component {
         document.addEventListener('backScanning', this.handleBackScanning);
         document.addEventListener('selection', this.handleSelection);
         document.addEventListener('scanningTypeChanged', this.handleScanningTypeChange);
+        document.addEventListener('hoverSelection', this.handleItemSelection);
+        document.addEventListener('hoverScanning', (event) => {
+            this.handleItemScanning(event.detail);
+        });
         
         // ask main process to send configuration
         ipcRenderer.send('getConfiguration');
@@ -976,12 +1236,14 @@ class GridBoard extends Component {
         // add event listeners for main process messages
         ipcRenderer.on('configLoad', this.loadConfig);
         ipcRenderer.on('vocabularyLoad', this.loadVocabulary);
+        window.addEventListener('resize', this.handleResize);
     }
 
     componentWillUnmount(){
         // remove listeners on component unmount
         ipcRenderer.removeListener('configLoad', this.loadConfig);
         ipcRenderer.removeListener('vocabularyLoad', this.loadVocabulary);
+        window.removeEventListener('resize', this.handleResize);
     }
    
     // render the grid of vocabulary items with a transition wrapper

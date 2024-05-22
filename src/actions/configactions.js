@@ -21,6 +21,10 @@ let automaticIsLocked = false;
 let regionScanningColumns = 3;
 let regionScanningRows = 2;
 let defaultVocabularyPath = "demoboard.json";
+let hoverDuration = 3000;
+let dwellAnimation = 'fill-up';
+let eyeTrackingOption = 'eyetracker';
+let restModeBool = false;
 
 export function changeConfig(configObject, save = false){
     chosenScanningGesture = configObject.scanningGesture;
@@ -35,17 +39,22 @@ export function changeConfig(configObject, save = false){
     regionScanningColumns = parseInt(configObject.regionScanningColumns);
     defaultVocabularyPath = configObject.vocabularyFile;
     setAutomaticScanningInterval(configObject.automaticScanningInterval);
+    hoverDuration = configObject.hoverDuration;
+    dwellAnimation = configObject.dwellAnimation;
+    eyeTrackingOption = configObject.eyeTrackingOption;
+    
 
     if(save){
        /*if the configuration is to be said then this means that the user has modified the configuration
          and the setters that dispatch events to the main board need to be called */
         setScanningType();
         setTransition();
+        setDwellAnimation(configObject.dwellAnimation);
         // send the new configuration to the main process
         ipcRenderer.send('configChange', configObject);
     }
 
-    if(configObject.scanningGesture === "AUTOMATIC"){
+    if(configObject.scanningGesture === "AUTOMATIC" && configObject.scanningType !== scanningTypes.MOUSE_SCANNING){
         /* if the selection is automatic then first the interval of the automatic scanning function has to be cleared
            in case automatic was the previous scanning gesture*/
         automaticIsLocked = false;
@@ -86,6 +95,14 @@ export function getScanningType(){
     return scanningType;
 }
 
+export function getRestMode(){
+    return restModeBool;
+}
+
+export function setRestMode(rMode){
+    restModeBool = rMode
+}
+
 export function setScanningType(){
     // dispatch event to change the scanning type instantly
     document.dispatchEvent(new CustomEvent('scanningTypeChanged'));
@@ -115,6 +132,28 @@ export function getHighlightColor(){
 
 export function setHighlightColor(newColor){
    highlightColor = newColor;
+}
+
+export function getHoverDuration(){
+    return hoverDuration;
+}
+
+export function setHoverDuration(duration){
+    hoverDuration = duration
+}
+
+export function getDwellAnimation(){
+    return dwellAnimation;
+}
+
+export function getEyeTrackingOption(){
+    console.log(eyeTrackingOption);
+    return eyeTrackingOption;
+}
+
+export function setDwellAnimation(animation){
+    dwellAnimation = animation;
+    document.dispatchEvent(new CustomEvent('dwellAnimationChanged'));
 }
 
 export function getTransition(){

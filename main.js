@@ -63,19 +63,21 @@ const menuTemplate = [
             }
         }
     ]
-   }/**Options below commented out as these were meant to be used in development only**/
-  ,{
-        label: 'Open Dev Tools',
-        click: function(){
-            mainWindow.openDevTools();
-        }
-    },{
-        label: 'Refresh Page',
-        click: function(){
-            mainWindow.reload();
-        }
     }
-];
+    /**Options below commented out as these were meant to be used in development only**/ 
+    // , {
+    //     label: 'Open Dev Tools',
+    //     click: function() {
+    //         mainWindow.openDevTools();
+    //     }
+    // }, 
+    // {
+    //     label: 'Refresh Page',
+    //     click: function() {
+    //         mainWindow.reload();
+    //     }
+    // }
+    ];
 
 function createWindow(){
     // create the main window

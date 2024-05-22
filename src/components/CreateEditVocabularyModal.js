@@ -185,6 +185,13 @@ export default class CreateEditVocabularyModal extends Component {
     
     render() {
         const renderModal = this.renderItemModal();
+        const { currentItems, parentIndexList } = this.state;
+        //max length for sub folders
+        var showAddButton = currentItems.length < 27;
+        if (parentIndexList.length === 0) {
+            //max length for home 
+            showAddButton = currentItems.length < 25;
+        }
         return (
                 <Modal open={this.state.CreateEditVocabularyModalOpen} onClose={this.closeCreateEditVocabularyModal} size='large'>
                     <Modal.Header>{this.state.currentTitle}</Modal.Header>

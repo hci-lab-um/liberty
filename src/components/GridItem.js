@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Image, Transition, Icon } from 'semantic-ui-react';
-import { getHighlightColor, getTransition } from '../actions/configactions';
+import { getHighlightColor, getDwellAnimation, getTransition, getScanningType, getHoverDuration, updateCSSBgColour, getRestMode} from '../actions/configactions';
+import * as scanningTypes from '../configuration/scanningtypes'
 
 class GridItem extends Component {
     constructor(props){
@@ -8,8 +9,11 @@ class GridItem extends Component {
         this.state = {
             bgColor: "",
             transitionActive:true,
-            transitionType: getTransition(),
-            showTitle: true
+            transitionType: 'jiggle',
+            showTitle: true,
+            hoverDuration: getHoverDuration(),
+            dwellAnimation: getDwellAnimation(),
+            hovered: ''
           }
         this.colorItem = this.colorItem.bind(this);
         this.toggleTransition = this.toggleTransition.bind(this);
@@ -17,12 +21,22 @@ class GridItem extends Component {
 
     toggleTransition(){
       // activate transition on item
-      this.setState({transitionActive: !this.state.transitionActive});
-    }
+      this.setState({transitionActive: !this.state.transitionActive}, () => {
+          if (!this.state.transitionActive) {
+              setTimeout(() => {
+                  this.setState({transitionActive: true});
+              }, 500);
+          }
+      });
+  }
 
     handleTransitionChange =(event)=>{
       // handle event of user changing the transition type
       this.setState({transitionType: getTransition()});
+    }
+
+    handleDwellAnimationChange =(event) =>{
+      this.setState({dwellAnimation: getDwellAnimation()});
     }
 
     componentWillMount(){
@@ -33,11 +47,13 @@ class GridItem extends Component {
     componentDidMount(){
       // listen to event
       document.addEventListener('transitionChanged', this.handleTransitionChange);
+      document.addEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
     }
 
     componentWillUnmount(){
       // remove event listener
       document.removeEventListener('transitionChanged', this.handleTransitionChange);
+      document.removeEventListener('dwellAnimationChanged', this.handleDwellAnimationChange);
     }
 
     componentWillReceiveProps(nextProps){
@@ -63,20 +79,45 @@ class GridItem extends Component {
           }
     }
 
-  render() {
-    return (
-      <Transition animation={this.state.transitionType} duration={500} visible={this.state.transitionActive}>
-        <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className="gridColumn">
-            <div className='gridItem'>
-                <Image src={this.props.item.image} size='small' centered />
-                <p>
-                {this.state.showTitle && <span>{this.props.item.title} </span>}
-                <span>{this.props.isParent && <Icon name='folder'/>}</span>
-                </p>            
-            </div>
-        </Grid.Column>
-      </Transition>
-    )
+    handleMouseEnter = () => {
+      if (getScanningType() === scanningTypes.MOUSE_SCANNING && (getRestMode() === false || this.props.item.title === "Toggle Rest Mode")) {
+        this.setState({ hovered: 'hovered' });
+        document.dispatchEvent(new CustomEvent('hoverScanning', {detail: this.props.id}));
+        if (this.hoverTimeout) {
+          clearTimeout(this.hoverTimeout);
+        }
+        this.hoverTimeout = setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('hoverSelection'));
+            this.setState({ hovered: '' });
+        }, this.state.hoverDuration);
+      }
+    }
+
+    handleMouseLeave = () => {
+        if (getScanningType() === scanningTypes.MOUSE_SCANNING && (getRestMode() === false || this.props.item.title === "Toggle Rest Mode")) {
+          this.setState({ hovered: '' });
+          if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+            this.hoverTimeout = null;
+          }
+        }
+    }
+
+    render() {
+      return (
+        
+          <Transition animation={this.state.transitionType} duration={500} visible={this.state.transitionActive}>
+              <Grid.Column {...(this.state.bgColor!== ''? {color:this.state.bgColor}:{})} floated='left' className={`gridColumn ${this.state.dwellAnimation} ${this.state.hovered}`} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+                  <div className="gridItem" style={{ height: `${this.props.height}px`}}>
+                      <Image className="gridImage" src={this.props.item.image}  centered />
+                      <p className='labelCentered'>
+                          {this.state.showTitle && <span>{this.props.item.title} </span>}
+                          <span>{this.props.isParent && <img className="folderImg" src='../images/folder.svg'/>}</span>
+                      </p>            
+                  </div>
+              </Grid.Column>
+          </Transition>
+      )
   }
 }
 
