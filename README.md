@@ -1,6 +1,6 @@
 # Liberty - a multi-modal communications-board
 
-Liberty is a multi-modal communications board that allows carers to set up gesture-based interaction according to the user's range of abilities. This includes gesture controllers such as Leap motion and Myo, accessibility switches as well as keyboard interaction.
+Liberty is a multi-modal communications board that allows carers to set up gesture-based interaction according to the user's range of abilities. This includes gesture controllers such as Leap motion and Myo, accessibility switches, eye control as well as keyboard interaction.
 
 This project was developed at the University of Malta (HCI Lab) by Skye Dinwoodie, Maksymilian Derewonko, Mathias Anthony Schembri, Vladislav Kalashnikov, Kurt Camilleri, Kieran Cauchi and Ignacio Arias under the supervision of Chris Porter.
 
