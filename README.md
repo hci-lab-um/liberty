@@ -16,17 +16,12 @@ You must have NodeJS installed to run the application in the development environ
 5 To build the executable file for your chosen platform, run the following command: `npm run dist`
 ```
 
-##Dependencies
-
-1. Ultraleap Tracking Software (Gemini) 5.0.0 (last version that includes LeapJS + WebSocket server) - https://developer.leapmotion.com/releases
-
 ## Usage
 
 ```
 1 Run liberty Setup 1.0.0.exe
 2 [Optional] - You may import "demoboard.json" into the application. Note that the board will not be available automatically the next time you use the application unless you change the configurations and set the provided vocabulary as your default vocabulary.
-3 To use LEAP Motion you must own a LEAP Motion Controller. To be able to use LEAP Motion with this application please install the LEAP Motion Orion SDK v3.2.1 from https://developer.leapmotion.com/releases/leap-motion-orion-321 
-4 To be able to use MYO armband with this application please install the MYO Connect from https://support.getmyo.com/hc/en-us/articles/360018409792 
+
 ```
 
 ## People
