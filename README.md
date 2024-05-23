@@ -35,11 +35,10 @@ You must have NodeJS installed to run the application in the development environ
 - [Kurt Camilleri](mailto:kurt.camilleri.17@um.edu.mt)
 - [Kieran Cauchi](mailto:kieran.cauchi.17@um.edu.mt)
 - [Ignacio Arias](mailto:ignacio.arias.18@um.edu.mt)
+- Skye Dinwoodie
+- Maksymilian Derewonko
+- Mathias Anthony Schembri
 - [Chris Porter](https://www.um.edu.mt/profile/chrisporter)
-
-Expert advise provided by:
-- [Sharon Borg](mailto:sharon.borg@ilearn.edu.mt) - Access to Communication & Technology Unit (ACTU)
-- [May Agius](mailto:may.agius.2@ilearn.edu.mt) - Access to Communication & Technology Unit (ACTU)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
