@@ -40,3 +40,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+The pictographic symbols available for use in this software are the property of the Government of Aragón and have been created by Sergio Palao for ARASAAC (http://www.arasaac.org), that distributes them under Creative Commons License BY-NC-SA.
